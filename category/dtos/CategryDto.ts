@@ -3,6 +3,4 @@ export default class CategoryDto{
     idCreator!:string;
     name!:string;
     createdAt?:string;
-    limit?:number;
-    page?:number;
 };

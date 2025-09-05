@@ -9,7 +9,10 @@
     // See also https://aka.ms/tsconfig/module
     "module": "ESNext",
     "target": "es2020",
-    "types": [],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["jest", "node"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
