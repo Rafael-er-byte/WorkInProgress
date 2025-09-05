@@ -9,6 +9,7 @@ export default class SaveCategory{
     async execute(categoryDto:CategoryDto){
         if(!categoryDto.createdAt)categoryDto.createdAt = new Date().toISOString();
         if(!categoryDto.idCategory)categoryDto.idCategory = GenerateId.createId();
+        if(!categoryDto.idCreator)throw new Error('Invalid data');
         const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt);
         await this.repo.save(category);
     }
