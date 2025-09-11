@@ -5,7 +5,7 @@ import Category from "../../model/Category";
 import type iCategoryRepository from "../adapters/iRepository";
 
 export default class SaveCategory{
-    constructor(private repo: iCategoryRepository, private idManager:IDManager, private dateManager:DateManager){}
+    constructor(private readonly repo: iCategoryRepository, private readonly idManager:IDManager, private readonly dateManager:DateManager){}
 
     async execute(categoryDto:CategoryDto){
         if(!categoryDto.idCategory){
