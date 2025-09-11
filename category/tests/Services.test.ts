@@ -1,21 +1,23 @@
-import UUID from "../../shared/utils/IDManagement";
+import UUID from "../../shared/utils/UUID";
 import type IDManager from "../../shared/interfaces/IDManager";
 import type iCategoryRepository from "../application/adapters/iRepository";
 import SaveCategory from "../application/services/SaveCategory";
 import CategoryDto from "../dtos/CategryDto";
+import type DateManager from "../../shared/interfaces/DateManager";
+import ConcreteDateManager from "../../shared/utils/ConcreteDateManagement";
 
 describe('Testing save service', () => {
     let mockRepo:Partial<jest.Mocked<iCategoryRepository>>;
     let saveCategory:SaveCategory;
+    const dateManager:DateManager = new ConcreteDateManager();
+    const idManager:IDManager = new UUID();
 
     beforeEach(() => {
         mockRepo = {
             save:jest.fn()
         };
 
-        const idManager:IDManager = new UUID();
-
-        saveCategory = new SaveCategory(mockRepo as iCategoryRepository, idManager);
+        saveCategory = new SaveCategory(mockRepo as iCategoryRepository, idManager, dateManager);
     });
 
     it('Should add an id an a creation date to the object', async () => {
