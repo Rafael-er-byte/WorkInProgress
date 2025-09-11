@@ -6,6 +6,7 @@ import type SaveCategory from "../application/services/SaveCategory";
 import CategoryDto from '../dtos/CategryDto';
 import CategoryFilterDto from '../dtos/CategoryFilterDto';
 import Category from '../model/Category';
+import ResponseCategoryDto from '../dtos/ResponseCategoryDto';
 
 export default class CategoryController{
     constructor(private readonly saveCategory:SaveCategory, private readonly deleteCategory:DeleteCategoryById, private readonly getCategoryById:GetCategoryById, private readonly getAllCategories:GetAllCategories){}
@@ -13,7 +14,7 @@ export default class CategoryController{
     async save(req:Request, res:Response, next: NextFunction): Promise<Response | undefined>{
         try{
             const body = req.body;
-            const dto:CategoryDto = new CategoryDto();
+            let dto:CategoryDto = new CategoryDto();
             dto.idCategory = body.idCategory;
             dto.idCreator = body.idCreator;
             dto.name = body.name;
@@ -41,8 +42,10 @@ export default class CategoryController{
             const id = req.params.idCategory as string;
             const idCreator = req.params.idCreator as string;
             const category:Category | undefined = await this.getCategoryById.execute(id, idCreator);
+
             if(!category)return res.status(404).json({messsage:"Not found"});
-            return res.status(200).json({category: category});
+            let response:ResponseCategoryDto = new ResponseCategoryDto(category.getName(), category.getIdCreator(), category.getIdCategory());
+            return res.status(200).json({category: response});
         }catch(error){
             next();
         }
@@ -51,7 +54,7 @@ export default class CategoryController{
     async getAll(req:Request, res:Response, next:NextFunction): Promise<Response | undefined>{
         try {
             const body = req.body;
-            const dto:CategoryDto = new CategoryDto();
+            let dto:CategoryDto = new CategoryDto();
             dto.idCategory = body.idCategory;
             dto.idCreator = body.idCreator;
             dto.name = body.name;
@@ -63,7 +66,13 @@ export default class CategoryController{
             if(body.sortingType)filterDto.setSortingType(body.sortingType);
 
             const categories:Category[] = await this.getAllCategories.execute(dto, filterDto);
-            return res.status(200).json({categories:categories});
+            let response:ResponseCategoryDto[] = [];
+
+            categories.forEach((category) => {
+                response.push(new ResponseCategoryDto(category.getName(), category.getIdCreator(), category.getIdCategory()));
+            });
+
+            return res.status(200).json({categories:response});
         } catch (error) {
             next();
         }
