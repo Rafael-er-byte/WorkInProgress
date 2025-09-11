@@ -9,7 +9,7 @@ export default class GetAllCategories{
 
     async execute(categoryDto:CategoryDto, categoryFilterDto:CategoryFilterDto):Promise<Category[]>{
         if(!this.idManager.validateId(categoryDto.idCreator) || !this.idManager.validateId(categoryDto.idCategory) || !categoryFilterDto.limit || !categoryFilterDto.page)throw new Error('Invalid values');
-        const categories:Category[] = await this.repo.getAll(categoryDto.idCategory as string, categoryDto.idCreator, categoryFilterDto);
+        const categories:Category[] = await this.repo.getAll(categoryDto.idCategory, categoryDto.idCreator, categoryFilterDto);
         return categories; 
     }
 };

@@ -13,7 +13,7 @@ export default class SaveCategory{
             categoryDto.idCategory = this.idManager.generateId();
         }else if(!this.idManager.validateId(categoryDto.idCategory)) throw new Error('Invalid data');
         if(!this.idManager.validateId(categoryDto.idCreator))throw new Error('Invalid data');
-        const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory as string, categoryDto.createdAt);
+        const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt);
         await this.repo.save(category);
     }
 };

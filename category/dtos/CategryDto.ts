@@ -1,5 +1,5 @@
 export default class CategoryDto{
-    idCategory?:string;
+    idCategory!:string;
     idCreator!:string;
     name!:string;
     createdAt?:string;
