@@ -9,7 +9,11 @@ import Category from '../model/Category';
 import ResponseCategoryDto from '../dtos/ResponseCategoryDto';
 
 export default class CategoryController{
-    constructor(private readonly saveCategory:SaveCategory, private readonly deleteCategory:DeleteCategoryById, private readonly getCategoryById:GetCategoryById, private readonly getAllCategories:GetAllCategories){}
+    constructor(
+        private readonly saveCategory:SaveCategory, 
+        private readonly deleteCategory:DeleteCategoryById, 
+        private readonly getCategoryById:GetCategoryById, 
+        private readonly getAllCategories:GetAllCategories){}
 
     async save(req:Request, res:Response, next: NextFunction): Promise<Response | undefined>{
         try{
