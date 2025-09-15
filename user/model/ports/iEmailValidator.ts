@@ -1,3 +1,3 @@
 export default interface iEmailValidator{
-    vallidate(email:string): boolean;
+    validate(email:string): boolean;
 }
