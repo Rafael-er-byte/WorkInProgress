@@ -1,6 +1,6 @@
 import type IDManager from "../../../shared/interfaces/IDManager";
 import Category from "../../model/Category";
-import type iCategoryRepository from "../adapters/iRepository";
+import type iCategoryRepository from "../ports/iRepository";
 
 export default class GetCategoryById{
     constructor(private readonly repo: iCategoryRepository, private readonly idManager:IDManager){}

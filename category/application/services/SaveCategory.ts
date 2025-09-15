@@ -2,7 +2,7 @@ import type DateManager from "../../../shared/interfaces/DateManager";
 import type IDManager from "../../../shared/interfaces/IDManager";
 import CategoryDto from "../../dtos/CategryDto";
 import Category from "../../model/Category";
-import type iCategoryRepository from "../adapters/iRepository";
+import type iCategoryRepository from "../ports/iRepository";
 
 export default class SaveCategory{
     constructor(private readonly repo: iCategoryRepository, private readonly idManager:IDManager, private readonly dateManager:DateManager){}

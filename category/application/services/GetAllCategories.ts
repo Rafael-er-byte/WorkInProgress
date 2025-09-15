@@ -2,7 +2,7 @@ import type IDManager from "../../../shared/interfaces/IDManager";
 import type CategoryFilterDto from "../../dtos/CategoryFilterDto";
 import type CategoryDto from "../../dtos/CategryDto";
 import type Category from "../../model/Category";
-import type iCategoryRepository from "../adapters/iRepository";
+import type iCategoryRepository from "../ports/iRepository";
 
 export default class GetAllCategories{
     constructor(private readonly repo:iCategoryRepository, private readonly idManager:IDManager){}
