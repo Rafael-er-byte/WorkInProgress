@@ -1,5 +1,4 @@
-import type iEmailValidator from "./interfaces/iEmailValidator";
-import type iHasher from "./interfaces/iHasher";
+import type iHasher from "../interfaces/iHasher";
 import type UserBuilder from "./UserBuilder";
 
 export default class User{
@@ -8,25 +7,34 @@ export default class User{
     private password!:string;
     private createdAt!:string;
     private urlProfile?:string | undefined;
-    
+    private isVerified: boolean = false;
+    private readonly emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     private hasher!:iHasher;
-    private emailValidator!:iEmailValidator;
 
     constructor(builder:UserBuilder){
-        if(!builder.email || !builder.password || !builder.userName || !builder.hasher || !builder.emailValidator || !builder.createdAt)throw new Error('Missing required parameters')
+        if(!builder.email || !builder.password || !builder.userName || !builder.hasher || !builder.createdAt)throw new Error('Missing required parameters')
         this.hasher = builder.hasher;
-        this.emailValidator = builder.emailValidator;
         if(!this.hasher.validate(builder.password))throw new Error('Invalid password');
         this.password = this.hasher.hash(builder.password);
-        if(!this.emailValidator.validate(builder.email))throw new Error('Invalid email');
+        if(!this.emailRegex.test(builder.email))throw new Error('Invalid email');
         this.email = builder.email;
         this.createdAt = builder.createdAt;
         this.userName = builder.userName;
         this.urlProfile = builder.urlProfile;
+        this.isVerified = builder.isVerified;
     }
 
     auth(password: string): boolean{
         return this.hasher.compare(password, this.password);
+    }
+
+    verifyEmail(): void{
+        this.isVerified = true;
+    }
+
+    updatePassword(newPassword:string): void{
+        if(!this.hasher.validate(newPassword))throw new Error('Invalid password');
+        this.password = this.hasher.hash(newPassword);
     }
 
     setPassword(currentPwd:string, newPwd:string): void{
@@ -40,7 +48,7 @@ export default class User{
     }
 
     setEmail(email:string): void{
-        if(!this.emailValidator.validate(email))throw new Error('Invalid email');
+        if(!this.emailRegex.test(email))throw new Error('Invalid email');
         this.email = email;
     }
 
@@ -57,7 +65,7 @@ export default class User{
         return this.email;
     }
 
-    getUrlProfiel():string | undefined{
+    getUrlProfile():string | undefined{
         return this.urlProfile;
     }
 
@@ -67,5 +75,9 @@ export default class User{
 
     getCreatedAt(): string{
         return this.createdAt;
+    }
+
+    emailIsVerified(): boolean{
+        return this.isVerified;
     }
 };

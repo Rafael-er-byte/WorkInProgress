@@ -1,5 +1,4 @@
-import type iEmailValidator from "./interfaces/iEmailValidator";
-import type iHasher from "./interfaces/iHasher";
+import type iHasher from "../interfaces/iHasher";
 import User from "./User";
 
 export default class UserBuilder{
@@ -8,9 +7,10 @@ export default class UserBuilder{
     password!:string;
     urlProfile?:string;
     createdAt!:string;
+    isVerified:boolean = false;
 
-    constructor(public hasher:iHasher, public emailValidator: iEmailValidator){
-        if(!hasher || !emailValidator)throw new Error('Missing required parameters');
+    constructor(public hasher:iHasher){
+        if(!hasher)throw new Error('Missing required parameters');
     }
 
     setUserName(userName: string): this{
@@ -20,7 +20,7 @@ export default class UserBuilder{
     }
 
     setEmail(email:string): this{
-        if(!this.emailValidator.validate(email))throw new Error('Invalid email');
+        if(!email)throw new Error('Invalid email');
         this.email = email;
         return this;
     }
@@ -40,6 +40,11 @@ export default class UserBuilder{
     setCreatedAt(date:string): this{
         if(!date)throw new Error('Invalid date');
         this.createdAt = date;
+        return this;
+    }
+
+    setIsVerified(isVerified:boolean): this{
+        if(isVerified)this.isVerified = isVerified;
         return this;
     }
 
