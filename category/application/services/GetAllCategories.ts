@@ -1,6 +1,6 @@
 import type IDManager from "../../../shared/interfaces/IDManager";
-import type CategoryFilterDto from "../../dtos/CategoryFilterDto";
-import type CategoryDto from "../../dtos/CategryDto";
+import type CategoryFilterDto from "../dtos/CategoryFilterDto";
+import type CategoryDto from "../dtos/CategryDto";
 import type Category from "../../model/Category";
 import type iCategoryRepository from "../ports/iRepository";
 

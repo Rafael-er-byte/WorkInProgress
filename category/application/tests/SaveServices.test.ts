@@ -1,10 +1,10 @@
-import UUID from "../../shared/utils/UUID";
-import type IDManager from "../../shared/interfaces/IDManager";
-import type iCategoryRepository from "../application/ports/iRepository";
-import SaveCategory from "../application/services/SaveCategory";
+import UUID from "../../../shared/utils/UUID";
+import type IDManager from "../../../shared/interfaces/IDManager";
+import type iCategoryRepository from "../ports/iRepository";
+import SaveCategory from "../services/SaveCategory";
 import CategoryDto from "../dtos/CategryDto";
-import type DateManager from "../../shared/interfaces/DateManager";
-import ConcreteDateManager from "../../shared/utils/ConcreteDateManagement";
+import type DateManager from "../../../shared/interfaces/DateManager";
+import ConcreteDateManager from "../../../shared/utils/ConcreteDateManagement";
 
 describe('Testing save service', () => {
     let mockRepo:Partial<jest.Mocked<iCategoryRepository>>;

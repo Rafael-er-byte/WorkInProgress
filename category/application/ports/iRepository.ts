@@ -1,4 +1,4 @@
-import type CategoryFilterDto from "../../dtos/CategoryFilterDto";
+import type CategoryFilterDto from "../dtos/CategoryFilterDto";
 import type Category from "../../model/Category";
 
 export default interface iCategoryRepository{

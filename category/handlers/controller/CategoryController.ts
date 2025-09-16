@@ -1,12 +1,12 @@
 import type {Request, Response, NextFunction} from 'express'
-import type DeleteCategoryById from "../application/services/DeleteCategory";
-import type GetAllCategories from "../application/services/GetAllCategories";
-import type GetCategoryById from "../application/services/GetCategoryById";
-import type SaveCategory from "../application/services/SaveCategory";
-import CategoryDto from '../dtos/CategryDto';
-import CategoryFilterDto from '../dtos/CategoryFilterDto';
-import Category from '../model/Category';
-import ResponseCategoryDto from '../dtos/ResponseCategoryDto';
+import type DeleteCategoryById from "../../application/services/DeleteCategory";
+import type GetAllCategories from "../../application/services/GetAllCategories";
+import type GetCategoryById from "../../application/services/GetCategoryById";
+import type SaveCategory from "../../application/services/SaveCategory";
+import CategoryDto from '../../application/dtos/CategryDto';
+import CategoryFilterDto from '../../application/dtos/CategoryFilterDto';
+import Category from '../../model/Category';
+import ResponseCategoryDto from '../../application/dtos/ResponseCategoryDto';
 
 export default class CategoryController{
     constructor(
