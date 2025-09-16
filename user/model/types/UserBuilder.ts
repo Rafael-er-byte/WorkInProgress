@@ -1,5 +1,5 @@
-import type iEmailValidator from "./ports/iEmailValidator";
-import type iHasher from "./ports/iHasher";
+import type iEmailValidator from "./interfaces/iEmailValidator";
+import type iHasher from "./interfaces/iHasher";
 import User from "./User";
 
 export default class UserBuilder{

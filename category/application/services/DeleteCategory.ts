@@ -1,5 +1,5 @@
 import type IDManager from "../../../shared/interfaces/IDManager";
-import type iCategoryRepository from "../ports/iRepository";
+import type iCategoryRepository from "../interfaces/iRepository";
 
 export default class DeleteCategoryById{
     constructor(private readonly repo:iCategoryRepository, private readonly idManager:IDManager){}
