@@ -2,17 +2,18 @@ import type iHasher from "../interfaces/iHasher";
 import type UserBuilder from "./UserBuilder";
 
 export default class User{
+    private id!:string;
     private userName!:string; 
     private email!:string;
     private password!:string;
     private createdAt!:string;
     private urlProfile?:string | undefined;
     private isVerified: boolean = false;
-    private readonly emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    private readonly emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     private hasher!:iHasher;
 
     constructor(builder:UserBuilder){
-        if(!builder.email || !builder.password || !builder.userName || !builder.hasher || !builder.createdAt)throw new Error('Missing required parameters')
+        if(!builder.email || !builder.password || !builder.id || !builder.userName || !builder.hasher || !builder.createdAt)throw new Error('Missing required parameters')
         this.hasher = builder.hasher;
         if(!this.hasher.validate(builder.password))throw new Error('Invalid password');
         this.password = this.hasher.hash(builder.password);
@@ -22,14 +23,15 @@ export default class User{
         this.userName = builder.userName;
         this.urlProfile = builder.urlProfile;
         this.isVerified = builder.isVerified;
+        this.id = builder.id;
     }
 
     auth(password: string): boolean{
         return this.hasher.compare(password, this.password);
     }
 
-    verifyEmail(): void{
-        this.isVerified = true;
+    verifyEmail(verify:boolean): void{
+        this.isVerified = verify || this.isVerified;
     }
 
     updatePassword(newPassword:string): void{
@@ -37,8 +39,8 @@ export default class User{
         this.password = this.hasher.hash(newPassword);
     }
 
-    setPassword(currentPwd:string, newPwd:string): void{
-        if(!this.hasher.validate(newPwd) || !this.hasher.compare(currentPwd, this.password))throw new Error('Invalid password');
+    setPassword(newPwd:string): void{
+        if(!this.hasher.validate(newPwd))throw new Error('Invalid password');
         this.password = this.hasher.hash(newPwd);
     }
 

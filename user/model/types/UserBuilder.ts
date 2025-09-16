@@ -8,9 +8,11 @@ export default class UserBuilder{
     urlProfile?:string;
     createdAt!:string;
     isVerified:boolean = false;
+    id!: string;
 
-    constructor(public hasher:iHasher){
-        if(!hasher)throw new Error('Missing required parameters');
+    constructor(public hasher:iHasher, id:string){
+        if(!hasher || !id)throw new Error('Missing required parameters');
+        this.id = id;
     }
 
     setUserName(userName: string): this{
