@@ -33,7 +33,7 @@ export default class UserBuilder{
         return this;
     }
 
-    setUrlProfile(url:string): this{
+    setUrlProfile(url:string | undefined): this{
         if(!url)return this;
         this.urlProfile = url;
         return this;
