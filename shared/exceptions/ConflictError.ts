@@ -1,4 +1,4 @@
-import AppError from "../../../shared/exceptions/AppError";
+import AppError from "./AppError";
 
 export default class ConflictError extends AppError{
     constructor(message:string, public info?:any){

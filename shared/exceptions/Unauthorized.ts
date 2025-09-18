@@ -1,4 +1,4 @@
-import AppError from "../../../shared/exceptions/AppError";
+import AppError from "./AppError";
 
 export default class Unauthorized extends AppError{
     constructor(message:string, public info?:any){

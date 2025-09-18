@@ -1,3 +1,4 @@
+import BadRequest from "../../../shared/exceptions/BadRequest";
 import type iHasher from "../interfaces/iHasher";
 import type UserBuilder from "./UserBuilder";
 
@@ -13,11 +14,11 @@ export default class User{
     private hasher!:iHasher;
 
     constructor(builder:UserBuilder){
-        if(!builder.email || !builder.password || !builder.id || !builder.userName || !builder.hasher || !builder.createdAt)throw new Error('Missing required parameters')
+        if(!builder.email || !builder.password || !builder.id || !builder.hasher || !builder.createdAt)throw new BadRequest('Missing required parameters', builder);
         this.hasher = builder.hasher;
-        if(!this.hasher.validate(builder.password))throw new Error('Invalid password');
+        if(!this.hasher.validate(builder.password))throw new BadRequest('Invalid password', builder.password);
         this.password = this.hasher.hash(builder.password);
-        if(!this.emailRegex.test(builder.email))throw new Error('Invalid email');
+        if(!this.emailRegex.test(builder.email))throw new BadRequest('Invalid email', builder.email);
         this.email = builder.email;
         this.createdAt = builder.createdAt;
         this.userName = builder.userName;
@@ -35,27 +36,27 @@ export default class User{
     }
 
     updatePassword(newPassword:string): void{
-        if(!this.hasher.validate(newPassword))throw new Error('Invalid password');
+        if(!this.hasher.validate(newPassword))throw new BadRequest('Invalid password', newPassword);
         this.password = this.hasher.hash(newPassword);
     }
 
     setPassword(newPwd:string): void{
-        if(!this.hasher.validate(newPwd))throw new Error('Invalid password');
+        if(!this.hasher.validate(newPwd))throw new BadRequest('Invalid password', newPwd);
         this.password = this.hasher.hash(newPwd);
     }
 
     setUserName(userName:string): void{
-        if(!userName)throw new Error("Missing parameters");
+        if(!userName)throw new BadRequest('Invalid username', userName);
         this.userName = userName;
     }
 
     setEmail(email:string): void{
-        if(!this.emailRegex.test(email))throw new Error('Invalid email');
+        if(!this.emailRegex.test(email))throw new BadRequest('Invalid email', email);
         this.email = email;
     }
 
     setUrlProfile(url:string): void{
-        if(!url)throw new Error('Invalid url');
+        if(!url)throw new BadRequest('Invalid url', url);
         this.urlProfile = url;
     }
 
