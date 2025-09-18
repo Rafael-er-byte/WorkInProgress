@@ -82,4 +82,8 @@ export default class User{
     emailIsVerified(): boolean{
         return this.isVerified;
     }
+
+    getId(): string{
+        return this.id;
+    }
 };
