@@ -1,3 +1,5 @@
+import BadRequest from "../../../shared/exceptions/BadRequest";
+import ConflictError from "../../../shared/exceptions/ConflictError";
 import type DateManager from "../../../shared/interfaces/DateManager";
 import type IDManager from "../../../shared/interfaces/IDManager";
 import type iHasher from "../../model/interfaces/iHasher";
@@ -18,9 +20,9 @@ export default class SaveUserService{
     ){}
 
     async execute(info:SaveUserDto){
-        if(!info.email || !info.password)throw new Error('Missing required parameters');
+        if(!info.email || !info.password)throw new BadRequest('Missing required parameters');
 
-        if(await this.repo.existsByEmail(info.email))throw new Error('The user already exists');
+        if(await this.repo.existsByEmail(info.email))throw new ConflictError('User already exists');
 
         let userName:string;
 
