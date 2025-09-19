@@ -5,6 +5,7 @@ import SaveCategory from "../services/SaveCategory";
 import CategoryDto from "../dtos/CategryDto";
 import type DateManager from "../../../shared/interfaces/DateManager";
 import ConcreteDateManager from "../../../shared/utils/ConcreteDateManagement";
+import BadRequest from "../../../shared/exceptions/BadRequest";
 
 describe('Testing save service', () => {
     let mockRepo:Partial<jest.Mocked<iCategoryRepository>>;
@@ -61,7 +62,7 @@ describe('Testing save service', () => {
 
         await expect(saveCategory.execute(dto))
         .rejects
-        .toThrow('Invalid data');    
+        .toThrow(BadRequest);    
     });
 
     it('Should throw a error if the id of category is invalid', async () => {
@@ -73,6 +74,6 @@ describe('Testing save service', () => {
 
         await expect(saveCategory.execute(dto))
         .rejects
-        .toThrow('Invalid data');    
+        .toThrow(BadRequest);    
     });
 });
