@@ -1,6 +1,6 @@
 import BadRequest from "../../../shared/exceptions/BadRequest";
 import type IDManager from "../../../shared/interfaces/IDManager";
-import Category from "../../model/types/Category";
+import Category from "../../domain/model/Category";
 import type iCategoryRepository from "../interfaces/iRepository";
 
 export default class GetCategoryById{
