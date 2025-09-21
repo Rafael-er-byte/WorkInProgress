@@ -1,5 +1,5 @@
 import type iHasher from "../interfaces/iHasher";
-import UserBuilder from "../types/UserBuilder";
+import UserBuilder from "../model/UserBuilder";
 import BadRequest from "../../../shared/exceptions/BadRequest";
 
 describe('UserBuilder - invalid emails', () => {

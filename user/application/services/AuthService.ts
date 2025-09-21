@@ -1,5 +1,5 @@
 import Unauthorized from "../../../shared/exceptions/Unauthorized";
-import type User from "../../model/types/User";
+import type User from "../../domain/model/User";
 import type UserCredentials from "../dtos/in/UserCredentials";
 import type TokenDto from "../dtos/out/TokenDto";
 import type iToken from "../interfaces/iToken";

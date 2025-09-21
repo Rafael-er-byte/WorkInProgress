@@ -1,4 +1,4 @@
-import type User from "../../model/types/User";
+import type User from "../../domain/model/User";
 import type TokenDto from "../dtos/out/TokenDto";
 
 export default interface iToken{

@@ -1,6 +1,6 @@
 import type iHasher from "../interfaces/iHasher";
-import UserBuilder from "../types/UserBuilder";
-import User from "../types/User";
+import UserBuilder from "../model/UserBuilder";
+import User from "../model/User";
 import BadRequest from "../../../shared/exceptions/BadRequest";
 
 describe('User entity testing', () => {

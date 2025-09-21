@@ -1,4 +1,4 @@
-import type User from "../../model/types/User";
+import type User from "../../domain/model/User";
 
 export default interface iUserRepository{
     save(user:User): Promise<boolean>;
