@@ -8,7 +8,12 @@ import type iTokenRepository from "../interfaces/iTokenRepository";
 import type iUserRepository from "../interfaces/iUserRepository";
 
 export default class RefreshService{
-    constructor(private tokenManager:iToken, private tokenRepo:iTokenRepository, private repo:iUserRepository, private env: iEnviroment){}
+    constructor(
+        private tokenManager:iToken, 
+        private tokenRepo:iTokenRepository, 
+        private repo:iUserRepository, 
+        private env: iEnviroment
+    ){}
 
     async execute(refresh:RefreshDto): Promise<TokenDto>{
         if(!refresh.token || !refresh.userId)throw new Unauthorized('Invalid credentials', refresh);

@@ -8,7 +8,12 @@ import type iUserRepository from "../interfaces/iUserRepository";
 import type iEnviroment from "../../../interfaces/config/iEnviroment";
 
 export default class AuthService{
-    constructor(private repo:iUserRepository, private tokenManager:iToken, private tokenRepo:iTokenRepository, private env:iEnviroment){}
+    constructor(
+        private repo:iUserRepository, 
+        private tokenManager:iToken, 
+        private tokenRepo:iTokenRepository, 
+        private env:iEnviroment
+    ){}
 
     async execute(credentials:UserCredentials): Promise<TokenDto[]>{
         if(!await this.repo.existsByEmail(credentials.email))throw new Unauthorized('Invalid credentials');
