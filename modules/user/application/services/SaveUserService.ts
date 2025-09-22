@@ -19,7 +19,7 @@ export default class SaveUserService{
         private keyIds:string
     ){}
 
-    async execute(info:SaveUserDto){
+    async execute(info:SaveUserDto): Promise<boolean>{
         if(!info.email || !info.password)throw new BadRequest('Missing required parameters');
 
         if(await this.repo.existsByEmail(info.email))throw new ConflictError('User already exists');

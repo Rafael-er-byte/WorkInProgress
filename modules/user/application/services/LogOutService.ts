@@ -10,13 +10,13 @@ export default class RefreshService{
         private repo:iUserRepository, 
     ){}
 
-    async execute(refresh:RefreshDto): Promise<void>{
+    async execute(refresh:RefreshDto): Promise<boolean>{
         if(!refresh.token || !refresh.userId)throw new Unauthorized('Invalid credentials', refresh);
 
         const user:User | undefined = await this.repo.getById(refresh.userId);
 
         if(!user)throw new Unauthorized('Invalid token');
 
-        await this.tokenRepo.delete(`refresh:${refresh.userId}:${refresh.token}`);
+        return await this.tokenRepo.delete(`refresh:${refresh.userId}:${refresh.token}`);
     }
 };
