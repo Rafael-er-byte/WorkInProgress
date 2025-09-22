@@ -1,0 +1,31 @@
+import Unauthorized from "../../../../shared/errors/Unauthorized";
+import type iEnviroment from "../../../interfaces/config/iEnviroment";
+import type User from "../../core/model/User";
+import type RefreshDto from "../dtos/in/RefreshDto";
+import type TokenDto from "../dtos/out/TokenDto";
+import type iToken from "../interfaces/iToken";
+import type iTokenRepository from "../interfaces/iTokenRepository";
+import type iUserRepository from "../interfaces/iUserRepository";
+
+export default class RefreshService{
+    constructor(private tokenManager:iToken, private tokenRepo:iTokenRepository, private repo:iUserRepository, private env: iEnviroment){}
+
+    async execute(refresh:RefreshDto): Promise<TokenDto>{
+        if(!refresh.token || !refresh.userId)throw new Unauthorized('Invalid credentials', refresh);
+
+        const currentTTL: number = await this.tokenRepo.getTTL(`refresh:${refresh.userId}:${refresh.token}`);
+        if(currentTTL <= 0)throw new Unauthorized('Session expired');
+
+        const user:User | undefined = await this.repo.getById(refresh.userId);
+
+        if(!user)throw new Unauthorized('Something went worng');
+
+        const [_, newRefreshToken] = await Promise.all([
+            this.tokenRepo.delete(`refresh:${refresh.userId}:${refresh.token}`), 
+            this.tokenManager.generate(user, this.env.token.refresh, this.env.token.secretRefresh, this.env.token.ttlRefresh)
+        ]);
+
+        await this.tokenRepo.set(`refresh:${refresh.userId}:${newRefreshToken.token}`, newRefreshToken.token, Number(currentTTL));
+        return newRefreshToken;
+    }
+};
