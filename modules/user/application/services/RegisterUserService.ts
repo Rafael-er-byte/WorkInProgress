@@ -6,8 +6,8 @@ import type iHasher from "../../core/interfaces/iHasher";
 import type User from "../../core/model/User";
 import UserBuilder from "../../core/model/UserBuilder";
 import type SaveUserDto from "../dtos/in/SaveUserDto";
-import type LastId from "../interfaces/iLastId";
-import type iUserRepository from "../interfaces/iUserRepository";
+import type LastId from "../interfaces/utils/iLastId";
+import type iUserRepository from "../interfaces/repository/iUserRepository";
 
 export default class SaveUserService{
     constructor(
