@@ -1,7 +1,7 @@
 import type IDManager from "../../../../shared/interfaces/IDManager";
 import type CategoryFilterDto from "../dtos/CategoryFilterDto";
 import type CategoryDto from "../dtos/CategryDto";
-import type Category from "../../domain/model/Category";
+import type Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/iRepository";
 import BadRequest from "../../../../shared/errors/BadRequest";
 

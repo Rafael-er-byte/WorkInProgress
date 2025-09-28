@@ -11,4 +11,4 @@ export default class DeleteCategoryById{
         const result:boolean = await this.repo.delete(id, idCreator);
         if(!result)throw new NotFound('Not found category');
     }
-}
+};

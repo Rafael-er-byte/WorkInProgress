@@ -53,4 +53,4 @@ export default class Category {
     public setCreatedAt(createdAt?: string): void {
         this.createdAt = createdAt;
     }
-}
+};

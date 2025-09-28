@@ -4,4 +4,4 @@ export default interface iTokenRepository{
     get(key:string): Promise<string | null>
     getTTL(key:string): Promise<number>
     deleteByPattern(pattern:string): Promise<number>
-}
+};

@@ -4,4 +4,4 @@ export default class CategoryContrConfig{
     static createController():CategoryController{
         
     }
-}
+};

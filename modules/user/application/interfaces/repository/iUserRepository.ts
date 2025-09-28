@@ -1,4 +1,4 @@
-import type User from "../../core/model/User";
+import type User from "../../../core/model/User";
 
 export default interface iUserRepository{
     save(user:User): Promise<boolean>;
@@ -7,4 +7,4 @@ export default interface iUserRepository{
     getByEmail(id:string): Promise<User | undefined>
     existsById(id:string): Promise<boolean>;
     existsByEmail(email:string): Promise<boolean>;
-}
+};
