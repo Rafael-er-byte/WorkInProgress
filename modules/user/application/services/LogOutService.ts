@@ -1,22 +1,32 @@
+import type Enviroment from "../../../../config/env/Enviroment";
 import Unauthorized from "../../../../shared/errors/Unauthorized";
-import type User from "../../core/model/User";
 import type RefreshDto from "../dtos/in/RefreshDto";
+import type TokenPayLoad from "../dtos/out/TokenPayLoad";
+import type iToken from "../interfaces/iToken";
 import type iTokenRepository from "../interfaces/iTokenRepository";
 import type iUserRepository from "../interfaces/iUserRepository";
 
-export default class RefreshService{
+export default class LogOutService{
     constructor(
         private tokenRepo:iTokenRepository, 
         private repo:iUserRepository, 
+        private tokenManager: iToken,
+        private env: Enviroment
     ){}
 
     async execute(refresh:RefreshDto): Promise<boolean>{
-        if(!refresh.token || !refresh.userId)throw new Unauthorized('Invalid credentials', refresh);
 
-        const user:User | undefined = await this.repo.getById(refresh.userId);
+        const payload:TokenPayLoad = await this.tokenManager.decode(refresh.token);
 
-        if(!user)throw new Unauthorized('Invalid token');
+        if(!payload)throw new Unauthorized('Invalid token');
 
-        return await this.tokenRepo.delete(`refresh:${refresh.userId}:${refresh.token}`);
+        const [isTokenValid, user] = await Promise.all([
+            this.tokenManager.validate(refresh.token, this.env.token.refresh),
+            this.repo.existsById(payload.id)
+        ]);
+
+        if(!user || !isTokenValid)throw new Unauthorized('Invalid token');
+
+        return await this.tokenRepo.delete(`refresh:${payload.id}:${refresh.token}`);
     }
 };
