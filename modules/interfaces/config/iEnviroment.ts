@@ -7,6 +7,10 @@ export default interface iEnviroment{
         password:string;
     }
 
+    verificationCode:{
+        ttl:number;
+    }
+
     token:{
         secretRefresh:string;
         secretAccess:string;

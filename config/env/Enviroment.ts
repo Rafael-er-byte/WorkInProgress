@@ -11,6 +11,10 @@ export default class Enviroment implements iEnviroment{
         password:process.env.DB_PWD as string
     };
 
+    verificationCode = {
+        ttl:120
+    };
+
     token = {
         secretRefresh: process.env.SECRET_REFRESH as string,
         secretAccess: process.env.SECRET_ACCESS as string,

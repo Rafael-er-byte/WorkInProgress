@@ -5,6 +5,7 @@ import type TokenPayLoad from "../dtos/out/TokenPayLoad";
 import type iToken from "../interfaces/utils/iToken";
 import type iTokenRepository from "../interfaces/cache/iTokenRepository";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
+import Action from "../dtos/out/Action";
 
 export default class LogOutService{
     constructor(
@@ -14,7 +15,7 @@ export default class LogOutService{
         private env: Enviroment
     ){}
 
-    async execute(refresh:RefreshDto): Promise<boolean>{
+    async execute(refresh:RefreshDto): Promise<Action>{
 
         const payload:TokenPayLoad = await this.tokenManager.decode(refresh.token);
 
@@ -27,6 +28,10 @@ export default class LogOutService{
 
         if(!user || !isTokenValid)throw new Unauthorized('Invalid token');
 
-        return await this.tokenRepo.delete(`refresh:${payload.id}:${refresh.token}`);
+        await this.tokenRepo.delete(`refresh:${payload.id}:${refresh.token}`);
+
+        const action:Action = new Action();
+        action.success = true;
+        return action;
     }
 };

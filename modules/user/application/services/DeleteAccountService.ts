@@ -6,19 +6,29 @@ import type TokenPayLoad from "../dtos/out/TokenPayLoad";
 import type iToken from "../interfaces/utils/iToken";
 import type iTokenRepository from "../interfaces/cache/iTokenRepository";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
+import type iEnviroment from "../../../interfaces/config/iEnviroment";
+import Action from "../dtos/out/Action";
 
 export default class DeleteAccountService{
     constructor(
         private repo:iUserRepository, 
         private tokenRepo:iTokenRepository,
-        private tokenManager:iToken 
+        private tokenManager:iToken, 
+        private env: iEnviroment 
     ){}
 
-    async execute(credentials: DeleteAccountDto): Promise<boolean>{
+    async execute(credentials: DeleteAccountDto): Promise<Action>{
         const payload: TokenPayLoad = await this.tokenManager.decode(credentials.token);
         const user: User | undefined = await this.repo.getById(payload.id);
 
-        if(!user || !await user.auth(credentials.password))throw new Unauthorized('Invalid credentials');
+        if(!user)throw new Unauthorized('Invalid credentials');
+
+        const [isPasswordValid, isTokenValid] = await Promise.all([
+            user!.auth(credentials.password),
+            this.tokenManager.validate(credentials.token, this.env.token.refresh)
+        ]);
+
+        if(!isPasswordValid || ! isTokenValid) throw new Unauthorized('Invalid credentials');
 
         const [userDeleted, tokenDeleted] = await Promise.all([
             this.repo.deleteById(payload.id),
@@ -26,6 +36,10 @@ export default class DeleteAccountService{
         ]);
         
         if(!userDeleted) throw new AppError();
-        return true;
+
+        const action:Action = new Action();
+        action.id = user.getId();
+        action.success = true;
+        return action;
     }
 };

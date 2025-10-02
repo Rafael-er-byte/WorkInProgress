@@ -3,7 +3,7 @@ import type Category from "../../core/model/Category";
 
 export default interface iCategoryRepository{
     save(category:Category): Promise<void>
-    getAll(categoryId:string, idCreator:string, categoryFilterDto:CategoryFilterDto): Promise<Category[]>
-    getById(categoryId:string, idCreator:string): Promise<Category | undefined>
-    delete(categoryId:string, idCreator:string): Promise<boolean>
+    getAll(categoryId: Category['idCategory'], idCreator:Category['idCreator'], categoryFilterDto:CategoryFilterDto): Promise<Category[]>
+    getById(categoryId: Category['idCategory'], idCreator:Category['idCreator']): Promise<Category | undefined>
+    delete(categoryId: Category['idCategory'], idCreator:Category['idCreator']): Promise<boolean>
 };

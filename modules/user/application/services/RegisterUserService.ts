@@ -8,6 +8,7 @@ import UserBuilder from "../../core/model/UserBuilder";
 import type SaveUserDto from "../dtos/in/SaveUserDto";
 import type LastId from "../interfaces/utils/iLastId";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
+import Action from "../dtos/out/Action";
 
 export default class SaveUserService{
     constructor(
@@ -19,7 +20,7 @@ export default class SaveUserService{
         private keyIds:string
     ){}
 
-    async execute(info:SaveUserDto): Promise<boolean>{
+    async execute(info:SaveUserDto): Promise<Action>{
         if(!info.email || !info.password)throw new BadRequest('Missing required parameters');
 
         if(await this.repo.existsByEmail(info.email))throw new ConflictError('User already exists');
@@ -39,6 +40,11 @@ export default class SaveUserService{
                                                         .setUrlProfile(info.urlProfile);
 
         const user:User = userBuilder.build();
-        return await this.repo.save(user);                                
+        await this.repo.save(user);
+        
+        const action:Action = new Action();
+        action.id = user.getId();
+        action.success = true;
+        return action;
     }
 };

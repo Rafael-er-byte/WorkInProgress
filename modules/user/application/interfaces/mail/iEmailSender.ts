@@ -1,3 +1,6 @@
+import type EmailDto from "../../dtos/in/EmailDto";
+
 export default interface iEmailSender{
-    sendEmail(email:string, message:string):Promise<boolean>;
+    sendEmail(mail:EmailDto):Promise<boolean>;
+    healtCheck(): Promise<boolean>;
 }
