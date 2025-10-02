@@ -1,3 +1,5 @@
+import FailedToBuild from "../../../../shared/errors/core/FailedToBuild";
+import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
 import type iHasher from "../interfaces/iHasher";
 import User from "./User";;
@@ -17,19 +19,20 @@ export default class UserBuilder {
     }
 
     setUserName(userName: string): this {
-        if (!userName) throw new MissingRequiredParameters('Invalid username', userName);
+        if (!userName) throw new MissingRequiredParameters('username');
         this.userName = userName;
         return this;
     }
 
     setEmail(email: string): this {
-        if (!email) throw new MissingRequiredParameters('Invalid email', email);
+        if (!email) throw new MissingRequiredParameters('email');
         this.email = email;
         return this;
     }
 
     setPassword(password: string): this {
-        if (!this.hasher.validate(password)) throw new MissingRequiredParameters('Invalid password', password);
+        if(!password) throw new MissingRequiredParameters('password')
+        if (!this.hasher.validate(password)) throw new InvalidParameters('Invalid password', password);
         this.password = password;
         return this;
     }
@@ -41,7 +44,7 @@ export default class UserBuilder {
     }
 
     setCreatedAt(date: string): this {
-        if (!date) throw new MissingRequiredParameters('Invalid date', date);
+        if (!date) throw new MissingRequiredParameters('date');
         this.createdAt = date;
         return this;
     }
@@ -56,7 +59,7 @@ export default class UserBuilder {
             return new User(this);
         } catch (error) {
             if (error instanceof MissingRequiredParameters) throw error;
-            throw new MissingRequiredParameters('Failed to build user', error);
+            throw new FailedToBuild('Failed to build user', error);
         }
     }
 };
