@@ -1,4 +1,4 @@
-import BadRequest from "../../../../shared/errors/BadRequest";
+import BadRequest from "../../../../shared/errors/api/BadRequest";
 import type iHasher from "../interfaces/iHasher";
 import type UserBuilder from "./UserBuilder";
 

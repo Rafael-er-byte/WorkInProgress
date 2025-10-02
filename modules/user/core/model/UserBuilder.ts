@@ -1,6 +1,6 @@
 import type iHasher from "../interfaces/iHasher";
 import User from "./User";
-import BadRequest from "../../../../shared/errors/BadRequest";
+import BadRequest from "../../../../shared/errors/api/BadRequest";
 
 export default class UserBuilder {
     userName!: string;
