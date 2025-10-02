@@ -49,7 +49,7 @@ export default class User{
     }
 
     setUserName(userName:string): void{
-        if(!userName)throw new MissingRequiredParameters('Invalid username', userName);
+        if(!userName)throw new MissingRequiredParameters('username');
         this.userName = userName;
     }
 
@@ -60,7 +60,7 @@ export default class User{
     }
 
     setUrlProfile(url:string): void{
-        if(!url)throw new MissingRequiredParameters('Invalid url', url);
+        if(!url)throw new MissingRequiredParameters('url');
         this.urlProfile = url;
     }
 

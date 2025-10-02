@@ -58,7 +58,6 @@ export default class UserBuilder {
         try {
             return new User(this);
         } catch (error) {
-            if (error instanceof MissingRequiredParameters) throw error;
             throw new FailedToBuild('Failed to build user', error);
         }
     }

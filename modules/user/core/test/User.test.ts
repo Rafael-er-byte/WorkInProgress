@@ -1,7 +1,9 @@
 import type iHasher from "../interfaces/iHasher";
 import UserBuilder from "../model/UserBuilder";
 import User from "../model/User";
-import BadRequest from "../../../../shared/errors/BadRequest";
+import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
+import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
+import FailedToBuild from "../../../../shared/errors/core/FailedToBuild";
 
 describe('User entity testing', () => {
     const mockHasher: iHasher = {
@@ -33,7 +35,7 @@ describe('User entity testing', () => {
             .setUserName('User1')
             .setCreatedAt(validISOString);
 
-        expect(() => userBuilder.setPassword('123')).toThrow(BadRequest);
+        expect(() => userBuilder.setPassword('123')).toThrow(InvalidParameters);
         expect(() => userBuilder.setPassword('123')).toThrow('Invalid password');
     });
 
@@ -48,11 +50,11 @@ describe('User entity testing', () => {
             .setPassword('123456789')
             .setCreatedAt(validISOString); // Missing email
 
-        expect(() => userBuilder1.build()).toThrow(BadRequest);
-        expect(() => userBuilder1.build()).toThrow('Missing required parameters');
+        expect(() => userBuilder1.build()).toThrow(FailedToBuild);
+        expect(() => userBuilder1.build()).toThrow('Failed to build user');
 
-        expect(() => userBuilder2.build()).toThrow(BadRequest);
-        expect(() => userBuilder2.build()).toThrow('Missing required parameters');
+        expect(() => userBuilder2.build()).toThrow(FailedToBuild);
+        expect(() => userBuilder2.build()).toThrow('Failed to build user');
     });
 
     it('Should throw an error if the email is invalid', () => {
@@ -62,8 +64,8 @@ describe('User entity testing', () => {
             .setCreatedAt(validISOString)
             .setEmail('example.com'); // Invalid email
 
-        expect(() => userBuilder.build()).toThrow(BadRequest);
-        expect(() => userBuilder.build()).toThrow('Invalid email');
+        expect(() => userBuilder.build()).toThrow(FailedToBuild);
+        expect(() => userBuilder.build()).toThrow('Failed to build user');
     });
 
     it('Should authenticate only if the password matches', () => {
@@ -89,7 +91,7 @@ describe('User entity testing', () => {
         const user: User = userBuilder.build();
         expect(user.emailIsVerified()).toBe(false);
 
-        user.verifyEmail(true);
+        user.verifyEmail();
         expect(user.emailIsVerified()).toBe(true);
 
         user.verifyEmail();
