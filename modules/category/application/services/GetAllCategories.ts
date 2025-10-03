@@ -3,7 +3,7 @@ import type CategoryFilterDto from "../dtos/CategoryFilterDto";
 import type CategoryDto from "../dtos/CategryDto";
 import type Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/iRepository";
-import BadRequest from "../../../../shared/errors/BadRequest";
+import BadRequest from "../../../../shared/errors/api/BadRequest";
 
 export default class GetAllCategories{
     constructor(private readonly repo:iCategoryRepository, private readonly idManager:IDManager){}

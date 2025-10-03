@@ -3,7 +3,7 @@ import type IDManager from "../../../../shared/interfaces/IDManager";
 import CategoryDto from "../dtos/CategryDto";
 import Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/iRepository";
-import BadRequest from "../../../../shared/errors/BadRequest";
+import BadRequest from "../../../../shared/errors/api/BadRequest";
 
 export default class SaveCategory{
     constructor(private readonly repo: iCategoryRepository, private readonly idManager:IDManager, private readonly dateManager:DateManager){}
