@@ -1,5 +1,5 @@
-import BadRequest from "../../../../shared/errors/BadRequest";
-import NotFound from "../../../../shared/errors/NotFound";
+import BadRequest from "../../../../shared/errors/api/BadRequest";
+import NotFound from "../../../../shared/errors/api/NotFound";
 import type IDManager from "../../../../shared/interfaces/IDManager";
 import type iCategoryRepository from "../interfaces/iRepository";
 
