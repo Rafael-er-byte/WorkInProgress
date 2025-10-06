@@ -5,7 +5,7 @@ import SaveCategory from "../services/SaveCategory";
 import CategoryDto from "../dtos/CategryDto";
 import type DateManager from "../../../../shared/interfaces/DateManager";
 import ConcreteDateManager from "../../../../shared/utils/ConcreteDateManagement";
-import BadRequest from "../../../../shared/errors/BadRequest";
+import BadRequest from "../../../../shared/errors/api/BadRequest";
 
 describe('Testing save service', () => {
     let mockRepo:Partial<jest.Mocked<iCategoryRepository>>;

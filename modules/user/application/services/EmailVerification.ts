@@ -1,5 +1,3 @@
-import AppError from "../../../../shared/errors/AppError";
-import Unauthorized from "../../../../shared/errors/Unauthorized";
 import type iEnviroment from "../../../interfaces/config/iEnviroment";
 import type RefreshDto from "../dtos/in/RefreshDto";
 import type TokenPayLoad from "../dtos/out/TokenPayLoad";
@@ -9,10 +7,12 @@ import type iEmailSender from "../interfaces/mail/iEmailSender";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
 import type iCodeGenerator from "../interfaces/utils/iCodeGenerator";
 import type iToken from "../interfaces/utils/iToken";
-import type Msg from "../interfaces/types/message/Msg";
 import EmailDto from "../dtos/in/EmailDto";
 import type iMessageFactory from "../interfaces/types/iMessageFactory";
 import { MessageTypes } from "../../../../config/constants/MessageTypes";
+import AppError from "../../../../shared/errors/AppError";
+import Unauthorized from "../../../../shared/errors/Unauthorized";
+import type Msg from "../interfaces/types/Msg";
 
 export default class EmailVerification{
     constructor(
@@ -53,7 +53,7 @@ export default class EmailVerification{
 
         const [isSent, isSave] = await Promise.all([
             this.emailSender.sendEmail(mail),
-            this.codeRepo.set(`verify:${user.getId()}:${verificationCode}`, verificationCode, this.env.verificationCode.ttl)
+            this.codeRepo.set(`verify:${verificationCode}`, user.getId(), this.env.verificationCode.ttl)
         ]);
     
         if(!isSent || !isSave)throw new AppError('Something went wrong');
