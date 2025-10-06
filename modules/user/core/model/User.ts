@@ -4,7 +4,7 @@ import type UserBuilder from "./UserBuilder";
 
 export default class User{
     private id!:string;
-    private userName!:string; 
+    private userName:string; 
     private email!:string;
     private password!:string;
     private createdAt!:string;

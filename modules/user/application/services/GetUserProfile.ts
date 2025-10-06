@@ -1,3 +1,4 @@
+import type UserIdDto from "../dtos/in/UserIdDtos";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
 
 export default class GetUserProfile{
@@ -5,7 +6,7 @@ export default class GetUserProfile{
         private repo: iUserRepository
     ){}
 
-    async execute(){
+    async execute(id: UserIdDto){
         
     }
-}
+};
