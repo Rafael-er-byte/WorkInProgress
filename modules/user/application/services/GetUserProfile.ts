@@ -1,5 +1,5 @@
-import BadRequest from "../../../../shared/errors/BadRequest";
-import NotFound from "../../../../shared/errors/NotFound";
+import BadRequest from "../../../../shared/errors/api/BadRequest";
+import NotFound from "../../../../shared/errors/api/NotFound";
 import type User from "../../core/model/User";
 import type UserIdDto from "../dtos/in/UserIdDtos";
 import UserProfile from "../dtos/out/UserProfile";
