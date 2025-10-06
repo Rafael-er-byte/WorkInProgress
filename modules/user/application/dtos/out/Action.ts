@@ -1,5 +1,7 @@
 export default class Action{
-    success!:boolean;
-    data!:any;
-    id!:string;
+    constructor(
+        public success: boolean, 
+        public data?: any, 
+        public id?: string
+    ){}
 }

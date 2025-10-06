@@ -57,6 +57,7 @@ export default class User{
         if(!email)throw new MissingRequiredParameters('email');
         if(!this.emailRegex.test(email))throw new InvalidParameters('Invalid email', email);
         this.email = email;
+        this.isVerified = false;
     }
 
     setUrlProfile(url:string): void{
