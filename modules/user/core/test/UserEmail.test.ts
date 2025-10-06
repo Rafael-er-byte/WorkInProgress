@@ -1,6 +1,6 @@
 import type iHasher from "../interfaces/iHasher";
 import UserBuilder from "../model/UserBuilder";
-import BadRequest from "../../../../shared/errors/BadRequest";
+import FailedToBuild from "../../../../shared/errors/core/FailedToBuild";
 
 describe('UserBuilder - invalid emails', () => {
     const mockHasher: iHasher = {
@@ -31,7 +31,7 @@ describe('UserBuilder - invalid emails', () => {
             .setCreatedAt(validISOString)
             .setEmail(email);
 
-        expect(() => userBuilder.build()).toThrow(BadRequest);
-        expect(() => userBuilder.build()).toThrow('Invalid email');
+        expect(() => userBuilder.build()).toThrow(FailedToBuild);
+        expect(() => userBuilder.build()).toThrow('Failed to build user');
     });
 });

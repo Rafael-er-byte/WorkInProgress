@@ -1,4 +1,5 @@
-import BadRequest from "../../../../shared/errors/BadRequest";
+import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
+import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
 import type iHasher from "../interfaces/iHasher";
 import type UserBuilder from "./UserBuilder";
 
@@ -14,11 +15,11 @@ export default class User{
     private hasher!:iHasher;
 
     constructor(builder:UserBuilder){
-        if(!builder.email || !builder.password || !builder.id || !builder.hasher || !builder.createdAt)throw new BadRequest('Missing required parameters', builder);
+        if(!builder.email || !builder.password || !builder.id || !builder.hasher || !builder.createdAt)throw new MissingRequiredParameters('Missing required parameters', builder);
         this.hasher = builder.hasher;
-        if(!this.hasher.validate(builder.password))throw new BadRequest('Invalid password', builder.password);
+        if(!this.hasher.validate(builder.password))throw new InvalidParameters('Invalid password', builder.password);
         this.password = this.hasher.hash(builder.password);
-        if(!this.emailRegex.test(builder.email))throw new BadRequest('Invalid email', builder.email);
+        if(!this.emailRegex.test(builder.email))throw new InvalidParameters('Invalid email', builder.email);
         this.email = builder.email;
         this.createdAt = builder.createdAt;
         this.userName = builder.userName;
@@ -31,32 +32,35 @@ export default class User{
         return this.hasher.compare(password, this.password);
     }
 
-    verifyEmail(verify:boolean): void{
-        this.isVerified = verify || this.isVerified;
+    verifyEmail(): void{
+        this.isVerified = true;
     }
 
     updatePassword(newPassword:string): void{
-        if(!this.hasher.validate(newPassword))throw new BadRequest('Invalid password', newPassword);
+        if(!newPassword)throw new MissingRequiredParameters('password');
+        if(!this.hasher.validate(newPassword))throw new InvalidParameters('Invalid password', newPassword);
         this.password = this.hasher.hash(newPassword);
     }
 
     setPassword(newPwd:string): void{
-        if(!this.hasher.validate(newPwd))throw new BadRequest('Invalid password', newPwd);
+        if(!newPwd)throw new MissingRequiredParameters('password');
+        if(!this.hasher.validate(newPwd))throw new InvalidParameters('Invalid password', newPwd);
         this.password = this.hasher.hash(newPwd);
     }
 
     setUserName(userName:string): void{
-        if(!userName)throw new BadRequest('Invalid username', userName);
+        if(!userName)throw new MissingRequiredParameters('username');
         this.userName = userName;
     }
 
     setEmail(email:string): void{
-        if(!this.emailRegex.test(email))throw new BadRequest('Invalid email', email);
+        if(!email)throw new MissingRequiredParameters('email');
+        if(!this.emailRegex.test(email))throw new InvalidParameters('Invalid email', email);
         this.email = email;
     }
 
     setUrlProfile(url:string): void{
-        if(!url)throw new BadRequest('Invalid url', url);
+        if(!url)throw new MissingRequiredParameters('url');
         this.urlProfile = url;
     }
 
