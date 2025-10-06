@@ -10,8 +10,8 @@ import type iToken from "../interfaces/utils/iToken";
 import EmailDto from "../dtos/in/EmailDto";
 import type iMessageFactory from "../interfaces/types/iMessageFactory";
 import { MessageTypes } from "../../../../config/constants/MessageTypes";
-import AppError from "../../../../shared/errors/AppError";
-import Unauthorized from "../../../../shared/errors/Unauthorized";
+import AppError from "../../../../shared/errors/api/AppError";
+import Unauthorized from "../../../../shared/errors/api/Unauthorized";
 import type Msg from "../interfaces/types/Msg";
 
 export default class EmailVerification{

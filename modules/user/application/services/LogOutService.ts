@@ -1,5 +1,5 @@
 import type Enviroment from "../../../../config/env/Enviroment";
-import Unauthorized from "../../../../shared/errors/Unauthorized";
+import Unauthorized from "../../../../shared/errors/api/Unauthorized";
 import type RefreshDto from "../dtos/in/RefreshDto";
 import type TokenPayLoad from "../dtos/out/TokenPayLoad";
 import type iToken from "../interfaces/utils/iToken";
@@ -30,8 +30,8 @@ export default class LogOutService{
 
         await this.tokenRepo.delete(`refresh:${payload.id}:${refresh.token}`);
 
-        const action:Action = new Action();
-        action.success = true;
+        const action:Action = new Action(true);
+
         return action;
     }
 };

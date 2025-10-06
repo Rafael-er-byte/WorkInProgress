@@ -21,9 +21,7 @@ export default class ValidateEmailVerificationCode{
 
         const success: boolean = await this.repo.update(user!);
 
-        const action:Action = new Action()
-        action.success = success;
-        action.data = 'Email verified';
+        const action:Action = new Action(success, 'Email verified');
 
         return action;
     }

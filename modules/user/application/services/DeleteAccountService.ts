@@ -1,5 +1,5 @@
-import AppError from "../../../../shared/errors/AppError";
-import Unauthorized from "../../../../shared/errors/Unauthorized";
+import AppError from "../../../../shared/errors/api/AppError";
+import Unauthorized from "../../../../shared/errors/api/Unauthorized";
 import type User from "../../core/model/User";
 import type DeleteAccountDto from "../dtos/in/DeleteAccountDto";
 import type TokenPayLoad from "../dtos/out/TokenPayLoad";
@@ -37,9 +37,8 @@ export default class DeleteAccountService{
         
         if(!userDeleted) throw new AppError();
 
-        const action:Action = new Action();
-        action.id = user.getId();
-        action.success = true;
+        const action:Action = new Action(true, undefined, user.getId());
+
         return action;
     }
 };

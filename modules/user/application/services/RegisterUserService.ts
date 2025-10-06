@@ -1,5 +1,5 @@
-import BadRequest from "../../../../shared/errors/BadRequest";
-import ConflictError from "../../../../shared/errors/ConflictError";
+import BadRequest from "../../../../shared/errors/api/BadRequest";
+import ConflictError from "../../../../shared/errors/api/ConflictError";
 import type DateManager from "../../../../shared/interfaces/DateManager";
 import type IDManager from "../../../../shared/interfaces/IDManager";
 import type iHasher from "../../core/interfaces/iHasher";
@@ -42,9 +42,8 @@ export default class SaveUserService{
         const user:User = userBuilder.build();
         await this.repo.save(user);
         
-        const action:Action = new Action();
-        action.id = user.getId();
-        action.success = true;
+        const action:Action = new Action(true, undefined, user.getId());
+    
         return action;
     }
 };

@@ -1,4 +1,4 @@
-import Unauthorized from "../../../../shared/errors/Unauthorized";
+import Unauthorized from "../../../../shared/errors/api/Unauthorized";
 import type iEnviroment from "../../../interfaces/config/iEnviroment";
 import type RefreshDto from "../dtos/in/RefreshDto";
 import type TokenDto from "../dtos/out/TokenDto";
