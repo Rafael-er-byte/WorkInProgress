@@ -18,10 +18,13 @@ export default class Enviroment implements iEnviroment{
     token = {
         secretRefresh: process.env.SECRET_REFRESH as string,
         secretAccess: process.env.SECRET_ACCESS as string,
+        secretPermission: process.env.SECRET_PERMISSION as string,
         ttlAccess: process.env.TTL_ACCESS as number,
         ttlRefresh: process.env.TTL_REFRESH as number,
+        ttlPermission: process.env.TTL_PERMISSION as number,
         refresh: 'Refresh',
-        access: 'Access'
+        access: 'Access',
+        permission: 'Permission'
     };
 
     server = {
