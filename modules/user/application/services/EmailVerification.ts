@@ -4,7 +4,6 @@ import type iAppConfig from "../interfaces/contracts/AppConfig";
 import type iEmailSender from "../interfaces/mail/iEmailSender";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
 import type iCodeGenerator from "../interfaces/utils/iCodeGenerator";
-import type iToken from "../interfaces/utils/iToken";
 import EmailDto from "../dtos/in/EmailDto";
 import type iMessageFactory from "../interfaces/types/iMessageFactory";
 import { MessageTypes } from "../../../../config/constants/MessageTypes";

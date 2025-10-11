@@ -6,7 +6,6 @@ import type TokenPayLoad from "../dtos/out/TokenPayLoad";
 import type iToken from "../interfaces/utils/iToken";
 import type iTokenRepository from "../interfaces/cache/iTokenRepository";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
-import type iEnviroment from "../../../interfaces/config/iEnviroment";
 import Action from "../dtos/out/Action";
 
 export default class DeleteAccountService{
@@ -14,7 +13,6 @@ export default class DeleteAccountService{
         private repo:iUserRepository, 
         private tokenRepo:iTokenRepository,
         private tokenManager:iToken, 
-        private env: iEnviroment 
     ){}
 
     async execute(credentials: DeleteAccountDto): Promise<Action>{

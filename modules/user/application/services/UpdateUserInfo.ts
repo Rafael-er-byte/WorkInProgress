@@ -20,8 +20,10 @@ export default class UpdateUserInfo{
         if(userInfo.username)user.setUserName(userInfo.username);
 
         const success: boolean = await this.repo.update(user);
-    
-        const action: Action = new Action(success, 'User info updated');
+
+        let action: Action ;
+        if(success) action = new Action(success, 'User info updated');
+        else action = new Action(success, 'Cannot update user info');
         
         return action;
     }
