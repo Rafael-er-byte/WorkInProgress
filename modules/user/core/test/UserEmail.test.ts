@@ -24,14 +24,14 @@ describe('UserBuilder - invalid emails', () => {
         'test!@example.com'   // invalid character
     ];
 
-    test.each(invalidEmails)('Should throw an error for invalid email: %s', (email) => {
-        const userBuilder: UserBuilder = new UserBuilder(mockHasher, validUUID1)
+    test.each(invalidEmails)('Should throw an error for invalid email: %s', async (email) => {
+        let userBuilder: UserBuilder = new UserBuilder(mockHasher, validUUID1)
             .setUserName('User1')
-            .setPassword('123456789')
             .setCreatedAt(validISOString)
             .setEmail(email);
+            userBuilder = await userBuilder.setPassword('123456789');
 
-        expect(() => userBuilder.build()).toThrow(FailedToBuild);
-        expect(() => userBuilder.build()).toThrow('Failed to build user');
+        await expect(userBuilder.build()).rejects.toThrow(FailedToBuild);
+        await expect(userBuilder.build()).rejects.toThrow('Failed to build user');
     });
 });

@@ -32,13 +32,13 @@ export default class SaveUserService{
             await this.lastIds.increment(this.keyIds);
         }else userName = info.userName;
 
-        const userBuilder: UserBuilder = new UserBuilder(this.hasher, this.idManager.generateId())
+        let userBuilder: UserBuilder = new UserBuilder(this.hasher, this.idManager.generateId())
                                                         .setCreatedAt(this.dateManager.generate())
                                                         .setEmail(info.email)
                                                         .setUserName(userName)
                                                         .setUrlProfile(info.urlProfile);
 
-        await userBuilder.setPassword(info.password);
+        userBuilder = await userBuilder.setPassword(info.password);
         const user:User = await userBuilder.build();
         await this.repo.save(user);
         
