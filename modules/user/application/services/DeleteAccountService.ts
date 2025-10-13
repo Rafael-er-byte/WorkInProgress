@@ -19,7 +19,7 @@ export default class DeleteAccountService{
         const payload: TokenPayLoad = await this.tokenManager.decode(credentials.token);
         const user: User | undefined = await this.repo.getById(payload.id);
 
-        if(!user || !user!.auth(credentials.password)) throw new Unauthorized('Invalid credentials');
+        if(!user || !await user!.auth(credentials.password)) throw new Unauthorized('Invalid credentials');
 
         const [userDeleted, tokenDeleted] = await Promise.all([
             this.repo.deleteById(payload.id),

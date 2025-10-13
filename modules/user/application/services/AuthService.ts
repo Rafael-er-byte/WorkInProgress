@@ -20,7 +20,7 @@ export default class AuthService{
     
         const user: User | undefined = await this.repo.getByEmail(credentials.email);
 
-        if(!user || !user.auth(credentials.password))throw new Unauthorized('Invalid credentials');
+        if(!user || !await user.auth(credentials.password))throw new Unauthorized('Invalid credentials');
 
         const [accessToken, refreshToken] = await Promise.all([
             this.tokenManager.generate(user as User, this.env.token.access, this.env.token.secretAccess, this.env.token.ttlAccess),

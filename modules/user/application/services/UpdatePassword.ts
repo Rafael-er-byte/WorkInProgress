@@ -23,6 +23,6 @@ export default class UpdatePasswordService{
 
         if(!user)throw new Unauthorized('Please authenticate before');
 
-        user!.setPassword(newPassword.password);
+        await user!.setPassword(newPassword.password);
     }
 };

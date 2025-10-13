@@ -35,11 +35,11 @@ export default class SaveUserService{
         const userBuilder: UserBuilder = new UserBuilder(this.hasher, this.idManager.generateId())
                                                         .setCreatedAt(this.dateManager.generate())
                                                         .setEmail(info.email)
-                                                        .setPassword(info.password)
                                                         .setUserName(userName)
                                                         .setUrlProfile(info.urlProfile);
 
-        const user:User = userBuilder.build();
+        await userBuilder.setPassword(info.password);
+        const user:User = await userBuilder.build();
         await this.repo.save(user);
         
         const action:Action = new Action(true, undefined, user.getId());

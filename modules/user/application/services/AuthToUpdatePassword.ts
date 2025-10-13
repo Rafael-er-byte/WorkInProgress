@@ -18,7 +18,7 @@ export default class AuthToUpdatePassword{
         const user: User | undefined = await this.repo.getById(credentials.id);
 
         if(!user)throw new NotFound('User', credentials);
-        if(!user.auth(credentials.password)) throw new Unauthorized('Invalid credentials');
+        if(!await user.auth(credentials.password)) throw new Unauthorized('Invalid credentials');
 
         const token: TokenDto = await this.tokenManager.generate(user, this.env.token.permission, this.env.token.secretPermission, this.env.token.ttlPermission);
         return token;
