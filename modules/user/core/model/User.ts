@@ -5,7 +5,7 @@ import type UserBuilder from "./UserBuilder";
 
 export default class User{
     private id!:string;
-    private userName:string; 
+    private userName!:string; 
     private email!:string;
     private password!:string;
     private createdAt!:string;
@@ -14,10 +14,12 @@ export default class User{
     private readonly emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     private hasher!:iHasher;
 
-    constructor(builder:UserBuilder){
+    constructor(){}
+
+    async init(builder:UserBuilder){
         if(!builder.email || !builder.password || !builder.id || !builder.hasher || !builder.createdAt)throw new MissingRequiredParameters('Missing required parameters', builder);
         this.hasher = builder.hasher;
-        if(!this.hasher.validate(builder.password))throw new InvalidParameters('Invalid password', builder.password);
+        if(!await this.hasher.validate(builder.password))throw new InvalidParameters('Invalid password', builder.password);
         this.password = this.hasher.hash(builder.password);
         if(!this.emailRegex.test(builder.email))throw new InvalidParameters('Invalid email', builder.email);
         this.email = builder.email;
@@ -28,7 +30,7 @@ export default class User{
         this.id = builder.id;
     }
 
-    auth(password: string): boolean{
+    async auth(password: string): Promise<boolean>{
         return this.hasher.compare(password, this.password);
     }
 
@@ -36,16 +38,16 @@ export default class User{
         this.isVerified = true;
     }
 
-    updatePassword(newPassword:string): void{
+    async updatePassword(newPassword:string): Promise<void>{
         if(!newPassword)throw new MissingRequiredParameters('password');
-        if(!this.hasher.validate(newPassword))throw new InvalidParameters('Invalid password', newPassword);
+        if(!await this.hasher.validate(newPassword))throw new InvalidParameters('Invalid password', newPassword);
         this.password = this.hasher.hash(newPassword);
     }
 
-    setPassword(newPwd:string): void{
+    async setPassword(newPwd:string): Promise<void>{
         if(!newPwd)throw new MissingRequiredParameters('password');
-        if(!this.hasher.validate(newPwd))throw new InvalidParameters('Invalid password', newPwd);
-        this.password = this.hasher.hash(newPwd);
+        if(!await this.hasher.validate(newPwd))throw new InvalidParameters('Invalid password', newPwd);
+        this.password = await this.hasher.hash(newPwd);
     }
 
     setUserName(userName:string): void{
