@@ -30,9 +30,9 @@ export default class UserBuilder {
         return this;
     }
 
-    setPassword(password: string): this {
+    async setPassword(password: string): Promise<this> {
         if(!password) throw new MissingRequiredParameters('password')
-        if (!this.hasher.validate(password)) throw new InvalidParameters('Invalid password', password);
+        if (!await this.hasher.validate(password)) throw new InvalidParameters('Invalid password', password);
         this.password = password;
         return this;
     }
@@ -54,9 +54,11 @@ export default class UserBuilder {
         return this;
     }
 
-    build(): User {
+    async build(): Promise<User> {
         try {
-            return new User(this);
+            const user:User = new User();
+            await user.init(this);
+            return user;
         } catch (error) {
             throw new FailedToBuild('Failed to build user', error);
         }
