@@ -1,11 +1,11 @@
 import type Enviroment from "../../../../config/env/Enviroment";
 import Unauthorized from "../../../../shared/errors/api/Unauthorized";
-import type RefreshDto from "../dtos/in/RefreshDto";
 import type TokenPayLoad from "../dtos/out/TokenPayLoad";
 import type iToken from "../interfaces/utils/iToken";
 import type iTokenRepository from "../interfaces/cache/iTokenRepository";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
 import Action from "../dtos/out/Action";
+import type TokenDto from "../dtos/in/TokenDto";
 
 export default class LogOutService{
     constructor(
@@ -15,7 +15,7 @@ export default class LogOutService{
         private env: Enviroment
     ){}
 
-    async execute(refresh:RefreshDto): Promise<Action>{
+    async execute(refresh:TokenDto): Promise<Action>{
 
         const payload:TokenPayLoad = await this.tokenManager.decode(refresh.token);
 

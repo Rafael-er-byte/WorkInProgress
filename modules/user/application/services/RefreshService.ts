@@ -1,7 +1,6 @@
 import Unauthorized from "../../../../shared/errors/api/Unauthorized";
 import type iEnviroment from "../../../interfaces/config/iEnviroment";
-import type RefreshDto from "../dtos/in/RefreshDto";
-import type TokenDto from "../dtos/out/TokenDto";
+import type TokenDto from "../dtos/in/TokenDto";
 import type TokenPayLoad from "../dtos/out/TokenPayLoad";
 import type iToken from "../interfaces/utils/iToken";
 import type iTokenRepository from "../interfaces/cache/iTokenRepository";
@@ -15,7 +14,7 @@ export default class RefreshService{
         private env: iEnviroment
     ){}
 
-    async execute(refresh:RefreshDto): Promise<TokenDto>{
+    async execute(refresh:TokenDto): Promise<TokenDto>{
         const payload:TokenPayLoad = await this.tokenManager.decode(refresh.token);
         if(!payload)throw new Unauthorized('Invalid token');
 
