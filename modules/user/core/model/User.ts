@@ -8,22 +8,24 @@ export default class User{
     private userName!:string; 
     private email!:string;
     private password!:string;
-    private createdAt!:string;
     private urlProfile?:string | undefined;
     private isVerified: boolean = false;
+    private readonly createdAt!:string;
     private readonly emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    private hasher!:iHasher;
+    private readonly hasher!:iHasher;
 
-    constructor(){}
+    constructor(builder:UserBuilder){
+        if(!builder.hasher || !builder.createdAt)throw new MissingRequiredParameters('Missing required parameters', builder);
+        this.hasher = builder.hasher;
+        this.createdAt = builder.createdAt;
+    }
 
     async init(builder:UserBuilder){
-        if(!builder.email || !builder.password || !builder.id || !builder.hasher || !builder.createdAt)throw new MissingRequiredParameters('Missing required parameters', builder);
-        this.hasher = builder.hasher;
+        if(!builder.email || !builder.password || !builder.id)throw new MissingRequiredParameters('Missing required parameters', builder);
         if(!await this.hasher.validate(builder.password))throw new InvalidParameters('Invalid password', builder.password);
-        this.password = this.hasher.hash(builder.password);
+        this.password = await this.hasher.hash(builder.password);
         if(!this.emailRegex.test(builder.email))throw new InvalidParameters('Invalid email', builder.email);
         this.email = builder.email;
-        this.createdAt = builder.createdAt;
         this.userName = builder.userName;
         this.urlProfile = builder.urlProfile;
         this.isVerified = builder.isVerified;

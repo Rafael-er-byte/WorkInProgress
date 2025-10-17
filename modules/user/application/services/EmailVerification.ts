@@ -25,8 +25,6 @@ export default class EmailVerification{
 
     async execute(userId: UserIdDto): Promise<void>{
 
-        if(!await this.emailSender.healtCheck())throw new AppError('Email service unavailable', 503);
-
         const [user, verificationCode, language] = await Promise.all([
             this.repo.getById(userId.id),
             this.codeGenerator.generate(),

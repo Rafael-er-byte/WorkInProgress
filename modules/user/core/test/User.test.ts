@@ -2,7 +2,6 @@ import type iHasher from "../interfaces/iHasher";
 import UserBuilder from "../model/UserBuilder";
 import User from "../model/User";
 import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
-import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
 import FailedToBuild from "../../../../shared/errors/core/FailedToBuild";
 
 describe('User entity testing', () => {

@@ -56,7 +56,7 @@ export default class UserBuilder {
 
     async build(): Promise<User> {
         try {
-            const user:User = new User();
+            const user:User = new User(this);
             await user.init(this);
             return user;
         } catch (error) {
