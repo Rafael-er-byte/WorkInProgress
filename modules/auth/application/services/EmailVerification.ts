@@ -1,15 +1,15 @@
 import type iEnviroment from "../../../interfaces/config/iEnviroment";
-import type iCodeRepository from "../interfaces/cache/iCodeRepository";
-import type iAppConfig from "../interfaces/contracts/AppConfig";
-import type iEmailSender from "../interfaces/mail/iEmailSender";
+import type iCodeRepository from "../../../auth/application/interfaces/cache/iCodeRepository";
+import type iAppConfig from "../../../auth/application/interfaces/contracts/AppConfig";
+import type iEmailSender from "../../../auth/application/interfaces/mail/iEmailSender";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
 import type iCodeGenerator from "../interfaces/utils/iCodeGenerator";
 import EmailDto from "../dtos/in/EmailDto";
-import type iMessageFactory from "../interfaces/types/iMessageFactory";
+import type iMessageFactory from "../../../auth/application/interfaces/types/iMessageFactory";
 import { MessageTypes } from "../../../../config/constants/MessageTypes";
 import AppError from "../../../../shared/errors/api/AppError";
 import Unauthorized from "../../../../shared/errors/api/Unauthorized";
-import type Msg from "../interfaces/types/Msg";
+import type Msg from "../../../auth/application/interfaces/types/Msg";
 import type UserIdDto from "../dtos/in/UserIdDtos";
 
 export default class EmailVerification{

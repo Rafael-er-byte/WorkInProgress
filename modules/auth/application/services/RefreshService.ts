@@ -3,7 +3,7 @@ import type iEnviroment from "../../../interfaces/config/iEnviroment";
 import type TokenDto from "../dtos/in/TokenDto";
 import type TokenPayLoad from "../dtos/out/TokenPayLoad";
 import type iToken from "../interfaces/utils/iToken";
-import type iTokenRepository from "../interfaces/cache/iTokenRepository";
+import type iTokenRepository from "../../../auth/application/interfaces/cache/iTokenRepository";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
 
 export default class RefreshService{
