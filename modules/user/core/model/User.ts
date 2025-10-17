@@ -21,6 +21,7 @@ export default class User{
     }
 
     async init(builder:UserBuilder){
+        
         if(!builder.email || !builder.password || !builder.id)throw new MissingRequiredParameters('Missing required parameters', builder);
         if(!await this.hasher.validate(builder.password))throw new InvalidParameters('Invalid password', builder.password);
         this.password = await this.hasher.hash(builder.password);
