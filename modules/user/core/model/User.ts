@@ -8,14 +8,14 @@ export default class User{
     private id!:string;
     private havePassword:boolean = false;
     private userName!:string; 
-    private emailPrimary!:Email;
+    private emailPrimary?:Email | undefined;
     private emails: Map<string, Email> = new Map();
     private password?: Password;
     private urlProfile?:string | undefined;
     private readonly createdAt!:string;
 
     constructor(builder:UserBuilder){
-        if(!builder.emails || !builder.id)throw new MissingRequiredParameters('Missing required parameters', builder);
+        if(!builder.emails || !builder.id || !builder.createdAt)throw new MissingRequiredParameters('Missing required parameters', builder);
         
         builder.emails.forEach(email => {
             this.emails.set(email.getEmail(), email);
@@ -42,7 +42,7 @@ export default class User{
         this.emails.set(email, emailToVerify);
     }
 
-    havePassKey(): boolean{
+    hasPassword(): boolean{
         return this.havePassword;
     }
 
@@ -74,6 +74,8 @@ export default class User{
     }
 
     deleteEmail(email:string){
+        if(!this.emails.has(email)) throw new InvalidOperation('The Email doesnt exist');
+        if(this.emailPrimary && email === this.emailPrimary!.getEmail()) this.emailPrimary = undefined;
         this.emails.delete(email);
     }
 
