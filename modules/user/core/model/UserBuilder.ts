@@ -1,21 +1,30 @@
 import FailedToBuild from "../../../../shared/errors/core/FailedToBuild";
-import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
-import type iHasher from "../interfaces/iHasher";
+import Email from "../Objects/Email";
 import User from "./User";;
 
 export default class UserBuilder {
     userName!: string;
-    email!: string;
+    emails: Map<string, Email> = new Map();
+    emailPrimary!:Email;
     password!: string;
     urlProfile?: string;
     createdAt!: string;
     isVerified: boolean = false;
     id!: string;
+    havePassword:boolean = true;
 
-    constructor(public hasher: iHasher, id: string) {
-        if (!hasher || !id) throw new MissingRequiredParameters('Missing required parameters', { hasher, id });
+    constructor() {}
+
+    setId(id:string): this{
+        if(!id) throw new MissingRequiredParameters('id');
         this.id = id;
+        return this;
+    }
+
+    localPassword(doesIt:boolean): this{
+        this.havePassword = doesIt;
+        return this;
     }
 
     setUserName(userName: string): this {
@@ -24,15 +33,22 @@ export default class UserBuilder {
         return this;
     }
 
-    setEmail(email: string): this {
+    setEmail(email: string, isVerified: boolean): this {
         if (!email) throw new MissingRequiredParameters('email');
-        this.email = email;
+        const newEmail:Email = new Email();
+        newEmail.setEmail(email);
+        if(isVerified) newEmail.verify();
+        this.emails.set(email, newEmail);
         return this;
     }
 
-    async setPassword(password: string): Promise<this> {
+    setEmailPrimary(email:Email): this{
+        this.emailPrimary = email;
+        return this;
+    }
+
+    setPassword(password: string): this {
         if(!password) throw new MissingRequiredParameters('password')
-        if (!await this.hasher.validate(password)) throw new InvalidParameters('Invalid password', password);
         this.password = password;
         return this;
     }
@@ -54,10 +70,9 @@ export default class UserBuilder {
         return this;
     }
 
-    async build(): Promise<User> {
+    build(): User {
         try {
             const user:User = new User(this);
-            await user.init(this);
             return user;
         } catch (error) {
             throw new FailedToBuild('Failed to build user', error);
