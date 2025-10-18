@@ -1,7 +1,7 @@
 import InvalidOperation from "../../../../shared/errors/core/InvalidOperation";
-import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
 import Email from "../Objects/Email";
+import Password from "../Objects/Password";
 import type UserBuilder from "./UserBuilder";
 
 export default class User{
@@ -10,10 +10,9 @@ export default class User{
     private userName!:string; 
     private emailPrimary!:Email;
     private emails: Map<string, Email> = new Map();
-    private password?:string;
+    private password?: Password;
     private urlProfile?:string | undefined;
     private readonly createdAt!:string;
-    private readonly passwordRegex = /^(?=.*[A-Z])(?=.*\d).+$/;
 
     constructor(builder:UserBuilder){
         if(!builder.emails || !builder.id)throw new MissingRequiredParameters('Missing required parameters', builder);
@@ -22,7 +21,11 @@ export default class User{
             this.emails.set(email.getEmail(), email);
         });
 
-        if(builder.havePassword) this.password = builder.password;
+        if(builder.havePassword){
+            const pwd: Password = new Password();
+            pwd.setPassword(builder.password);
+            this.password = pwd;
+        }
 
         this.havePassword = builder.havePassword;
         this.emailPrimary = builder.emailPrimary;
@@ -44,9 +47,10 @@ export default class User{
     }
 
     setPassword(newPwd:string): void{
-        if(!this.havePassword)throw new MissingRequiredParameters('password');
-        if(newPwd.length < 8 || !this.passwordRegex.test(newPwd)) throw new InvalidParameters('Password', newPwd);
-        this.password = newPwd;
+        if(!newPwd)throw new MissingRequiredParameters('password');
+        const pwd: Password = new Password();
+        pwd.setPassword(newPwd);
+        this.password = pwd;
         this.havePassword = true;
     }
 
@@ -111,6 +115,6 @@ export default class User{
 
     getPasssword(): string{
         if(!this.havePassword) throw new InvalidOperation('This user dont have password, try another method');
-        return this.password!;
+        return this.password!.getPassword();
     }
 };

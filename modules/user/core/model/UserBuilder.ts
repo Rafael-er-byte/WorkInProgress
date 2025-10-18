@@ -22,8 +22,8 @@ export default class UserBuilder {
         return this;
     }
 
-    localPassword(doesIt:boolean): this{
-        this.havePassword = doesIt;
+    setLocalPassword(haveIt:boolean): this{
+        this.havePassword = haveIt;
         return this;
     }
 
