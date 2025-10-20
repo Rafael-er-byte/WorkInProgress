@@ -28,7 +28,8 @@ export default class User{
         }
 
         this.havePassword = builder.havePassword;
-        this.emailPrimary = builder.emailPrimary;
+        this.emailPrimary = this.emails.get(builder.emailPrimary);
+        if(!this.emailPrimary) throw new InvalidOperation('The primary email doesnt exists', builder.emailPrimary);
         this.userName = builder.userName;
         this.urlProfile = builder.urlProfile;
         this.id = builder.id;

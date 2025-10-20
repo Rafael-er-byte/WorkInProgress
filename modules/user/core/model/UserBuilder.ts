@@ -6,7 +6,7 @@ import User from "./User";;
 export default class UserBuilder {
     userName!: string;
     emails: Map<string, Email> = new Map();
-    emailPrimary!:Email;
+    emailPrimary!:string;
     password!: string;
     urlProfile?: string;
     createdAt!: string;
@@ -42,7 +42,7 @@ export default class UserBuilder {
         return this;
     }
 
-    setEmailPrimary(email:Email): this{
+    setEmailPrimary(email:string): this{
         this.emailPrimary = email;
         return this;
     }
