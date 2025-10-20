@@ -11,7 +11,6 @@ export default class Category {
         this.createdAt = createdAt;
     }
 
-    // Getters
     public getIdCategory(): string {
         return this.idCategory;
     }
@@ -28,7 +27,6 @@ export default class Category {
         return this.createdAt;
     }
 
-    // Setters
     public setIdCategory(idCategory: string): void {
         if (!idCategory || idCategory.trim().length === 0) {
             throw new Error('Invalid id');
