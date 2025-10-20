@@ -17,7 +17,6 @@ export default class Category {
         this.createdAt = createdAt;
     }
 
-    // Getters
     getIdCategory(): string {
         return this.idCategory;
     }

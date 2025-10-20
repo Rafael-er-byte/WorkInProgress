@@ -36,7 +36,7 @@ export default class User{
     }
 
     verifyEmail(email:string): void{
-        const emailToVerify: Email | undefined= this.emails.get(email);
+        const emailToVerify: Email | undefined = this.emails.get(email);
         if(!emailToVerify) throw new InvalidOperation('Email doesnt exists', email);
         emailToVerify.verify()
         this.emails.set(email, emailToVerify);
