@@ -1,18 +1,19 @@
 import FailedToBuild from "../../../../shared/errors/core/FailedToBuild";
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
 import Email from "../Objects/Email";
+import Password from "../Objects/Password";
 import User from "./User";;
 
 export default class UserBuilder {
     userName!: string;
     emails: Map<string, Email> = new Map();
     emailPrimary!:string;
-    password!: string;
+    password?: Password;
     urlProfile?: string;
     createdAt!: string;
     isVerified: boolean = false;
     id!: string;
-    havePassword:boolean = true;
+    havePassword:boolean = false;
 
     constructor() {}
 
@@ -49,7 +50,9 @@ export default class UserBuilder {
 
     setPassword(password: string): this {
         if(!password) throw new MissingRequiredParameters('password')
-        this.password = password;
+        const newPwd = new Password();
+        newPwd.setPassword(password);
+        this.password = newPwd;
         return this;
     }
 

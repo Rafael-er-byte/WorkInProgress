@@ -21,11 +21,7 @@ export default class User{
             this.emails.set(email.getEmail(), email);
         });
 
-        if(builder.havePassword){
-            const pwd: Password = new Password();
-            pwd.setPassword(builder.password);
-            this.password = pwd;
-        }
+        if(builder.havePassword) this.password = builder.password!;
 
         this.havePassword = builder.havePassword;
         this.emailPrimary = this.emails.get(builder.emailPrimary);

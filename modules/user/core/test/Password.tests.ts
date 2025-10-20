@@ -14,6 +14,7 @@ describe('Password object tests', () => {
         expect(password.setPassword('aaaaaaaa')).toThrow(InvalidParameters); //Only low case letters
         expect(password.setPassword('GGGGGGGG')).toThrow(InvalidParameters); //Only high level letters
         expect(password.setPassword('12@Rsf')).toThrow(InvalidParameters); //Not minimum size
+        expect(password.setPassword('12345')).toThrow(InvalidParameters); //Not minimum size and only numbers
         expect(password.setPassword('12#?foi4o4n')).toThrow(InvalidParameters); //Without high level letters
         expect(password.setPassword('fjo@joSD_?fR')).toThrow(InvalidParameters); //Without numbers
         expect(password.setPassword('92@13SD_?R')).toThrow(InvalidParameters); //Without low level letters
