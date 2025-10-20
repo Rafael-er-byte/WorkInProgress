@@ -1,5 +1,5 @@
-import type CategoryFilterDto from "../dtos/CategoryFilterDto";
-import type Category from "../../core/model/Category";
+import type Category from "../../../core/model/Category";
+import type CategoryFilterDto from "../../dtos/in/CategoryFilterDto";
 
 export default interface iCategoryRepository{
     create(category:Category): Promise<void>
