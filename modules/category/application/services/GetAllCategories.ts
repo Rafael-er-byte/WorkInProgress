@@ -1,8 +1,8 @@
 import type IDManager from "../../../../shared/interfaces/IDManager";
-import type CategoryFilterDto from "../dtos/CategoryFilterDto";
-import type CategoryDto from "../dtos/CategryDto";
+import type CategoryFilterDto from "../dtos/in/CategoryFilterDto";
+import type CategoryDto from "../dtos/in/CategryDto";
 import type Category from "../../core/model/Category";
-import type iCategoryRepository from "../interfaces/iRepository";
+import type iCategoryRepository from "../interfaces/repository/iRepository";
 import BadRequest from "../../../../shared/errors/BadRequest";
 
 export default class GetAllCategories{

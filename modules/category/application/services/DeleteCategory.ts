@@ -1,7 +1,7 @@
 import BadRequest from "../../../../shared/errors/BadRequest";
 import NotFound from "../../../../shared/errors/NotFound";
 import type IDManager from "../../../../shared/interfaces/IDManager";
-import type iCategoryRepository from "../interfaces/iRepository";
+import type iCategoryRepository from "../interfaces/repository/iRepository";
 
 export default class DeleteCategoryById{
     constructor(private readonly repo:iCategoryRepository, private readonly idManager:IDManager){}
