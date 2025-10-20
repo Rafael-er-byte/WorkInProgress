@@ -14,8 +14,11 @@ export default interface iEnviroment{
     token:{
         secretRefresh:string;
         secretAccess:string;
+        secretPermission:string;
         ttlAccess:number;
         ttlRefresh:number;
+        ttlPermission:number;
+        permission: 'Permission'
         refresh: 'Refresh';
         access: 'Access';
     }

@@ -1,13 +1,19 @@
+import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
+
 export default class Category {
-    private idCategory!: string;
     private name!: string;
-    private idCreator!: string;
-    private createdAt?: string | undefined;
+    private readonly idCategory!: string;
+    private readonly idCreator!: string;
+    private readonly createdAt?: string | undefined;
 
     constructor(name: string, idCreator: string, idCategory: string, createdAt?: string | undefined) {
+        if (!idCategory?.trim()) throw new MissingRequiredParameters("id");
+        if (!name?.trim()) throw new MissingRequiredParameters("category_name");
+        if (!idCreator?.trim()) throw new MissingRequiredParameters("id_creator");
+
         this.setName(name);
-        this.setIdCreator(idCreator);
-        this.setIdCategory(idCategory);
+        this.idCategory = idCategory;
+        this.idCreator = idCreator;
         this.createdAt = createdAt;
     }
 
@@ -15,15 +21,15 @@ export default class Category {
         return this.idCategory;
     }
 
-    public getName(): string {
+    getName(): string {
         return this.name;
     }
 
-    public getIdCreator(): string {
+    getIdCreator(): string {
         return this.idCreator;
     }
 
-    public getCreatedAt(): string | undefined {
+    getCreatedAt(): string | undefined {
         return this.createdAt;
     }
 
@@ -36,19 +42,8 @@ export default class Category {
 
     public setName(name: string): void {
         if (!name || name.trim().length === 0) {
-            throw new Error('Invalid name of category');
+            throw new MissingRequiredParameters('category_name');
         }
         this.name = name;
-    }
-
-    public setIdCreator(idCreator: string): void {
-        if (!idCreator || idCreator.trim().length === 0) {
-            throw new Error('Invalid user id');
-        }
-        this.idCreator = idCreator;
-    }
-
-    public setCreatedAt(createdAt?: string): void {
-        this.createdAt = createdAt;
     }
 };

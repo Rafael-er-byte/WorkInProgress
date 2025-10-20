@@ -1,36 +1,58 @@
-import type iHasher from "../interfaces/iHasher";
-import User from "./User";
-import BadRequest from "../../../../shared/errors/BadRequest";
+import FailedToBuild from "../../../../shared/errors/core/FailedToBuild";
+import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
+import Email from "../Objects/Email";
+import Password from "../Objects/Password";
+import User from "./User";;
 
 export default class UserBuilder {
     userName!: string;
-    email!: string;
-    password!: string;
+    emails: Map<string, Email> = new Map();
+    emailPrimary!:string;
+    password?: Password;
     urlProfile?: string;
     createdAt!: string;
     isVerified: boolean = false;
     id!: string;
+    havePassword:boolean = false;
 
-    constructor(public hasher: iHasher, id: string) {
-        if (!hasher || !id) throw new BadRequest('Missing required parameters', { hasher, id });
+    constructor() {}
+
+    setId(id:string): this{
+        if(!id) throw new MissingRequiredParameters('id');
         this.id = id;
+        return this;
+    }
+
+    setLocalPassword(haveIt:boolean): this{
+        this.havePassword = haveIt;
+        return this;
     }
 
     setUserName(userName: string): this {
-        if (!userName) throw new BadRequest('Invalid username', userName);
+        if (!userName) throw new MissingRequiredParameters('username');
         this.userName = userName;
         return this;
     }
 
-    setEmail(email: string): this {
-        if (!email) throw new BadRequest('Invalid email', email);
-        this.email = email;
+    setEmail(email: string, isVerified: boolean): this {
+        if (!email) throw new MissingRequiredParameters('email');
+        const newEmail:Email = new Email();
+        newEmail.setEmail(email);
+        if(isVerified) newEmail.verify();
+        this.emails.set(email, newEmail);
+        return this;
+    }
+
+    setEmailPrimary(email:string): this{
+        this.emailPrimary = email;
         return this;
     }
 
     setPassword(password: string): this {
-        if (!this.hasher.validate(password)) throw new BadRequest('Invalid password', password);
-        this.password = password;
+        if(!password) throw new MissingRequiredParameters('password')
+        const newPwd = new Password();
+        newPwd.setPassword(password);
+        this.password = newPwd;
         return this;
     }
 
@@ -41,7 +63,7 @@ export default class UserBuilder {
     }
 
     setCreatedAt(date: string): this {
-        if (!date) throw new BadRequest('Invalid date', date);
+        if (!date) throw new MissingRequiredParameters('date');
         this.createdAt = date;
         return this;
     }
@@ -53,10 +75,10 @@ export default class UserBuilder {
 
     build(): User {
         try {
-            return new User(this);
+            const user:User = new User(this);
+            return user;
         } catch (error) {
-            if (error instanceof BadRequest) throw error;
-            throw new BadRequest('Failed to build user', error);
+            throw new FailedToBuild('Failed to build user', error);
         }
     }
 };

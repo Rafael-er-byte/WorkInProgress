@@ -1,62 +1,87 @@
-import BadRequest from "../../../../shared/errors/BadRequest";
-import type iHasher from "../interfaces/iHasher";
+import InvalidOperation from "../../../../shared/errors/core/InvalidOperation";
+import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
+import Email from "../Objects/Email";
+import Password from "../Objects/Password";
 import type UserBuilder from "./UserBuilder";
 
 export default class User{
     private id!:string;
+    private havePassword:boolean = false;
     private userName!:string; 
-    private email!:string;
-    private password!:string;
-    private createdAt!:string;
+    private emailPrimary?:Email | undefined;
+    private emails: Map<string, Email> = new Map();
+    private password?: Password;
     private urlProfile?:string | undefined;
-    private isVerified: boolean = false;
-    private readonly emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    private hasher!:iHasher;
+    private readonly createdAt!:string;
 
     constructor(builder:UserBuilder){
-        if(!builder.email || !builder.password || !builder.id || !builder.hasher || !builder.createdAt)throw new BadRequest('Missing required parameters', builder);
-        this.hasher = builder.hasher;
-        if(!this.hasher.validate(builder.password))throw new BadRequest('Invalid password', builder.password);
-        this.password = this.hasher.hash(builder.password);
-        if(!this.emailRegex.test(builder.email))throw new BadRequest('Invalid email', builder.email);
-        this.email = builder.email;
-        this.createdAt = builder.createdAt;
+        if(!builder.emails || !builder.id || !builder.createdAt)throw new MissingRequiredParameters('Missing required parameters', builder);
+        
+        builder.emails.forEach(email => {
+            this.emails.set(email.getEmail(), email);
+        });
+
+        if(builder.havePassword) this.password = builder.password!;
+
+        this.havePassword = builder.havePassword;
+        this.emailPrimary = this.emails.get(builder.emailPrimary);
+        if(!this.emailPrimary) throw new InvalidOperation('The primary email doesnt exists', builder.emailPrimary);
         this.userName = builder.userName;
         this.urlProfile = builder.urlProfile;
-        this.isVerified = builder.isVerified;
         this.id = builder.id;
+        this.createdAt = builder.createdAt;
     }
 
-    auth(password: string): boolean{
-        return this.hasher.compare(password, this.password);
+    verifyEmail(email:string): void{
+        const emailToVerify: Email | undefined = this.emails.get(email);
+        if(!emailToVerify) throw new InvalidOperation('Email doesnt exists', email);
+        emailToVerify.verify()
+        this.emails.set(email, emailToVerify);
     }
 
-    verifyEmail(verify:boolean): void{
-        this.isVerified = verify || this.isVerified;
-    }
-
-    updatePassword(newPassword:string): void{
-        if(!this.hasher.validate(newPassword))throw new BadRequest('Invalid password', newPassword);
-        this.password = this.hasher.hash(newPassword);
+    hasPassword(): boolean{
+        return this.havePassword;
     }
 
     setPassword(newPwd:string): void{
-        if(!this.hasher.validate(newPwd))throw new BadRequest('Invalid password', newPwd);
-        this.password = this.hasher.hash(newPwd);
+        if(!newPwd)throw new MissingRequiredParameters('password');
+        const pwd: Password = new Password();
+        pwd.setPassword(newPwd);
+        this.password = pwd;
+        this.havePassword = true;
     }
 
     setUserName(userName:string): void{
-        if(!userName)throw new BadRequest('Invalid username', userName);
+        if(!userName)throw new MissingRequiredParameters('username');
         this.userName = userName;
     }
 
+    setMainEmail(email:string): void{
+        const newMainEmail:Email | undefined = this.emails.get(email);
+        if(!newMainEmail) throw new InvalidOperation('Email doesnt exists', email);
+        this.emailPrimary = newMainEmail;
+    }
+
     setEmail(email:string): void{
-        if(!this.emailRegex.test(email))throw new BadRequest('Invalid email', email);
-        this.email = email;
+        const newEmail:Email = new Email();
+        newEmail.setEmail(email);
+        this.emails.set(email, newEmail);
+
+        if(!this.emailPrimary) this.emailPrimary = newEmail;
+    }
+
+    deleteEmail(email:string){
+        if(!this.emails.has(email)) throw new InvalidOperation('The Email doesnt exist');
+        if(this.emailPrimary && email === this.emailPrimary!.getEmail()) this.emailPrimary = undefined;
+        this.emails.delete(email);
+    }
+
+    getMainEmail(){
+        return this.emailPrimary;
     }
 
     setUrlProfile(url:string): void{
-        if(!url)throw new BadRequest('Invalid url', url);
+        if(!url)throw new MissingRequiredParameters('url');
         this.urlProfile = url;
     }
 
@@ -64,8 +89,11 @@ export default class User{
         this.urlProfile = undefined;
     }
 
-    getEmail(): string{
-        return this.email;
+    getAllEmails(): string[]{
+        let emailsList: string[] = [];
+
+        for(let [id, email] of this.emails) emailsList.push(email.getEmail());
+        return emailsList;
     }
 
     getUrlProfile():string | undefined{
@@ -80,11 +108,12 @@ export default class User{
         return this.createdAt;
     }
 
-    emailIsVerified(): boolean{
-        return this.isVerified;
-    }
-
     getId(): string{
         return this.id;
+    }
+
+    getPasssword(): string{
+        if(!this.havePassword) throw new InvalidOperation('This user dont have password, try another method');
+        return this.password!.getPassword();
     }
 };

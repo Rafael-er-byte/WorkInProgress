@@ -1,4 +1,4 @@
-import BadRequest from "../../../../shared/errors/BadRequest";
+import BadRequest from "../../../../shared/errors/api/BadRequest";
 import type IDManager from "../../../../shared/interfaces/IDManager";
 import Category from "../../core/model/Category";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
