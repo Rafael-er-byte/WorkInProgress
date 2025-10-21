@@ -6,5 +6,5 @@ export default interface iSearchRepository{
     create(category:Category): Promise<boolean>
     update(category: Category): Promise<boolean>
     delete(id:Category['idCategory']): Promise<boolean>
-    search(categoryDto:CategoryDto, categoryFilterDto: CategoryFilterDto): Promise<Category[]>
+    search(categoryFilterDto: CategoryFilterDto): Promise<Category[]>
 };

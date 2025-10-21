@@ -11,8 +11,8 @@ export default class DeleteCategoryById{
     constructor(
         private readonly repo:iCategoryRepository, 
         private readonly idManager:IDManager, 
-        private search: iSearchRepository,
-        private messenger: iMessenger
+        private readonly search: iSearchRepository,
+        private readonly messenger: iMessenger
     ){}
 
     async execute(id:string, idCreator:string):Promise<Action>{
