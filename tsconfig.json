@@ -3,6 +3,7 @@
   "compilerOptions": {
     "module": "ESNext",
     "target": "es2020",
+    "types": ["jest"],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

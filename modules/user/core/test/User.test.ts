@@ -11,7 +11,7 @@ describe("User entity tests (strong password validation)", () => {
       .setUserName("rafael")
       .setEmail("rafael@example.com", true)
       .setEmailPrimary("rafael@example.com")
-      .setPassword("ValidP@ss1") // ✅ Contraseña válida
+      .setPassword("ValidP@ss1") // Valid password
       .setCreatedAt("2025-10-19")
       .setLocalPassword(true);
   });

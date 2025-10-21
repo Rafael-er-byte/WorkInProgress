@@ -1,7 +1,8 @@
 import CoreError from "./CoreError";
 
 export default class InvalidParameters extends CoreError{
-    constructor(public isInvalid:string, public info?:any){
-        super(isInvalid);
+    constructor(isInvalid:string, info?:any){
+        super(isInvalid, info);
+        Object.setPrototypeOf(this, InvalidParameters.prototype);
     }
 };

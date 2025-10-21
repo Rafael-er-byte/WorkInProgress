@@ -1,7 +1,13 @@
 export default class CoreError extends Error{
-    constructor(public message:string){
+    public info?:any;
+
+    constructor(message:string, info:any){
         super(message);
+        this.info = info;
+
         Object.setPrototypeOf(this, new.target.prototype);
-        Error.captureStackTrace(this);
+        if(Error.captureStackTrace){
+            Error.captureStackTrace(this, new.target);
+        }
     }
 };

@@ -3,6 +3,8 @@ export default class AppError extends Error{
         super(message);
 
         Object.setPrototypeOf(this, new.target.prototype);
-        Error.captureStackTrace(this);
+        if(Error.captureStackTrace){
+            Error.captureStackTrace(this, new.target);
+        }
     }
 };
