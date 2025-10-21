@@ -3,7 +3,7 @@ import MissingRequiredParameters from "../../../../shared/errors/core/MissingReq
 
 export default class Password{
     private password?: string;
-    private readonly passwordRegex = /^(?=.*[A-Z])(?=.*\d).+$/;
+    private readonly passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/;
 
     setPassword(pwd:string):void{
         if(!pwd) throw new MissingRequiredParameters('Password');

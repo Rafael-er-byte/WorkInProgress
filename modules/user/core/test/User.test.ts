@@ -1,4 +1,5 @@
 import InvalidOperation from "../../../../shared/errors/core/InvalidOperation";
+import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
 import UserBuilder from "../model/UserBuilder";
 
@@ -36,27 +37,27 @@ describe("User entity tests (strong password validation)", () => {
 
   test("should throw for invalid passwords (too short)", () => {
     const user = builder.build();
-    expect(() => user.setPassword("Ab1@c")).toThrow(MissingRequiredParameters);
+    expect(() => user.setPassword("Ab1@c")).toThrow(InvalidParameters);
   });
 
   test("should throw for missing uppercase", () => {
     const user = builder.build();
-    expect(() => user.setPassword("weakp@ss1")).toThrow(MissingRequiredParameters);
+    expect(() => user.setPassword("weakp@ss1")).toThrow(InvalidParameters);
   });
 
   test("should throw for missing lowercase", () => {
     const user = builder.build();
-    expect(() => user.setPassword("WEAKP@SS1")).toThrow(MissingRequiredParameters);
+    expect(() => user.setPassword("WEAKP@SS1")).toThrow(InvalidParameters);
   });
 
   test("should throw for missing number", () => {
     const user = builder.build();
-    expect(() => user.setPassword("WeakP@ss")).toThrow(MissingRequiredParameters);
+    expect(() => user.setPassword("WeakP@ss")).toThrow(InvalidParameters);
   });
 
   test("should throw for missing symbol", () => {
     const user = builder.build();
-    expect(() => user.setPassword("WeakPass1")).toThrow(MissingRequiredParameters);
+    expect(() => user.setPassword("WeakPass1")).toThrow(InvalidParameters);
   });
 
   test("should throw when getting password without having one", () => {
