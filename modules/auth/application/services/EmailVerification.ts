@@ -1,4 +1,4 @@
-import type iEnviroment from "../../../interfaces/config/iEnviroment";
+import type iEnviroment from "../../../shared/config/iEnviroment";
 import type iCodeRepository from "../../../auth/application/interfaces/cache/iCodeRepository";
 import type iAppConfig from "../../../auth/application/interfaces/contracts/AppConfig";
 import type iEmailSender from "../../../auth/application/interfaces/mail/iEmailSender";
@@ -6,7 +6,7 @@ import type iUserRepository from "../interfaces/repository/iUserRepository";
 import type iCodeGenerator from "../interfaces/utils/iCodeGenerator";
 import EmailDto from "../dtos/in/EmailDto";
 import type iMessageFactory from "../../../auth/application/interfaces/types/iMessageFactory";
-import { MessageTypes } from "../../../../config/constants/MessageTypes";
+import { MessageTypes } from "../../../../shared/config/constants/MessageTypes";
 import AppError from "../../../../shared/errors/api/AppError";
 import Unauthorized from "../../../../shared/errors/api/Unauthorized";
 import type Msg from "../../../auth/application/interfaces/types/Msg";

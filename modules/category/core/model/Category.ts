@@ -6,10 +6,10 @@ export default class Category {
     private readonly idCreator!: string;
     private readonly createdAt?: string | undefined;
 
-    constructor(name: string, idCreator: string, idCategory: string, createdAt?: string | undefined) {
-        if (!idCategory?.trim()) throw new MissingRequiredParameters("id");
-        if (!name?.trim()) throw new MissingRequiredParameters("category_name");
-        if (!idCreator?.trim()) throw new MissingRequiredParameters("id_creator");
+    constructor(name: string, idCreator: string, idCategory: string, createdAt: string) {
+        if (!idCategory || idCategory?.trim().length === 0) throw new MissingRequiredParameters("id");
+        if (!name || name?.trim().length === 0) throw new MissingRequiredParameters("category_name");
+        if (!idCreator || idCreator?.trim().length === 0) throw new MissingRequiredParameters("id_creator");
 
         this.setName(name);
         this.idCategory = idCategory;
@@ -31,13 +31,6 @@ export default class Category {
 
     getCreatedAt(): string | undefined {
         return this.createdAt;
-    }
-
-    public setIdCategory(idCategory: string): void {
-        if (!idCategory || idCategory.trim().length === 0) {
-            throw new Error('Invalid id');
-        }
-        this.idCategory = idCategory;
     }
 
     public setName(name: string): void {

@@ -1,16 +1,36 @@
-import type IDManager from "../../../../shared/interfaces/IDManager";
+import type IDManager from "../../../shared/contracts/IDManager";
 import type CategoryFilterDto from "../dtos/in/CategoryFilterDto";
-import type CategoryDto from "../dtos/in/CategryDto";
 import type Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/repository/iRepository";
 import BadRequest from "../../../../shared/errors/BadRequest";
+import type iSearchRepository from "../interfaces/cache/iSearchRepsitory";
+import AppError from "../../../../shared/errors/AppError";
+import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
 
 export default class GetAllCategories{
-    constructor(private readonly repo:iCategoryRepository, private readonly idManager:IDManager){}
+    constructor(
+        private readonly repo:iCategoryRepository, 
+        private readonly idManager:IDManager,
+        private readonly search: iSearchRepository
+    ){}
 
-    async execute(categoryDto:CategoryDto, categoryFilterDto:CategoryFilterDto):Promise<Category[]>{
-        if(!this.idManager.validateId(categoryDto.idCreator) || !this.idManager.validateId(categoryDto.idCategory) || !categoryFilterDto.limit || !categoryFilterDto.page)throw new BadRequest('Invalid data');
-        const categories:Category[] = await this.repo.getAll(categoryDto.idCategory, categoryDto.idCreator, categoryFilterDto);
-        return categories; 
+    async execute(categoryFilterDto:CategoryFilterDto):Promise<ResponseCategoryDto[]>{
+        if(!this.idManager.validateId(categoryFilterDto.idCreator) || !categoryFilterDto.limit || !categoryFilterDto.page)throw new BadRequest('Invalid data');
+            let categories: Category[] = [];
+
+        try {
+            categories = await this.search.search(categoryFilterDto);
+        } catch (error) {
+            if(error instanceof AppError && error.code === 500){
+                categories = await this.repo.getAll(categoryFilterDto);
+            }else throw error;
+        }
+
+        let categoriesResponse: ResponseCategoryDto[] = categories.map(c => {
+                const category:ResponseCategoryDto = new ResponseCategoryDto(c.getName(), c.getIdCategory(), c.getIdCreator(), c.getCreatedAt() as string);
+                return category;
+        });
+        
+        return categoriesResponse; 
     }
 };

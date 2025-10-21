@@ -1,6 +1,7 @@
 type TypeSorting = 'a-z' | 'z-a' | 'recent';
 
 export default class CategoryFilterDto{
+    idCreator!:string;
     limit!:number;
     page!:number;
     titleLike?:string;
