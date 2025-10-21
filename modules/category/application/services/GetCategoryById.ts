@@ -1,5 +1,5 @@
 import BadRequest from "../../../../shared/errors/api/BadRequest";
-import type IDManager from "../../../../shared/interfaces/IDManager";
+import type IDManager from "../../../shared/contracts/IDManager";
 import Category from "../../core/model/Category";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
 import type iCategoryRepository from "../interfaces/repository/iRepository";

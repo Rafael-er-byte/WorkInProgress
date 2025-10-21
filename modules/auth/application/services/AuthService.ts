@@ -5,7 +5,7 @@ import type TokenDto from "../dtos/out/TokenDto";
 import type iToken from "../interfaces/utils/iToken";
 import type iTokenRepository from "../../../auth/application/interfaces/cache/iTokenRepository";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
-import type iEnviroment from "../../../interfaces/config/iEnviroment";
+import type iEnviroment from "../../../shared/config/iEnviroment";
 
 export default class AuthService{
     constructor(

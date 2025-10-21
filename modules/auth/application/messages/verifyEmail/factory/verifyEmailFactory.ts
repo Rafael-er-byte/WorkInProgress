@@ -1,4 +1,4 @@
-import { Languages } from "../../../../../../config/constants/AllowedLanguages";
+import { Languages } from "../../../../../../shared/config/constants/AllowedLanguages";
 import AppError from "../../../../../../shared/errors/AppError";
 import type iMessageFactory from "../../../interfaces/types/iMessageFactory";
 import type Msg from "../../../interfaces/types/Msg";

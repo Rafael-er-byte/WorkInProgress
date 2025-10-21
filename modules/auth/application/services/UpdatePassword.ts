@@ -1,5 +1,5 @@
 import Unauthorized from "../../../../shared/errors/api/Unauthorized";
-import type iEnviroment from "../../../interfaces/config/iEnviroment";
+import type iEnviroment from "../../../shared/config/iEnviroment";
 import type User from "../../core/model/User";
 import type PasswordDto from "../dtos/in/Password";
 import type TokenDto from "../dtos/in/TokenDto";

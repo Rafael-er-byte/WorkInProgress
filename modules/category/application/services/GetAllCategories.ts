@@ -1,4 +1,4 @@
-import type IDManager from "../../../../shared/interfaces/IDManager";
+import type IDManager from "../../../shared/contracts/IDManager";
 import type CategoryFilterDto from "../dtos/in/CategoryFilterDto";
 import type CategoryDto from "../dtos/in/CategryDto";
 import type Category from "../../core/model/Category";

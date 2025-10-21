@@ -1,5 +1,5 @@
-import type { Languages } from "../../../../../config/constants/AllowedLanguages";
-import { MessageTypes } from "../../../../../config/constants/MessageTypes";
+import type { Languages } from "../../../../../shared/config/constants/AllowedLanguages";
+import { MessageTypes } from "../../../../../shared/config/constants/MessageTypes";
 import AppError from "../../../../../shared/errors/AppError";
 import type iMessageFactory from "../../interfaces/types/iMessageFactory";
 import type Msg from "../../interfaces/types/Msg";

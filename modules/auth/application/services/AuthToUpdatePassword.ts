@@ -1,6 +1,6 @@
 import NotFound from "../../../../shared/errors/api/NotFound";
 import Unauthorized from "../../../../shared/errors/api/Unauthorized";
-import type iEnviroment from "../../../interfaces/config/iEnviroment";
+import type iEnviroment from "../../../shared/config/iEnviroment";
 import type User from "../../core/model/User";
 import type UserCredentials from "../dtos/in/UserCredentials";
 import type TokenDto from "../dtos/out/TokenDto";

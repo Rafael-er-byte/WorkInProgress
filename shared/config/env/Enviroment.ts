@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import type iEnviroment from '../../modules/interfaces/config/iEnviroment';
+import type iEnviroment from '../../../modules/shared/config/iEnviroment';
 dotenv.config();
 
 export default class Enviroment implements iEnviroment{

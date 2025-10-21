@@ -1,5 +1,5 @@
 import Unauthorized from "../../../../shared/errors/api/Unauthorized";
-import type iEnviroment from "../../../interfaces/config/iEnviroment";
+import type iEnviroment from "../../../shared/config/iEnviroment";
 import type TokenDto from "../dtos/in/TokenDto";
 import type TokenPayLoad from "../dtos/out/TokenPayLoad";
 import type iToken from "../interfaces/utils/iToken";

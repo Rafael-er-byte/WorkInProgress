@@ -1,5 +1,5 @@
-import type DateManager from "../../../../shared/interfaces/DateManager";
-import type IDManager from "../../../../shared/interfaces/IDManager";
+import type DateManager from "../../../shared/contracts/DateManager";
+import type IDManager from "../../../shared/contracts/IDManager";
 import CategoryDto from "../dtos/in/CategryDto";
 import Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/repository/iRepository";

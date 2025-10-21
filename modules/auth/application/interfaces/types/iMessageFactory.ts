@@ -1,5 +1,5 @@
-import type { Languages } from "../../../../../config/constants/AllowedLanguages";
-import type { MessageTypes } from "../../../../../config/constants/MessageTypes";
+import type { Languages } from "../../../../../shared/config/constants/AllowedLanguages";
+import type { MessageTypes } from "../../../../../shared/config/constants/MessageTypes";
 import type Msg from "./message/Msg";
 
 export default interface iMessageFactory{
