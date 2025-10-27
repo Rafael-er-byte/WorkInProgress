@@ -1,6 +1,6 @@
+import AppError from "../../../../shared/errors/api/AppError";
 import BadRequest from "../../../../shared/errors/api/BadRequest";
 import NotFound from "../../../../shared/errors/api/NotFound";
-import AppError from "../../../../shared/errors/AppError";
 import type IDManager from "../../../shared/contracts/IDManager";
 import Action from "../dtos/out/ActionDto";
 import type iSearchRepository from "../interfaces/cache/iSearchRepsitory";
