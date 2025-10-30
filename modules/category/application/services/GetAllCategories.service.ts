@@ -4,8 +4,8 @@ import type Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/repository/iRepository";
 import type iSearchRepository from "../interfaces/cache/iSearchRepsitory";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
-import AppError from "../../../../shared/errors/api/AppError";
 import BadRequest from "../../../../shared/errors/api/BadRequest";
+import ServiceUnavailable from "../../../../shared/errors/api/ServiceUnavailable";
 
 export default class GetAllCategories{
     constructor(
@@ -21,7 +21,7 @@ export default class GetAllCategories{
         try {
             categories = await this.search.search(categoryFilterDto);
         } catch (error) {
-            if(error instanceof AppError && error.code === 500){
+            if(error instanceof ServiceUnavailable){
                 categories = await this.repo.getAll(categoryFilterDto);
             }else throw error;
         }

@@ -8,6 +8,7 @@ import type iSearchRepository from "../interfaces/cache/iSearchRepsitory";
 import type iMessenger from "../interfaces/messaging/iMessenger";
 import BadRequest from "../../../../shared/errors/api/BadRequest";
 import AppError from "../../../../shared/errors/api/AppError";
+import ServiceUnavailable from "../../../../shared/errors/api/ServiceUnavailable";
 
 export default class SaveCategory{
     constructor(
@@ -34,7 +35,7 @@ export default class SaveCategory{
                 this.search.create(category)
             ]);
         } catch (error) {
-            if(error instanceof AppError && error.code === 500 && savedOnRepo){
+            if(error instanceof ServiceUnavailable && savedOnRepo){
                 this.messenger.saveCategoryLater(category);
             }else throw error;
         }
