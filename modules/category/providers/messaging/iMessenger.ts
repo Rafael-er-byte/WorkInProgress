@@ -1,4 +1,4 @@
-import type Category from "../../../core/model/Category";
+import type Category from "../../core/model/Category";
 
 export default interface iMessenger{
     saveCategoryLater(category:Category): Promise<boolean>

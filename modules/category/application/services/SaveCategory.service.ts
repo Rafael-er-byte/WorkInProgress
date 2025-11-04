@@ -11,7 +11,7 @@ export default class SaveCategory{
     constructor(
         private readonly repo: iCategoryRepository, 
         private readonly idManager:IDManager, 
-        private readonly dateManager:DateManager,
+        private readonly dateManager:DateManager
     ){}
 
     async execute(categoryDto:CategoryDto): Promise<Action>{

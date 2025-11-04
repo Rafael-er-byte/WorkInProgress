@@ -1,0 +1,13 @@
+import type IDManager from "../../modules/shared/contracts/IDManager";
+
+export function createIdManagerMock():jest.Mocked<IDManager>{
+    let idManagerMock: jest.Mocked<IDManager>; 
+
+   return idManagerMock = {
+        generateId: jest.fn().mockReturnValue('mock123'),
+        validateId: jest.fn().mockImplementation((word) => {
+            if(word.includes('mock'))return true;
+            else return false;
+        })
+    }
+}
