@@ -4,19 +4,14 @@ import CategoryDto from "../dtos/in/CategryDto";
 import Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/repository/iRepository";
 import Action from "../dtos/out/ActionDto";
-import type iSearchRepository from "../interfaces/cache/iSearchRepsitory";
-import type iMessenger from "../interfaces/messaging/iMessenger";
 import BadRequest from "../../../../shared/errors/api/BadRequest";
 import AppError from "../../../../shared/errors/api/AppError";
-import ServiceUnavailable from "../../../../shared/errors/api/ServiceUnavailable";
 
 export default class SaveCategory{
     constructor(
         private readonly repo: iCategoryRepository, 
         private readonly idManager:IDManager, 
         private readonly dateManager:DateManager,
-        private readonly search:iSearchRepository,
-        private readonly messenger: iMessenger
     ){}
 
     async execute(categoryDto:CategoryDto): Promise<Action>{
@@ -26,19 +21,7 @@ export default class SaveCategory{
         if(!this.idManager.validateId(categoryDto.idCreator))throw new BadRequest('Invalid data');
         const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt);
     
-        let savedOnRepo: boolean = false;
-        let savedOnSearch: boolean = false;
-
-        try {
-            [savedOnRepo, savedOnSearch] = await Promise.all([
-                this.repo.create(category),
-                this.search.create(category)
-            ]);
-        } catch (error) {
-            if(error instanceof ServiceUnavailable && savedOnRepo){
-                this.messenger.saveCategoryLater(category);
-            }else throw error;
-        }
+        let savedOnRepo: boolean = await this.repo.create(category);
 
         if(!savedOnRepo)throw new AppError('Something went wrong');
 

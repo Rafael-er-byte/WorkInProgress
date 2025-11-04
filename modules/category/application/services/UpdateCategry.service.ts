@@ -21,20 +21,8 @@ export default class Updateategory{
         if(!this.idManager.validateId(categoryDto.idCreator) && this.idManager.validateId(categoryDto.idCategory))throw new BadRequest('Invalid data', categoryDto);
         const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt as string);
     
-        let savedOnRepo: boolean = false;
-        let savedOnSearch: boolean = false;
-
-        try {
-            [savedOnRepo, savedOnSearch] = await Promise.all([
-                this.repo.update(category),
-                this.search.update(category)
-            ]);
-        } catch (error) {
-            if(error instanceof ServiceUnavailable && savedOnRepo){
-                this.messenger.updateCategoryLater(category);
-            }else throw error;
-        }
-
+        let savedOnRepo: boolean = await this.repo.update(category);
+        
         if(!savedOnRepo)throw new AppError('Something went wrong');
 
         const action:Action = new Action(true, categoryDto.idCategory);
