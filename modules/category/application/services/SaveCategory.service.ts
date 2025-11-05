@@ -5,7 +5,8 @@ import Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/repository/iRepository";
 import Action from "../dtos/out/ActionDto";
 import BadRequest from "../../../../shared/errors/api/BadRequest";
-import AppError from "../../../../shared/errors/api/AppError";
+import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
+import ServiceUnavailable from "../../../../shared/errors/api/ServiceUnavailable";
 
 export default class SaveCategory{
     constructor(
@@ -21,10 +22,14 @@ export default class SaveCategory{
         if(!this.idManager.validateId(categoryDto.idCreator))throw new BadRequest('Invalid data');
         const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt);
     
-        let savedOnRepo: boolean = await this.repo.create(category);
+        let savedOnRepo: boolean;
+        try{
+            savedOnRepo = await this.repo.create(category);        
+        }catch(error){
+            throw new ServiceUnavailable('Something went wrong', error);
+        }
 
-        if(!savedOnRepo)throw new AppError('Something went wrong');
-
+        if(!savedOnRepo)throw new InvalidParameters('Some pareameters are invalid', categoryDto);
         const action:Action = new Action(true, categoryDto.idCategory);
         return action;
     }
