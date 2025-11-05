@@ -1,7 +1,7 @@
 import InvalidOperation from "../../../../shared/errors/core/InvalidOperation";
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
-import Email from "../Objects/Email";
-import Password from "../Objects/Password";
+import Email from "../objects/Email";
+import Password from "../objects/Password";
 import type UserBuilder from "./UserBuilder";
 
 export default class User{

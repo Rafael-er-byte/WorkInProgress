@@ -1,6 +1,6 @@
 import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
-import Email from "../Objects/Email";
+import Email from "../objects/Email";
 
 describe('Email class tests', () => {
     const email:Email = new Email();

@@ -1,6 +1,6 @@
 import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
-import Password from "../Objects/Password";
+import Password from "../objects/Password";
 
 describe('Password object tests', () => {
     const password: Password = new Password();

@@ -1,8 +1,9 @@
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
+import Url from "../objects/URL";
 
 export default class Category {
     private name!: string;
-    private icon!: string;
+    private icon: Url = new Url();
     private readonly idCategory!: string;
     private readonly idCreator!: string;
     private readonly createdAt?: string | undefined;
@@ -11,13 +12,12 @@ export default class Category {
         if (!idCategory || idCategory?.trim().length === 0) throw new MissingRequiredParameters("id");
         if (!name || name?.trim().length === 0) throw new MissingRequiredParameters("category_name");
         if (!idCreator || idCreator?.trim().length === 0) throw new MissingRequiredParameters("id_creator");
-        if(!icon || icon.trim().length === 0) throw new MissingRequiredParameters("icon");
 
         this.setName(name);
         this.idCategory = idCategory;
         this.idCreator = idCreator;
         this.createdAt = createdAt;
-        this.icon = icon;
+        this.icon.setUrl(icon);
     }
 
     public getIdCategory(): string {
@@ -37,11 +37,11 @@ export default class Category {
     }
 
     public getIcon(): string{
-        return this.icon;
+        return this.icon.getUrl();
     }
 
     public setIcon(newIcon:string): void{
-        this.icon = newIcon;
+        this.icon.setUrl(newIcon);
     }
 
     public setName(name: string): void {

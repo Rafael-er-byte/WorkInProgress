@@ -1,7 +1,7 @@
 import FailedToBuild from "../../../../shared/errors/core/FailedToBuild";
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
-import Email from "../Objects/Email";
-import Password from "../Objects/Password";
+import Email from "../objects/Email";
+import Password from "../objects/Password";
 import User from "./User";;
 
 export default class UserBuilder {
