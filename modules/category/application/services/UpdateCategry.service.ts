@@ -18,13 +18,7 @@ export default class Updateategory{
         if(!this.idManager.validateId(categoryDto.idCreator) && this.idManager.validateId(categoryDto.idCategory))throw new BadRequest('Invalid data', categoryDto);
         const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt as string);
     
-        let savedOnRepo: boolean;
-        try {
-            savedOnRepo = await this.repo.update(category);
-        } catch (error) {
-            throw new ServiceUnavailable('Something went wrong', error);
-        }
-        
+        let savedOnRepo: boolean = await this.repo.update(category);
         if(!savedOnRepo)throw new InvalidParameters('Some pareameters are invalid', categoryDto);
 
         const action:Action = new Action(true, categoryDto.idCategory);

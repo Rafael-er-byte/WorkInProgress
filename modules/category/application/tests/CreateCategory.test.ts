@@ -5,7 +5,7 @@ import { createDateManagerMock } from "../../../../shared/mocks/DateManagerMock"
 import CategoryDto from "../dtos/in/CategryDto";
 import Action from "../dtos/out/ActionDto";
 import BadRequest from "../../../../shared/errors/api/BadRequest";
-import ServiceUnavailable from "../../../../shared/errors/api/ServiceUnavailable";
+import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 
 describe('Create category service tests', () => {
     let idManagerMock:ReturnType<typeof createIdManagerMock>;
@@ -41,9 +41,8 @@ describe('Create category service tests', () => {
         categoryDto.name = 'Category1';
         categoryDto.idCreator = 'mock123';
         
-        mockRepo.create.mockRejectedValueOnce(new ServiceUnavailable('Test error'));
+        mockRepo.create = jest.fn().mockReturnValue(false);
 
-       expect(createCategory.execute(categoryDto)).rejects.toThrow(ServiceUnavailable);
+       expect(createCategory.execute(categoryDto)).rejects.toThrow(InvalidParameters);
     });
-
 });

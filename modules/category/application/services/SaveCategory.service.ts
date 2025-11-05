@@ -22,12 +22,7 @@ export default class SaveCategory{
         if(!this.idManager.validateId(categoryDto.idCreator))throw new BadRequest('Invalid data');
         const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt);
     
-        let savedOnRepo: boolean;
-        try{
-            savedOnRepo = await this.repo.create(category);        
-        }catch(error){
-            throw new ServiceUnavailable('Something went wrong', error);
-        }
+        const savedOnRepo: boolean = await this.repo.create(category);
 
         if(!savedOnRepo)throw new InvalidParameters('Some pareameters are invalid', categoryDto);
         const action:Action = new Action(true, categoryDto.idCategory);
