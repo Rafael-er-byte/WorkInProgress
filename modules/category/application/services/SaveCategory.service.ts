@@ -6,7 +6,6 @@ import type iCategoryRepository from "../interfaces/repository/iRepository";
 import Action from "../dtos/out/ActionDto";
 import BadRequest from "../../../../shared/errors/api/BadRequest";
 import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
-import ServiceUnavailable from "../../../../shared/errors/api/ServiceUnavailable";
 
 export default class SaveCategory{
     constructor(
@@ -20,7 +19,7 @@ export default class SaveCategory{
         categoryDto.idCategory = this.idManager.generateId();
 
         if(!this.idManager.validateId(categoryDto.idCreator))throw new BadRequest('Invalid data');
-        const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt);
+        const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt, categoryDto.icon);
     
         const savedOnRepo: boolean = await this.repo.create(category);
 

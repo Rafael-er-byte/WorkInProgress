@@ -12,7 +12,7 @@ export default class DeleteCategoryById{
 
     async execute(id:string, idCreator:string):Promise<Action>{
         if(!this.idManager.validateId(idCreator) || !this.idManager.validateId(id))throw new BadRequest('Invalid data');
-        if(!await this.repo.getById(id, idCreator)) throw new NotFound('Category not found');
+        if(!await this.repo.existsById(id, idCreator)) throw new NotFound('Category not found');
         
         await this.repo.delete(id, idCreator);
 

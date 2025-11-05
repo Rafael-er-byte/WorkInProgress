@@ -3,4 +3,5 @@ export default class CategoryDto{
     idCreator!:string;
     name!:string;
     createdAt?:string;
+    icon!:string;
 };
