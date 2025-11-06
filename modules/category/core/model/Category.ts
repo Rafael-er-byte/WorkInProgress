@@ -43,7 +43,7 @@ export default class Category {
     public setIcon(newIcon:string): void{
         this.icon.setUrl(newIcon);
     }
-
+    
     public setName(name: string): void {
         if (!name || name.trim().length === 0) {
             throw new MissingRequiredParameters('category_name');

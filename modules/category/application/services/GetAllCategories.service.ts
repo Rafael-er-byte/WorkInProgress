@@ -3,7 +3,7 @@ import type CategoryFilterDto from "../dtos/in/CategoryFilterDto";
 import type Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/repository/iRepository";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
-import BadRequest from "../../../../shared/errors/api/BadRequest";
+import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 
 export default class GetAllCategories{
     constructor(
@@ -12,7 +12,7 @@ export default class GetAllCategories{
     ){}
 
     async execute(categoryFilterDto:CategoryFilterDto):Promise<ResponseCategoryDto[]>{
-        if(!this.idManager.validateId(categoryFilterDto.idCreator) || !categoryFilterDto.limit || !categoryFilterDto.page)throw new BadRequest('Invalid data');
+        if(!this.idManager.validateId(categoryFilterDto.idCreator) || !categoryFilterDto.limit || !categoryFilterDto.page)throw new InvalidParameters('Invalid Data', categoryFilterDto);
         let categories: Category[] = [];
 
         categories = await this.repo.getAll(categoryFilterDto);

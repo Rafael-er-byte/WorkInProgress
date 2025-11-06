@@ -3,7 +3,6 @@
     import Category from "../../core/model/Category";
     import type iCategoryRepository from "../interfaces/repository/iRepository";
     import Action from "../dtos/out/ActionDto";
-    import BadRequest from "../../../../shared/errors/api/BadRequest";
     import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 
     export default class Updateategory{
@@ -13,7 +12,7 @@
         ){}
 
         async execute(categoryDto:CategoryDto): Promise<Action>{
-            if(!this.idManager.validateId(categoryDto.idCreator) && this.idManager.validateId(categoryDto.idCategory))throw new BadRequest('Invalid data', categoryDto);
+            if(!this.idManager.validateId(categoryDto.idCreator) && this.idManager.validateId(categoryDto.idCategory))throw new InvalidParameters('Invalid id of creator or id of category', {idCreator: categoryDto.idCreator, id: categoryDto.idCategory});
             const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt as string, categoryDto.icon);
         
             let savedOnRepo: boolean = await this.repo.update(category);

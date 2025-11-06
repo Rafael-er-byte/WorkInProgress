@@ -1,5 +1,5 @@
-import BadRequest from "../../../../shared/errors/api/BadRequest";
-import NotFound from "../../../../shared/errors/api/NotFound";
+import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
+import ResourceNotFoud from "../../../../shared/errors/core/ResourceNotFound";
 import type IDManager from "../../../shared/contracts/IDManager";
 import Action from "../dtos/out/ActionDto";
 import type iCategoryRepository from "../interfaces/repository/iRepository";
@@ -11,8 +11,8 @@ export default class DeleteCategoryById{
     ){}
 
     async execute(id:string, idCreator:string):Promise<Action>{
-        if(!this.idManager.validateId(idCreator) || !this.idManager.validateId(id))throw new BadRequest('Invalid data');
-        if(!await this.repo.existsById(id, idCreator)) throw new NotFound('Category not found');
+        if(!this.idManager.validateId(idCreator) || !this.idManager.validateId(id))throw new InvalidParameters('Invalid id of creator or id of category', {idCreator: idCreator, id: id});
+        if(!await this.repo.existsById(id, idCreator)) throw new ResourceNotFoud('Category', {idCreator: idCreator, id: id});
         
         await this.repo.delete(id, idCreator);
 

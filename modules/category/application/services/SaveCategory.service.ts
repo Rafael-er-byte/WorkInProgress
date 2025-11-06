@@ -4,7 +4,6 @@ import CategoryDto from "../dtos/in/CategryDto";
 import Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/repository/iRepository";
 import Action from "../dtos/out/ActionDto";
-import BadRequest from "../../../../shared/errors/api/BadRequest";
 import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 
 export default class SaveCategory{
@@ -18,7 +17,7 @@ export default class SaveCategory{
         categoryDto.createdAt = this.dateManager.generate();
         categoryDto.idCategory = this.idManager.generateId();
 
-        if(!this.idManager.validateId(categoryDto.idCreator))throw new BadRequest('Invalid data');
+        if(!this.idManager.validateId(categoryDto.idCreator)) throw new InvalidParameters('Invalid id of creator or id of category', {idCreator: categoryDto.idCreator});
         const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, categoryDto.createdAt, categoryDto.icon);
     
         const savedOnRepo: boolean = await this.repo.create(category);

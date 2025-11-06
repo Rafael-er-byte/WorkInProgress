@@ -7,12 +7,12 @@ export default class Url{
 
     constructor(){}
 
-    setUrl(newUrl: string){
+    public setUrl(newUrl: string){
         if(!newUrl || !this.urlRegex.test(newUrl)) throw new InvalidParameters('url', newUrl);
         this.url = newUrl;
     }
 
-    getUrl(): string{
+    public getUrl(): string{
         if(!this.url || this.url.trim().length === 0) throw new InvalidOperation('url doesnt exists');
         return this.url;
     }

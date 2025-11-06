@@ -4,9 +4,9 @@ import { createIdManagerMock } from "../../../../shared/mocks/IdManagerMock";
 import { createDateManagerMock } from "../../../../shared/mocks/DateManagerMock";
 import CategoryDto from "../dtos/in/CategryDto";
 import Action from "../dtos/out/ActionDto";
-import BadRequest from "../../../../shared/errors/api/BadRequest";
 import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
+import Url from "../../core/objects/URL";
 
 describe('Create category service tests', () => {
     let idManagerMock:ReturnType<typeof createIdManagerMock>;
@@ -23,11 +23,19 @@ describe('Create category service tests', () => {
         const categoryDto: CategoryDto = new CategoryDto();
         categoryDto.name = 'Category1';
         categoryDto.idCreator = 'mock123';
-        categoryDto.icon = 'icon';
+        categoryDto.icon = 'http://example.com';
 
         const result = await createCategory.execute(categoryDto);
         expect(result).toBeInstanceOf(Action);
-        expect(mockRepo.create).toHaveBeenCalledWith({idCategory: 'mock123', idCreator: 'mock123', name: 'Category1', createdAt: 'validDate', icon: 'icon'});
+        expect(mockRepo.create).toHaveBeenCalledWith(
+            expect.objectContaining({
+                idCategory: 'mock123', 
+                idCreator: 'mock123', 
+                name: 'Category1', 
+                createdAt: 'validDate', 
+                icon: expect.any(Url)
+            })
+        );
     });
 
     it('Should throw an error if dont send the id of creator', async () => {
@@ -36,7 +44,7 @@ describe('Create category service tests', () => {
         //categoryDto.idCreator = 'mock123'; Without idCreator
         categoryDto.icon = 'icon';
 
-       expect(createCategory.execute(categoryDto)).rejects.toThrow(BadRequest);
+       expect(createCategory.execute(categoryDto)).rejects.toThrow(InvalidParameters);
     });
 
      it('Should throw an error if dont send the icon url', async () => {
@@ -45,7 +53,7 @@ describe('Create category service tests', () => {
         categoryDto.idCreator = 'mock123'; 
         //categoryDto.icon = 'icon'; Without icon
 
-       expect(createCategory.execute(categoryDto)).rejects.toThrow(MissingRequiredParameters);
+       expect(createCategory.execute(categoryDto)).rejects.toThrow(InvalidParameters);
     });
 
      it('Should throw an error if dont send the name of category', async () => {
