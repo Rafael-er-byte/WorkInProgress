@@ -3,7 +3,7 @@ import InvalidParameters from "../../../../shared/errors/InvalidParameters";
 
 export default class Url{
     private url!: string;
-    private readonly urlRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s?#]*)?(\?[^\s#]*)?(#[^\s]*)?$/;
+    private readonly urlRegex = /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s?#]*)?(\?[^\s#]*)?(#[^\s]*)?$/;
 
     constructor(){}
 
