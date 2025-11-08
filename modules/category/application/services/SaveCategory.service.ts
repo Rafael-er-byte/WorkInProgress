@@ -4,7 +4,7 @@ import CategoryDto from "../dtos/in/CategryDto";
 import Category from "../../core/model/Category";
 import type iCategoryRepository from "../interfaces/repository/iRepository";
 import Action from "../dtos/out/ActionDto";
-import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
+import InvalidParameters from "../../../../shared/errors/InvalidParameters";
 
 export default class SaveCategory{
     constructor(

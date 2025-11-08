@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
-import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
+import InvalidParameters from "../../../../shared/errors/InvalidParameters";
+import MissingRequiredParameters from "../../../../shared/errors/MissingRequiredParameters";
 import Password from "../objects/Password";
 
 describe('Password object tests', () => {

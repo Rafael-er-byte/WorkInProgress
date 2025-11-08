@@ -1,5 +1,5 @@
-import InvalidOperation from "../../../../shared/errors/core/InvalidOperation";
-import InvalidParameters from "../../../../shared/errors/core/InvalidParameters";
+import InvalidOperation from "../../../../shared/errors/InvalidOperation";
+import InvalidParameters from "../../../../shared/errors/InvalidParameters";
 
 export default class Url{
     private url!: string;

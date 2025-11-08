@@ -1,5 +1,5 @@
-import InvalidOperation from "../../../../shared/errors/core/InvalidOperation";
-import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
+import InvalidOperation from "../../../../shared/errors/InvalidOperation";
+import MissingRequiredParameters from "../../../../shared/errors/MissingRequiredParameters";
 import Email from "../objects/Email";
 import Password from "../objects/Password";
 import type UserBuilder from "./UserBuilder";

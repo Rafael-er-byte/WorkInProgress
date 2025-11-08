@@ -1,4 +1,4 @@
-import MissingRequiredParameters from "../../../../shared/errors/core/MissingRequiredParameters";
+import MissingRequiredParameters from "../../../../shared/errors/MissingRequiredParameters";
 import Url from "../objects/URL";
 
 export default class Category {
