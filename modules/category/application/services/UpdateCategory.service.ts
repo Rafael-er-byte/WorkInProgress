@@ -1,9 +1,9 @@
     import type IDManager from "../../../shared/contracts/IDManager";
     import CategoryDto from "../dtos/in/CategryDto";
     import Category from "../../core/model/Category";
-    import type iCategoryRepository from "../interfaces/repository/iRepository";
     import Action from "../dtos/out/ActionDto";
-    import InvalidParameters from "../../../../shared/errors/InvalidParameters";
+import type iCategoryRepository from "../contracts/repository/iRepository";
+import InvalidParameters from "../../../shared/errors/InvalidParameters";
 
     export default class Updateategory{
         constructor(

@@ -1,4 +1,4 @@
-import type iCategoryRepository from "../../../interfaces/repository/iRepository";
+import type iCategoryRepository from "../../../contracts/repository/iRepository";
 
 export let mockRepo: jest.Mocked<iCategoryRepository>;
 beforeEach(() => {

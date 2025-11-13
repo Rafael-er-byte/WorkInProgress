@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
-import MissingRequiredParameters from "../../../../shared/errors/MissingRequiredParameters";
+import InvalidParameters from "../../../shared/errors/InvalidParameters";
+import MissingRequiredParameters from "../../../shared/errors/MissingRequiredParameters";
 
 export default class Password{
     private password?: string;

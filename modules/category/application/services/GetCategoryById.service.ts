@@ -1,9 +1,9 @@
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
-import ResourceNotFoud from "../../../../shared/errors/ResourceNotFound";
 import type IDManager from "../../../shared/contracts/IDManager";
+import InvalidParameters from "../../../shared/errors/InvalidParameters";
+import ResourceNotFoud from "../../../shared/errors/ResourceNotFound";
 import Category from "../../core/model/Category";
+import type iCategoryRepository from "../contracts/repository/iRepository";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
-import type iCategoryRepository from "../interfaces/repository/iRepository";
 
 export default class GetCategoryById{
     constructor(private readonly repo: iCategoryRepository, private readonly idManager:IDManager){}

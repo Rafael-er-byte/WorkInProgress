@@ -1,6 +1,6 @@
-import InvalidOperation from "../../../../shared/errors/InvalidOperation";
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
-import MissingRequiredParameters from "../../../../shared/errors/MissingRequiredParameters";
+import InvalidOperation from "../../../shared/errors/InvalidOperation";
+import InvalidParameters from "../../../shared/errors/InvalidParameters";
+import MissingRequiredParameters from "../../../shared/errors/MissingRequiredParameters";
 import UserBuilder from "../model/UserBuilder";
 
 describe("User entity tests (strong password validation)", () => {

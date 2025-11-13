@@ -1,8 +1,8 @@
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
-import ResourceNotFoud from "../../../../shared/errors/ResourceNotFound";
 import type IDManager from "../../../shared/contracts/IDManager";
+import InvalidParameters from "../../../shared/errors/InvalidParameters";
+import ResourceNotFoud from "../../../shared/errors/ResourceNotFound";
+import type iCategoryRepository from "../contracts/repository/iRepository";
 import Action from "../dtos/out/ActionDto";
-import type iCategoryRepository from "../interfaces/repository/iRepository";
 
 export default class DeleteCategoryById{
     constructor(

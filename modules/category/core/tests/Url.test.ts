@@ -1,4 +1,4 @@
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
+import InvalidParameters from "../../../shared/errors/InvalidParameters";
 import Url from "../objects/URL";
 
 describe('Url object tests', () => {

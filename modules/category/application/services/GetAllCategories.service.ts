@@ -1,9 +1,9 @@
 import type IDManager from "../../../shared/contracts/IDManager";
 import type CategoryFilterDto from "../dtos/in/CategoryFilterDto";
 import type Category from "../../core/model/Category";
-import type iCategoryRepository from "../interfaces/repository/iRepository";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
+import type iCategoryRepository from "../contracts/repository/iRepository";
+import InvalidParameters from "../../../shared/errors/InvalidParameters";
 
 export default class GetAllCategories{
     constructor(
