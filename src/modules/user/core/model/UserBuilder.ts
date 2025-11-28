@@ -2,6 +2,7 @@ import FailedToBuild from "../../../../shared/core/errors/FailedToBuild";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 import Email from "../objects/Email";
 import Password from "../objects/Password";
+import Url from "../objects/URL";
 import User from "./User";;
 
 export default class UserBuilder {
@@ -9,7 +10,7 @@ export default class UserBuilder {
     emails: Map<string, Email> = new Map();
     emailPrimary!:string;
     password?: Password;
-    urlProfile?: string;
+    urlProfile?: Url;
     createdAt!: string;
     isVerified: boolean = false;
     id!: string;
@@ -56,9 +57,10 @@ export default class UserBuilder {
         return this;
     }
 
-    setUrlProfile(url: string | undefined): this {
+    setUrlProfile(url: string): this {
         if (!url) return this;
-        this.urlProfile = url;
+        this.urlProfile = new Url();
+        this.urlProfile.setUrl(url);
         return this;
     }
 

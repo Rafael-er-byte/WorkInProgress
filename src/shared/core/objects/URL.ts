@@ -32,4 +32,8 @@ export default class Url{
         if(!this.url || this.url.trim().length === 0) throw new InvalidOperation('url doesnt exists');
         return this.url;
     }
+
+    public clearUrl():void{
+        this.url = '';
+    }
 };

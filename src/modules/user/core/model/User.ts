@@ -1,7 +1,9 @@
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
+import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 import Email from "../objects/Email";
 import Password from "../objects/Password";
+import Url from "../objects/URL";
 import type UserBuilder from "./UserBuilder";
 
 export default class User{
@@ -11,7 +13,7 @@ export default class User{
     private emailPrimary?:Email | undefined;
     private emails: Map<string, Email> = new Map();
     private password?: Password;
-    private urlProfile?:string | undefined;
+    private urlProfile?: Url;
     private readonly createdAt!:string;
 
     constructor(builder:UserBuilder){
@@ -27,6 +29,8 @@ export default class User{
         this.emailPrimary = this.emails.get(builder.emailPrimary);
         if(!this.emailPrimary) throw new InvalidOperation('The primary email doesnt exists', builder.emailPrimary);
         this.userName = builder.userName;
+        if(!builder.urlProfile) throw new InvalidParameters('url', builder.urlProfile);
+        const exists = builder.urlProfile.getUrl();
         this.urlProfile = builder.urlProfile;
         this.id = builder.id;
         this.createdAt = builder.createdAt;
@@ -81,12 +85,12 @@ export default class User{
     }
 
     setUrlProfile(url:string): void{
-        if(!url)throw new MissingRequiredParameters('url');
-        this.urlProfile = url;
+        this.urlProfile = new Url();
+        this.urlProfile.setUrl(url);
     }
 
     deleteUrlProfile():void{
-        this.urlProfile = undefined;
+        this.urlProfile?.clearUrl();
     }
 
     getAllEmails(): string[]{
@@ -97,7 +101,8 @@ export default class User{
     }
 
     getUrlProfile():string | undefined{
-        return this.urlProfile;
+        if(!this.urlProfile)return undefined;
+        return this.urlProfile.getUrl();
     }
 
     getUserName(): string{
