@@ -1,4 +1,4 @@
-import Unauthorized from "../../../../shared/errors/api/Unauthorized";
+import Unauthorized from "../../../../shared/core/errors/api/Unauthorized";
 import type User from "../../core/model/User";
 import type UserCredentials from "../dtos/in/UserCredentials";
 import type TokenDto from "../dtos/out/TokenDto";

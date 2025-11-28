@@ -1,6 +1,6 @@
 import type { Languages } from "../../../../../shared/config/constants/AllowedLanguages";
 import { MessageTypes } from "../../../../../shared/config/constants/MessageTypes";
-import AppError from "../../../../../shared/errors/AppError";
+import AppError from "../../../../../shared/core/errors/AppError";
 import type iMessageFactory from "../../interfaces/types/iMessageFactory";
 import type Msg from "../../interfaces/types/Msg";
 import VerifyEmailFactory from "../verifyEmail/factory/verifyEmailFactory";

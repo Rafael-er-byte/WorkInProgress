@@ -1,5 +1,5 @@
-import NotFound from "../../../../shared/errors/api/NotFound";
-import Unauthorized from "../../../../shared/errors/api/Unauthorized";
+import NotFound from "../../../../shared/core/errors/api/NotFound";
+import Unauthorized from "../../../../shared/core/errors/api/Unauthorized";
 import type iEnviroment from "../../../contracts/config/iEnviroment";
 import type User from "../../core/model/User";
 import type UserCredentials from "../dtos/in/UserCredentials";

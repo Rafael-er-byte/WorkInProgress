@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
-import MissingRequiredParameters from "../../../../shared/errors/MissingRequiredParameters";
+import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
+import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 import Email from "../objects/Email";
 
 describe('Email class tests', () => {

@@ -1,4 +1,4 @@
-import Unauthorized from "../../../../shared/errors/api/Unauthorized";
+import Unauthorized from "../../../../shared/core/errors/api/Unauthorized";
 import type iEnviroment from "../../../contracts/config/iEnviroment";
 import type TokenDto from "../dtos/in/TokenDto";
 import type TokenPayLoad from "../dtos/out/TokenPayLoad";

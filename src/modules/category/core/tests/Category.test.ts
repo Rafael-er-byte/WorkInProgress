@@ -1,4 +1,4 @@
-import MissingRequiredParameters from "../../../../shared/errors/MissingRequiredParameters";
+import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 import Category from "../model/Category";
 
 describe('Tests for category model', ()=>{

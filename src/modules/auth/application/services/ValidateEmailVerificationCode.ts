@@ -1,4 +1,4 @@
-import BadRequest from "../../../../shared/errors/api/BadRequest";
+import BadRequest from "../../../../shared/core/errors/api/BadRequest";
 import type User from "../../core/model/User";
 import type VerificationCode from "../dtos/in/VerificationCode";
 import Action from "../dtos/out/Action";

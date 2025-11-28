@@ -5,8 +5,8 @@ import { createDateManagerMock } from "../../../../shared/mocks/DateManagerMock"
 import CategoryDto from "../dtos/in/CategryDto";
 import Action from "../dtos/out/ActionDto";
 import Url from "../../core/objects/URL";
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
-import MissingRequiredParameters from "../../../../shared/errors/MissingRequiredParameters";
+import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
+import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 
 describe('Create category service tests', () => {
     let idManagerMock:ReturnType<typeof createIdManagerMock>;

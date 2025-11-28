@@ -7,8 +7,8 @@ import type iCodeGenerator from "../interfaces/utils/iCodeGenerator";
 import EmailDto from "../dtos/in/EmailDto";
 import type iMessageFactory from "../../../auth/application/interfaces/types/iMessageFactory";
 import { MessageTypes } from "../../../../shared/config/constants/MessageTypes";
-import AppError from "../../../../shared/errors/api/AppError";
-import Unauthorized from "../../../../shared/errors/api/Unauthorized";
+import AppError from "../../../../shared/core/errors/api/AppError";
+import Unauthorized from "../../../../shared/core/errors/api/Unauthorized";
 import type Msg from "../../../auth/application/interfaces/types/Msg";
 import type UserIdDto from "../dtos/in/UserIdDtos";
 

@@ -2,7 +2,7 @@ import CategoryDto from "../dtos/in/CategryDto";
 import Category from "../../core/model/Category";
 import Action from "../dtos/out/ActionDto";
 import type iCategoryRepository from "../contracts/repository/iRepository";
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
+import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import type IDManager from "../../../contracts/utils/IDManager";
 import type DateManager from "../../../contracts/utils/DateManager";
 

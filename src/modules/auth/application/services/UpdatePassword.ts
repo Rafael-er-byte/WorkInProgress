@@ -1,4 +1,4 @@
-import Unauthorized from "../../../../shared/errors/api/Unauthorized";
+import Unauthorized from "../../../../shared/core/errors/api/Unauthorized";
 import type iEnviroment from "../../../contracts/config/iEnviroment";
 import type User from "../../core/model/User";
 import type PasswordDto from "../dtos/in/Password";

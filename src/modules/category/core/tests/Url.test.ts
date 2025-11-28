@@ -1,4 +1,4 @@
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
+import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import Url from "../objects/URL";
 
 describe('Url object tests', () => {
@@ -48,6 +48,12 @@ describe('Url object tests', () => {
     url.setUrl('https://example.com/products/item?id=10#reviews');
     expect(url).toHaveProperty('url', 'https://example.com/products/item?id=10#reviews');
   });
+
+  it('Should accept a valid AWS S3 image URL', () => {
+    url.setUrl( 'https://my-bucket.s3.amazonaws.com/images/photo.png');
+    expect(url).toHaveProperty('url',  'https://my-bucket.s3.amazonaws.com/images/photo.png');
+  });
+
 
   //Invalid cases
   it('Should throw if protocol is missing', () => {

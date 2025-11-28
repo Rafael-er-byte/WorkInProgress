@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../shared/errors/InvalidParameters";
-import ResourceNotFoud from "../../../../shared/errors/ResourceNotFound";
+import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
+import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
 import type IDManager from "../../../contracts/utils/IDManager";
 import Category from "../../core/model/Category";
 import type iCategoryRepository from "../contracts/repository/iRepository";
