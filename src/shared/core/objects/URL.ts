@@ -1,4 +1,3 @@
-import InvalidOperation from "../errors/InvalidOperation";
 import InvalidParameters from "../errors/InvalidParameters";
 
 export default class Url{
@@ -28,8 +27,8 @@ export default class Url{
         this.url = newUrl;
     }
 
-    public getUrl(): string{
-        if(!this.url || this.url.trim().length === 0) throw new InvalidOperation('url doesnt exists');
+    public getUrl(): string | undefined{
+        if(!this.url || this.url.trim().length === 0) return undefined;
         return this.url;
     }
 

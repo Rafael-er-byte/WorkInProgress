@@ -36,7 +36,7 @@ export default class Category {
         return this.createdAt;
     }
 
-    public getIcon(): string{
+    public getIcon(): string | undefined{
         return this.icon.getUrl();
     }
 

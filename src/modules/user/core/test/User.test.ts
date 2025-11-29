@@ -125,20 +125,20 @@ describe("User entity tests (strong password validation)", () => {
 
   test("should set and get profile url", () => {
     const user = builder.build();
-    user.setUrlProfile("https://cdn/img.png");
-    expect(user.getUrlProfile()).toBe("https://cdn/img.png");
+    user.setUrlProfile("https://cdn.com/img.png");
+    expect(user.getUrlProfile()).toBe("https://cdn.com/img.png");
   });
 
   test("should delete profile url", () => {
     const user = builder.build();
-    user.setUrlProfile("https://cdn/img.png");
+    user.setUrlProfile("https://cdn.com/img.png");
     user.deleteUrlProfile();
     expect(user.getUrlProfile()).toBeUndefined();
   });
 
   test("should throw when setting empty url", () => {
     const user = builder.build();
-    expect(() => user.setUrlProfile("")).toThrow(MissingRequiredParameters);
+    expect(() => user.setUrlProfile("")).toThrow(InvalidParameters);
   });
 
   //Username
