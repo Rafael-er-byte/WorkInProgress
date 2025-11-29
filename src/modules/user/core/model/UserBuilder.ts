@@ -1,5 +1,6 @@
 import FailedToBuild from "../../../../shared/core/errors/FailedToBuild";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import BUILD_KEY from "../../token/UserBuilderKey";
 import Email from "../objects/Email";
 import Password from "../objects/Password";
 import Url from "../objects/URL";
@@ -77,7 +78,7 @@ export default class UserBuilder {
 
     build(): User {
         try {
-            const user:User = new User(this);
+            const user:User = new User(this, BUILD_KEY);
             return user;
         } catch (error) {
             throw new FailedToBuild('Failed to build user', error);
