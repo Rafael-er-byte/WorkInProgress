@@ -4,7 +4,7 @@ import Email from "../objects/Email";
 import Password from "../objects/Password";
 import Url from "../objects/URL";
 import type UserBuilder from "./UserBuilder";
-import type BUILD_KEY from "../../token/UserBuilderKey";
+import type BUILD_KEY from "../token/UserBuilderKey";
 
 export default class User{
     private id!:string;

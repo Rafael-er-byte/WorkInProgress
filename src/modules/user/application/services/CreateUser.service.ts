@@ -2,7 +2,6 @@ import MissingRequiredParameters from "../../../../shared/core/errors/MissingReq
 import type DateManager from "../../../contracts/utils/DateManager";
 import type IDManager from "../../../contracts/utils/IDManager";
 import UserBuilder from "../../core/model/UserBuilder";
-import Password from "../../core/objects/Password";
 import type iUserRepository from "../contracts/repository/iUserRepository";
 import type iHasher from "../contracts/utils/iHasher";
 import type UserDto from "../dtos/in/UserDto";
@@ -34,7 +33,7 @@ export default class CreateUser{
             builder = builder.setUserName(this.generateUsername.generate());
         }
 
-        if(!user.email || !user.mainEmail) throw new MissingRequiredParameters('email, mainEmail');
+        if(!user.email) throw new MissingRequiredParameters('email');
 
         user.email.map(([email, isVerified]) => {
             builder = builder.setEmail(email, isVerified);

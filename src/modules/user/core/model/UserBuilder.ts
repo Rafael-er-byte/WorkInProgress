@@ -1,6 +1,6 @@
 import FailedToBuild from "../../../../shared/core/errors/FailedToBuild";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
-import BUILD_KEY from "../../token/UserBuilderKey";
+import BUILD_KEY from "../token/UserBuilderKey";
 import Email from "../objects/Email";
 import Password from "../objects/Password";
 import Url from "../objects/URL";
