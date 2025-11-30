@@ -4,4 +4,4 @@ export default class Action{
         public data?: any, 
         public id?: string
     ){}
-}
+};

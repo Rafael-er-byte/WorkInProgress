@@ -25,11 +25,6 @@ export default class UserBuilder {
         return this;
     }
 
-    setLocalPassword(haveIt:boolean): this{
-        this.havePassword = haveIt;
-        return this;
-    }
-
     setUserName(userName: string): this {
         if (!userName) throw new MissingRequiredParameters('username');
         this.userName = userName;
@@ -55,6 +50,7 @@ export default class UserBuilder {
         const newPwd = new Password();
         newPwd.setPassword(password);
         this.password = newPwd;
+        this.havePassword = true;
         return this;
     }
 
@@ -68,11 +64,6 @@ export default class UserBuilder {
     setCreatedAt(date: string): this {
         if (!date) throw new MissingRequiredParameters('date');
         this.createdAt = date;
-        return this;
-    }
-
-    setIsVerified(isVerified: boolean): this {
-        if (isVerified) this.isVerified = isVerified;
         return this;
     }
 
