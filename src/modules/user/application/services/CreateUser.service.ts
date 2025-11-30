@@ -2,6 +2,7 @@ import MissingRequiredParameters from "../../../../shared/core/errors/MissingReq
 import type DateManager from "../../../contracts/utils/DateManager";
 import type IDManager from "../../../contracts/utils/IDManager";
 import UserBuilder from "../../core/model/UserBuilder";
+import Password from "../../core/objects/Password";
 import type iUserRepository from "../contracts/repository/iUserRepository";
 import type iHasher from "../contracts/utils/iHasher";
 import type UserDto from "../dtos/in/UserDto";
@@ -24,7 +25,10 @@ export default class CreateUser{
                                 .setId(id)
                                 .setCreatedAt(this.dateManager.generate());
     
-        if(user.havePassword)builder = builder.setPassword(await this.hasher.hash(user.password!));
+        if(user.havePassword && user.password?.trim().length !== 0){
+            const hashedPwd = await this.hasher.hash(user.password!);
+            builder = builder.setPassword(hashedPwd);
+        }
         if(user.userName)builder = builder.setUserName(user.userName);
         else{
             builder = builder.setUserName(this.generateUsername.generate());

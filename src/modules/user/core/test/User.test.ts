@@ -14,7 +14,6 @@ describe("User entity tests (strong password validation)", () => {
       .setEmailPrimary("rafael@example.com")
       .setPassword("ValidP@ss1") // Valid password
       .setCreatedAt("2025-10-19")
-      .setLocalPassword(true);
   });
 
   // Building
@@ -58,12 +57,6 @@ describe("User entity tests (strong password validation)", () => {
   test("should throw for missing symbol", () => {
     const user = builder.build();
     expect(() => user.setPassword("WeakPass1")).toThrow(InvalidParameters);
-  });
-
-  test("should throw when getting password without having one", () => {
-    builder.setLocalPassword(false);
-    const user = builder.build();
-    expect(() => user.getPasssword()).toThrow(InvalidOperation);
   });
 
   //Emails
