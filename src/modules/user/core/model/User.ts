@@ -92,11 +92,13 @@ export default class User{
         this.urlProfile.clearUrl();
     }
 
-    getAllEmails(): string[]{
-        let emailsList: string[] = [];
+    getAllEmails(): Email[]{
+        let emails:Email[] = [];
+        this.emails.forEach((email, key) => {
+        emails.push(email);
+       });
 
-        for(let [id, email] of this.emails) emailsList.push(email.getEmail());
-        return emailsList;
+       return emails;
     }
 
     getUrlProfile():string | undefined{

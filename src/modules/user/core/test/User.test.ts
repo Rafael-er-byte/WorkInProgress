@@ -65,9 +65,14 @@ describe("User entity tests (strong password validation)", () => {
     const user = builder.build();
     user.setEmail("extra@example.com");
     const emails = user.getAllEmails();
+    let emailArray: [string, boolean][] = [];
 
-    expect(emails).toContain("rafael@example.com");
-    expect(emails).toContain("extra@example.com");
+    emails.map((email) => {
+      emailArray.push([email.getEmail(), email.isVerified()]);
+    });
+
+    expect(emailArray).toContainEqual(["rafael@example.com", true]);
+    expect(emailArray).toContainEqual(["extra@example.com", false]);
   });
 
   test("should delete an email correctly", () => {
@@ -75,7 +80,7 @@ describe("User entity tests (strong password validation)", () => {
     user.setEmail("temp@example.com");
     user.deleteEmail("temp@example.com");
 
-    expect(user.getAllEmails()).not.toContain("temp@example.com");
+    expect(user.getAllEmails()).not.toContainEqual(["temp@example.com", false]);
   });
 
   test("should throw when deleting non-existent email", () => {
