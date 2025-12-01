@@ -1,5 +1,5 @@
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import Url from "../objects/URL";
+import Url from "../URL";
 
 describe('Url object tests', () => {
   let url: Url;
