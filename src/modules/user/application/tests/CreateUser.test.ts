@@ -7,6 +7,7 @@ import GenerateUserName from "../utils/GenerateUserName";
 import UserDto from "../dtos/in/UserDto";
 import Action from "../dtos/out/Action";
 import User from "../../core/model/User";
+import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 
 describe('Create user service tests', () => {
     let IdManager!: ReturnType<typeof createIdManagerMock>;
@@ -32,4 +33,12 @@ describe('Create user service tests', () => {
         expect(success).toBeInstanceOf(Action);
     });
     
+    it('Should throw if not contain required parameters', async () => {
+        let userDto: UserDto = new UserDto();
+        userDto.havePassword = true;
+        userDto.password = "ValidPa$sword48";
+        userDto.urlProfile = "http://example.com";
+
+        await expect(() => createUser.execute(userDto)).rejects.toThrow(MissingRequiredParameters);
+    });
 });
