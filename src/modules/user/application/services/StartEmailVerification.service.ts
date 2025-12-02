@@ -2,8 +2,8 @@ import MissingRequiredParameters from "../../../../shared/core/errors/MissingReq
 import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
 import type User from "../../core/model/User";
 import type iEmail from "../contracts/Email/iEmail.mail";
-import type { iEmailConstructor } from "../contracts/Email/iEmailConstructor";
-import type iMessenger from "../contracts/Email/iMessenger.sender";
+import type iEmailConstructor from "../contracts/Email/iEmailConstructor";
+import type iEmailSender from "../contracts/Email/iEmailSender.sender";
 import type iUserRepository from "../contracts/repository/iUserRepository.repository";
 import type EmailDto from "../dtos/in/EmailDto";
 import Action from "../dtos/out/Action";
@@ -12,7 +12,7 @@ export default class StartEmailVerification{
 
     constructor(
         private repo: iUserRepository,
-        private sender: iMessenger,
+        private sender: iEmailSender,
         private emailConstructor: iEmailConstructor
     ){}
 

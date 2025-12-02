@@ -1,6 +1,6 @@
 import type User from "../../../core/model/User";
 import type iEmail from "./iEmail.mail";
 
-export interface iEmailConstructor{
+export default interface iEmailConstructor{
     build(user:User): iEmail;
 };
