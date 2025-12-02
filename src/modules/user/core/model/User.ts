@@ -5,6 +5,7 @@ import Password from "../objects/Password";
 import Url from "../objects/URL";
 import type UserBuilder from "./UserBuilder";
 import type BUILD_KEY from "../token/UserBuilderKey";
+import FailedToBuild from "../../../../shared/core/errors/FailedToBuild";
 
 export default class User{
     private id!:string;
@@ -15,10 +16,9 @@ export default class User{
     private password?: Password;
     private urlProfile: Url = new Url();
     private readonly createdAt!:string;
-    
-    private readonly key!: typeof BUILD_KEY
 
     constructor(builder:UserBuilder, key: typeof BUILD_KEY){
+        if(!key) throw new FailedToBuild('User');
         if(!builder.emails || !builder.id || !builder.createdAt)throw new MissingRequiredParameters('Missing required parameters', builder);
         
         builder.emails.forEach(email => {
