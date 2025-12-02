@@ -2,7 +2,7 @@ import MissingRequiredParameters from "../../../../shared/core/errors/MissingReq
 import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
 import type IDManager from "../../../contracts/utils/IDManager";
 import type User from "../../core/model/User";
-import type iUserRepository from "../contracts/repository/iUserRepository";
+import type iUserRepository from "../contracts/repository/iUserRepository.repository";
 import type UpdateUserDto from "../dtos/in/UpdateUserDto";
 import Action from "../dtos/out/Action";
 

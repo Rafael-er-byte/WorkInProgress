@@ -43,6 +43,10 @@ export default class User{
         this.emails.set(email, emailToVerify);
     }
 
+    hasEmail(email:string): boolean{
+        return this.emails.has(email);
+    }
+
     hasPassword(): boolean{
         return this.havePassword;
     }

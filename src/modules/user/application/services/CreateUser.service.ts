@@ -2,7 +2,7 @@ import MissingRequiredParameters from "../../../../shared/core/errors/MissingReq
 import type DateManager from "../../../contracts/utils/DateManager";
 import type IDManager from "../../../contracts/utils/IDManager";
 import UserBuilder from "../../core/model/UserBuilder";
-import type iUserRepository from "../contracts/repository/iUserRepository";
+import type iUserRepository from "../contracts/repository/iUserRepository.repository";
 import type iHasher from "../contracts/utils/iHasher";
 import type UserDto from "../dtos/in/UserDto";
 import Action from "../dtos/out/Action";
