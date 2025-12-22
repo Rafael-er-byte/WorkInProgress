@@ -3,16 +3,14 @@ import type Category from "../../core/model/Category";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
 import type iCategoryRepository from "../contracts/repository/iRepository";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import type IDManager from "../../../contracts/utils/IDManager";
 
 export default class GetAllCategories{
     constructor(
-        private readonly repo:iCategoryRepository, 
-        private readonly idManager:IDManager,
+        private readonly repo:iCategoryRepository
     ){}
 
     async execute(categoryFilterDto:CategoryFilterDto):Promise<ResponseCategoryDto[]>{
-        if(!this.idManager.validateId(categoryFilterDto.idCreator) || !categoryFilterDto.limit || !categoryFilterDto.page)throw new InvalidParameters('Invalid Data', categoryFilterDto);
+        if(!categoryFilterDto.idCreator)throw new InvalidParameters('Invalid id of creator', {idCreator: categoryFilterDto.idCreator});
         let categories: Category[] = [];
 
         categories = await this.repo.getAll(categoryFilterDto);
