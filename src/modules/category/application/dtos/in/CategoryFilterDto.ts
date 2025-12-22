@@ -1,4 +1,4 @@
-import type { TypeSorting } from "../../types/Typesorting.type";
+import type { TypeSorting } from "../../types/TypeSorting.type";
 
 export default interface CategoryFilterDto{
     idCreator:string;

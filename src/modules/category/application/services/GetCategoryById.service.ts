@@ -13,7 +13,7 @@ export default class GetCategoryById{
         const category: Category | undefined = await this.repo.getById(id, idCreator);
         if(!category)throw new ResourceNotFoud('Category doesnt exists', id);
         
-        const response: ResponseCategoryDto = new ResponseCategoryDto(category.getName(), category.getIdCreator(), category.getIdCategory(), category.getCreatedAt() as string);
+        const response: ResponseCategoryDto = new ResponseCategoryDto(category.getName(), category.getIdCategory(), category.getCreatedAt() as string, category.getIcon());
         return response;
     }
 };  

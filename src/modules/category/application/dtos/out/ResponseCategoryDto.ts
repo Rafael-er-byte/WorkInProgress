@@ -1,14 +1,14 @@
 
 export default class ResponseCategoryDto{
     name!:string;
-    idCreator!:string;
     idCategory!:string;
+    icon?:string | undefined;
     readonly createdAt!:string;
 
-    constructor(name:string, idCategory:string, idCreator:string, createdAt:string){
+    constructor(name:string, idCategory:string, createdAt:string, icon: string | undefined){
         this.name = name;
         this.idCategory = idCategory;
-        this.idCreator = idCreator;
         this.createdAt = createdAt;
+        this.icon = icon;
     }
 };

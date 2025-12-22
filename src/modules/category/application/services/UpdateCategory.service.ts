@@ -4,6 +4,7 @@ import Action from "../dtos/out/ActionDto";
 import type iCategoryRepository from "../contracts/repository/iRepository";
 import CoreError from "../../../../shared/core/errors/CoreError";
 import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
+import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 
 export default class UpdateCategory{
     constructor(
@@ -11,6 +12,7 @@ export default class UpdateCategory{
     ){}
 
     async execute(categoryDto:CategoryDto): Promise<Action>{
+        if(!categoryDto.idCategory)throw new MissingRequiredParameters('category id', categoryDto.idCategory);
         const category:Category | undefined = await this.repo.getById(categoryDto.idCategory, categoryDto.idCreator);
         if(!category) throw new ResourceNotFoud('Category', categoryDto);
 

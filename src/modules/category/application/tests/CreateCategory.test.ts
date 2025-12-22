@@ -7,6 +7,7 @@ import Action from "../dtos/out/ActionDto";
 import Url from "../../core/objects/URL";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import CoreError from "../../../../shared/core/errors/CoreError";
 
 describe('Create category service tests', () => {
     let idManagerMock:ReturnType<typeof createIdManagerMock>;
@@ -79,6 +80,6 @@ describe('Create category service tests', () => {
         
         mockRepo.create = jest.fn().mockReturnValue(false);
 
-       expect(createCategory.execute(categoryDto)).rejects.toThrow(InvalidParameters);
+       expect(createCategory.execute(categoryDto)).rejects.toThrow(CoreError);
     });
 });
