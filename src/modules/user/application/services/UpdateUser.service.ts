@@ -1,6 +1,4 @@
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
-import type IDManager from "../../../contracts/utils/IDManager";
 import type User from "../../core/model/User";
 import type iUserRepository from "../contracts/repository/iUserRepository.repository";
 import type UpdateUserDto from "../dtos/in/UpdateUserDto";
@@ -8,13 +6,10 @@ import Action from "../dtos/out/Action";
 
 export default class UpdateUser{
     constructor(
-        private repo: iUserRepository,
-        private idManager: IDManager
+        private repo: iUserRepository
     ){}
 
     public async execute(info: UpdateUserDto): Promise<Action>{
-        if(!this.idManager.validateId(info.id)) throw new MissingRequiredParameters('id');
-
         const user: User | undefined = await this.repo.getById(info.id);
         if(!user) throw new ResourceNotFoud('User', info);
 

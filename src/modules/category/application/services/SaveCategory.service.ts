@@ -1,4 +1,4 @@
-import CategoryDto from "../dtos/in/CategryDto";
+import type CategoryDto from "../dtos/in/CategoryDto";
 import Category from "../../core/model/Category";
 import Action from "../dtos/out/ActionDto";
 import type iCategoryRepository from "../contracts/repository/iRepository";

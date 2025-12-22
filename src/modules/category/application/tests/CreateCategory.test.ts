@@ -2,7 +2,7 @@ import SaveCategory from "../services/SaveCategory.service";
 import { mockRepo } from "./mocks/repository/MockRepository";
 import { createIdManagerMock } from "../../../../shared/mocks/IdManagerMock";
 import { createDateManagerMock } from "../../../../shared/mocks/DateManagerMock";
-import CategoryDto from "../dtos/in/CategryDto";
+import type CategoryDto from "../dtos/in/CategoryDto";
 import Action from "../dtos/out/ActionDto";
 import Url from "../../core/objects/URL";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
@@ -20,10 +20,11 @@ describe('Create category service tests', () => {
     });
 
     it('Should create an instance of Category and return an action object', async () => {
-        const categoryDto: CategoryDto = new CategoryDto();
-        categoryDto.name = 'Category1';
-        categoryDto.idCreator = 'mock123';
-        categoryDto.icon = 'http://example.com';
+        let categoryDto: CategoryDto = {
+            name:'Category1',
+            idCreator:'mock123',
+            icon:'http://example.com'
+        }
 
         const result = await createCategory.execute(categoryDto);
         expect(result).toBeInstanceOf(Action);
@@ -39,38 +40,42 @@ describe('Create category service tests', () => {
     });
 
     it('Should throw an error if dont send the id of creator', async () => {
-        const categoryDto: CategoryDto = new CategoryDto();
-        categoryDto.name = 'Category1';
-        //categoryDto.idCreator = 'mock123'; Without idCreator
-        categoryDto.icon = 'http://example.com';
+        let categoryDto: CategoryDto = {
+            name:'Category1',
+            idCreator:'',
+            icon:'http://example.com'
+        }
 
        expect(createCategory.execute(categoryDto)).rejects.toThrow(MissingRequiredParameters);
     });
 
      it('Should throw an error if dont send the icon url', async () => {
-        const categoryDto: CategoryDto = new CategoryDto();
-        categoryDto.name = 'Category1';
-        categoryDto.idCreator = 'mock123'; 
-        //categoryDto.icon = 'icon'; Without icon
+        let categoryDto: CategoryDto = {
+            name:'Category1',
+            idCreator:'mock123',
+            icon:''
+        }
 
        expect(createCategory.execute(categoryDto)).rejects.toThrow(InvalidParameters);
     });
 
      it('Should throw an error if dont send the name of category', async () => {
-        const categoryDto: CategoryDto = new CategoryDto();
-        //categoryDto.name = 'Category1'; Without name
-        categoryDto.idCreator = 'mock123'; 
-        categoryDto.icon = 'http://example.com';
+        let categoryDto: CategoryDto = {
+            name:'',
+            idCreator:'mock123',
+            icon:'http://example.com'
+        }
 
        expect(createCategory.execute(categoryDto)).rejects.toThrow(MissingRequiredParameters);
     });
 
 
     it('Should throw an error if are some internal errors', async () => {
-        const categoryDto: CategoryDto = new CategoryDto();
-        categoryDto.name = 'Category1';
-        categoryDto.idCreator = 'mock123';
-        categoryDto.icon = 'http://example.com';
+        let categoryDto: CategoryDto = {
+            name:'Category1',
+            idCreator:'mock123',
+            icon:'http://example.com'
+        }
         
         mockRepo.create = jest.fn().mockReturnValue(false);
 
