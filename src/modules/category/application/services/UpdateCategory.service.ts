@@ -2,7 +2,8 @@ import type CategoryDto from "../dtos/in/CategoryDto";
 import Category from "../../core/model/Category";
 import Action from "../dtos/out/ActionDto";
 import type iCategoryRepository from "../contracts/repository/iRepository";
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
+import CoreError from "../../../../shared/core/errors/CoreError";
+import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
 
 export default class UpdateCategory{
     constructor(
@@ -10,10 +11,14 @@ export default class UpdateCategory{
     ){}
 
     async execute(categoryDto:CategoryDto): Promise<Action>{
-        const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory!, categoryDto.createdAt as string, categoryDto.icon);
-    
+        const category:Category | undefined = await this.repo.getById(categoryDto.idCategory, categoryDto.idCreator);
+        if(!category) throw new ResourceNotFoud('Category', categoryDto);
+
+        category.setIcon(categoryDto.icon);
+        category.setName(categoryDto.name);
+
         let savedOnRepo: boolean = await this.repo.update(category);
-        if(!savedOnRepo)throw new InvalidParameters('Some pareameters are invalid', categoryDto);
+        if(!savedOnRepo)throw new CoreError('Cannot update the category at the moment', categoryDto);
 
         const action:Action = new Action(true, categoryDto.idCategory);
         return action;

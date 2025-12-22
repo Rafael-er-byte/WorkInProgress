@@ -5,7 +5,7 @@ import type iCategoryRepository from "../contracts/repository/iRepository";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import { VALID_SORTS } from "../types/TypeSorting.type";
 
-export default class GetAllCategories{
+export default class GetCategories{
     constructor(
         private readonly repo:iCategoryRepository
     ){}
