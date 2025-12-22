@@ -1,7 +1,7 @@
-export default class UserDto{
-    email!: [string, boolean][];
+export default interface UserDto{
+    email: [string, boolean][];
     mainEmail?: string;
-    havePassword!:boolean;
+    havePassword:boolean;
     password?:string;
     userName?:string;
     urlProfile?:string;

@@ -1,3 +1,3 @@
-export default class UserIdDto{
-    id!: string;
+export default interface UserIdDto{
+    id: string;
 };

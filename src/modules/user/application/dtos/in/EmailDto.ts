@@ -1,4 +1,4 @@
-export default class EmailDto{
-    email!: string;
-    idUser!: string;
+export default interface EmailDto{
+    email: string;
+    idUser: string;
 };

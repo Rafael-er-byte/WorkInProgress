@@ -1,7 +1,7 @@
-export default class UpdateUserDto{
-    id!:string;
+export default interface UpdateUserDto{
+    id:string;
     username?:string;
     urlProfile?:string;
-    setMainEmail:boolean = false;
+    setMainEmail:boolean;
     email?:string;
 };
