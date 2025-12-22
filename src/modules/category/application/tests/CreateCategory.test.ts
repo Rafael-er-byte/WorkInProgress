@@ -42,9 +42,9 @@ describe('Create category service tests', () => {
         const categoryDto: CategoryDto = new CategoryDto();
         categoryDto.name = 'Category1';
         //categoryDto.idCreator = 'mock123'; Without idCreator
-        categoryDto.icon = 'icon';
+        categoryDto.icon = 'http://example.com';
 
-       expect(createCategory.execute(categoryDto)).rejects.toThrow(InvalidParameters);
+       expect(createCategory.execute(categoryDto)).rejects.toThrow(MissingRequiredParameters);
     });
 
      it('Should throw an error if dont send the icon url', async () => {
@@ -60,7 +60,7 @@ describe('Create category service tests', () => {
         const categoryDto: CategoryDto = new CategoryDto();
         //categoryDto.name = 'Category1'; Without name
         categoryDto.idCreator = 'mock123'; 
-        categoryDto.icon = 'icon';
+        categoryDto.icon = 'http://example.com';
 
        expect(createCategory.execute(categoryDto)).rejects.toThrow(MissingRequiredParameters);
     });
@@ -70,7 +70,7 @@ describe('Create category service tests', () => {
         const categoryDto: CategoryDto = new CategoryDto();
         categoryDto.name = 'Category1';
         categoryDto.idCreator = 'mock123';
-        categoryDto.icon = 'icon';
+        categoryDto.icon = 'http://example.com';
         
         mockRepo.create = jest.fn().mockReturnValue(false);
 

@@ -1,12 +1,11 @@
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
-import type IDManager from "../../../contracts/utils/IDManager";
 import Category from "../../core/model/Category";
 import type iCategoryRepository from "../contracts/repository/iRepository";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
 
 export default class GetCategoryById{
-    constructor(private readonly repo: iCategoryRepository, private readonly idManager:IDManager){}
+    constructor(private readonly repo: iCategoryRepository){}
 
     async execute(id:string, idCreator:string):Promise<ResponseCategoryDto>{
         if(!id && !idCreator)throw new InvalidParameters('Invalid id of creator or id of category', {idCategory: id, idCreator: idCreator});
