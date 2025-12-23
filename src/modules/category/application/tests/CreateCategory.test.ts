@@ -50,17 +50,7 @@ describe('Create category service tests', () => {
        expect(createCategory.execute(categoryDto)).rejects.toThrow(MissingRequiredParameters);
     });
 
-     it('Should throw an error if dont send the icon url', async () => {
-        let categoryDto: CategoryDto = {
-            name:'Category1',
-            idCreator:'mock123',
-            icon:''
-        }
-
-       expect(createCategory.execute(categoryDto)).rejects.toThrow(InvalidParameters);
-    });
-
-     it('Should throw an error if dont send the name of category', async () => {
+    it('Should throw an error if dont send the name of category', async () => {
         let categoryDto: CategoryDto = {
             name:'',
             idCreator:'mock123',

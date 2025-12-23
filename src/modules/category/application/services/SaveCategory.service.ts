@@ -2,10 +2,10 @@ import type CategoryDto from "../dtos/in/CategoryDto";
 import Category from "../../core/model/Category";
 import Action from "../dtos/out/ActionDto";
 import type iCategoryRepository from "../contracts/repository/iRepository";
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import type IDManager from "../../../contracts/utils/IDManager";
 import type DateManager from "../../../contracts/utils/DateManager";
 import CoreError from "../../../../shared/core/errors/CoreError";
+import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 
 export default class SaveCategory{
     constructor(
@@ -15,10 +15,9 @@ export default class SaveCategory{
     ){}
 
     async execute(categoryDto:CategoryDto): Promise<Action>{
-        categoryDto.idCategory = this.idManager.generateId();
 
-        if(!categoryDto.idCreator && !categoryDto.idCategory)throw new InvalidParameters('Invalid id of creator or id of category', {idCreator: categoryDto.idCreator, id: categoryDto.idCategory});
-        const category:Category = new Category(categoryDto.name, categoryDto.idCreator, categoryDto.idCategory, this.dateManager.generate(), categoryDto.icon);
+        if(!categoryDto.idCreator)throw new MissingRequiredParameters('Invalid id of creator ', {idCreator: categoryDto.idCreator});
+        const category:Category = new Category(categoryDto.name, categoryDto.idCreator, this.idManager.generateId(), categoryDto.icon, this.dateManager.generate());
     
         const savedOnRepo: boolean = await this.repo.create(category);
 
