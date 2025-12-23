@@ -1,3 +1,4 @@
+import CoreError from "../../../../shared/core/errors/CoreError";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
 import Unauthorized from "../../../../shared/core/errors/Unauthorized";
@@ -15,7 +16,8 @@ export default class DeleteCategoryById{
         if(!category) throw new ResourceNotFoud('Category', {idCreator: idCreator, id: id});
         if(category.getIdCreator() !== idCreator)throw new Unauthorized('Not allowed');
 
-        await this.repo.delete(id);
+        const deleted = await this.repo.delete(id);
+        if(!deleted)throw new CoreError('Something went wrong', {id: id, idCreator: idCreator});
 
         const action:Action = new Action(true, id);
         return action;
