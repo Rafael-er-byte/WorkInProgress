@@ -5,7 +5,7 @@ import Action from "../dtos/out/ActionDto";
 import CoreError from "../../../../shared/core/errors/CoreError";
 import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
-import Unauthorized from "../../../../shared/core/errors/Unauthorized";
+import OperationNotAllowed from "../../../../shared/core/errors/OperationNotAllowed";
 
 export default class UpdateCategory{
     constructor(
@@ -17,7 +17,7 @@ export default class UpdateCategory{
 
         const category:Category | undefined = await this.repo.getById(categoryDto.idCategory);
         if(!category) throw new ResourceNotFoud('Category', categoryDto);
-        if(category.getIdCreator() !== categoryDto.idCreator) throw new Unauthorized('Not allowed');
+        if(category.getIdCreator() !== categoryDto.idCreator) throw new OperationNotAllowed('Not allowed');
 
         category.setIcon(categoryDto.icon);
         category.setName(categoryDto.name);
