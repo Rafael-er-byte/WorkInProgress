@@ -14,7 +14,7 @@ export default class User{
     private emailPrimary?:Email | undefined;
     private emails: Map<string, Email> = new Map();
     private password?: Password;
-    private urlProfile: Url = new Url();
+    private urlProfile?: Url | undefined;
     private readonly createdAt!:string;
 
     constructor(builder:UserBuilder, key: typeof BUILD_KEY){
@@ -31,7 +31,7 @@ export default class User{
         this.emailPrimary = this.emails.get(builder.emailPrimary);
         if(!this.emailPrimary) throw new InvalidOperation('The primary email doesnt exists', builder.emailPrimary);
         this.userName = builder.userName;
-        if(builder.urlProfile) this.urlProfile = builder.urlProfile;
+        if(builder.urlProfile) this.urlProfile = new Url(builder.urlProfile);
         this.id = builder.id;
         this.createdAt = builder.createdAt;
     }
@@ -89,11 +89,11 @@ export default class User{
     }
 
     setUrlProfile(url:string): void{
-        this.urlProfile.setUrl(url);
+        this.urlProfile = new Url(url);
     }
 
     deleteUrlProfile():void{
-        this.urlProfile.clearUrl();
+        this.urlProfile = undefined;
     }
 
     getAllEmails(): Email[]{
@@ -106,7 +106,7 @@ export default class User{
     }
 
     getUrlProfile():string | undefined{
-        return this.urlProfile.getUrl();
+        return this.urlProfile? this.urlProfile.getUrl(): undefined;
     }
 
     getUserName(): string{

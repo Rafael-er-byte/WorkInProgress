@@ -11,7 +11,7 @@ export default class UserBuilder {
     emails: Map<string, Email> = new Map();
     emailPrimary!:string;
     password?: Password;
-    urlProfile?: Url;
+    urlProfile?: string;
     createdAt!: string;
     isVerified: boolean = false;
     id!: string;
@@ -56,8 +56,7 @@ export default class UserBuilder {
 
     setUrlProfile(url: string): this {
         if (!url) return this;
-        this.urlProfile = new Url();
-        this.urlProfile.setUrl(url);
+        this.urlProfile = url;
         return this;
     }
 
