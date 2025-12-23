@@ -5,7 +5,7 @@ export default interface iCategoryRepository{
     create(category:Category): Promise<boolean>
     update(category:Category): Promise<boolean>
     getAll(categoryFilterDto:CategoryFilterDto): Promise<Category[]>
-    getById(categoryId: Category['idCategory'], idCreator:Category['idCreator']): Promise<Category | undefined>
-    delete(categoryId: Category['idCategory'], idCreator:Category['idCreator']): Promise<boolean>
-    existsById(categoryId: Category['idCategory'], idCreator: Category['idCreator']): Promise<boolean>
+    getById(categoryId: Category['idCategory']): Promise<Category | undefined>
+    delete(categoryId: Category['idCategory']): Promise<boolean>
+    existsById(categoryId: Category['idCategory']): Promise<boolean>
 };
