@@ -5,9 +5,7 @@ export default class Url{
     private readonly hostnameRegex = /^[a-zA-Z0-9-.]+$/;
     private readonly tldRegex = /^[a-zA-Z]{2,}$/
 
-    constructor(){}
-
-    public setUrl(newUrl: string){
+    constructor(newUrl:string){
         let tmpUrl: URL;
         try {
             tmpUrl = new URL(newUrl);
@@ -24,15 +22,12 @@ export default class Url{
         } catch (error) {
             throw new InvalidParameters('url', newUrl);
         }
+
         this.url = newUrl;
     }
 
     public getUrl(): string | undefined{
         if(!this.url || this.url.trim().length === 0) return undefined;
         return this.url;
-    }
-
-    public clearUrl():void{
-        this.url = '';
     }
 };
