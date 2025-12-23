@@ -1,7 +1,7 @@
 import type CategoryDto from "../dtos/in/CategoryDto";
+import type iCategoryRepository from "../contracts/repository/iRepository";
 import Category from "../../core/model/Category";
 import Action from "../dtos/out/ActionDto";
-import type iCategoryRepository from "../contracts/repository/iRepository";
 import CoreError from "../../../../shared/core/errors/CoreError";
 import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
@@ -14,6 +14,7 @@ export default class UpdateCategory{
 
     async execute(categoryDto:CategoryDto): Promise<Action>{
         if(!categoryDto.idCategory)throw new MissingRequiredParameters('category id', categoryDto.idCategory);
+
         const category:Category | undefined = await this.repo.getById(categoryDto.idCategory);
         if(!category) throw new ResourceNotFoud('Category', categoryDto);
         if(category.getIdCreator() !== categoryDto.idCreator) throw new Unauthorized('Not allowed');

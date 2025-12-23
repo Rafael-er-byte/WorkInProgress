@@ -6,7 +6,7 @@ import { mockRepo } from "./mocks/repository/MockRepository";
 
 describe('Get categories service tests', () => {
     let service: GetCategories;
-    let validResponse: ResponseCategoryDto = new ResponseCategoryDto('category1', 'idCategory', 'http://icon.com');
+    let validResponse: ResponseCategoryDto = new ResponseCategoryDto('category1', 'idCategory', 'http://icon.com', undefined);
     const category: Category = new Category('category1', 'idCreator', 'idCategory', 'http://icon.com');
 
     beforeEach(() => {
