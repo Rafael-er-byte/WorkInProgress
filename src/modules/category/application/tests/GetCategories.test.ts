@@ -1,3 +1,4 @@
+import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import Category from "../../core/model/Category";
 import type CategoryFilterDto from "../dtos/in/CategoryFilterDto";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
@@ -27,5 +28,17 @@ describe('Get categories service tests', () => {
         let response = await service.execute(filter);
 
         expect(response).toStrictEqual([validResponse]);
+    });
+
+    it('Should throw an error if the order to sort is not valid', async () => {
+        let filter: CategoryFilterDto = {
+            idCreator:'idCreator',
+            limit: 40,
+            page:1,
+            titleLike:'title',
+            orderBy: 'invalid'
+        }
+
+        await expect(() => service.execute(filter)).rejects.toThrow(InvalidParameters);
     });
 });
