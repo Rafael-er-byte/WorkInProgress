@@ -101,4 +101,32 @@ export default class Task {
     public markAsPending(): void {
         this.finished = false;
     }
-}
+
+    public getTitle(): string {
+        return this.title;
+    }
+
+    public getDescription(): string | undefined {
+        return this.description;
+    }
+
+    public getEndDate(): string | undefined {
+        return this.endDate;
+    }
+
+    public getEndTime(): string | undefined {
+        return this.endTime;
+    }
+
+    public getHasReminder(): boolean {
+        return this.hasReminder;
+    }
+
+    public isFinished(): boolean {
+        return this.finished;
+    }
+
+    public getCategories(): string[] {
+        return [...this.categories]; 
+    }
+};
