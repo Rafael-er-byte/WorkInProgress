@@ -1,6 +1,8 @@
+import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 import Url from "../../../../shared/core/objects/URL";
+import Schedule from "../objects/Schedule";
 import { PRIORITY_LEVEL, type Priority } from "../types/Prioroty.type";
 
 export default class Task {
@@ -8,7 +10,7 @@ export default class Task {
     private priority!: Priority;
     private description?: string;
     private urlImage?:Url;
-    private schedule?: string;
+    private schedule?: Schedule;
     private finished: boolean = false;
     private categories: string[] = [];
 
@@ -34,7 +36,7 @@ export default class Task {
     }
 
     public setDate(date:string): void{
-
+        this.schedule = new Schedule(date);
     }
 
     public setUrlImage(url:string): void{
@@ -78,7 +80,8 @@ export default class Task {
         return this.title;
     }
 
-    public getDescription(): string | undefined {
+    public getDescription(): string{
+        if(!this.description)throw new InvalidOperation('Cannot get if not exists');
         return this.description;
     }
 
@@ -86,8 +89,9 @@ export default class Task {
         return this.priority;
     }
 
-    public getImageUrl(): Url | undefined{
-        return this.urlImage? this.urlImage : undefined;
+    public getImageUrl(): string{
+        if(!this.urlImage)throw new InvalidOperation('Cannot get if not exists');
+        return this.urlImage!.getUrl();
     }
 
     public isFinished(): boolean {
@@ -96,5 +100,10 @@ export default class Task {
 
     public getCategories(): string[] {
         return [...this.categories]; 
+    }
+
+    public getSchedule(): string{
+        if(!this.schedule)throw new InvalidOperation('Cannot get if not exists');
+        return this.schedule.getSchedule();
     }
 };

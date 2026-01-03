@@ -26,8 +26,7 @@ export default class Url{
         this.url = newUrl;
     }
 
-    public getUrl(): string | undefined{
-        if(!this.url || this.url.trim().length === 0) return undefined;
+    public getUrl(): string{
         return this.url;
     }
 };
