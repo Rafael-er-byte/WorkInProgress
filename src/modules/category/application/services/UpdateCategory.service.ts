@@ -17,7 +17,7 @@ export default class UpdateCategory{
 
         const category:Category | undefined = await this.repo.getById(categoryDto.idCategory);
         if(!category) throw new ResourceNotFoud('Category', categoryDto);
-        if(category.getIdCreator() !== categoryDto.idCreator) throw new OperationNotAllowed('Not allowed');
+        if(category.getIdProject() !== categoryDto.idProject) throw new OperationNotAllowed('Not allowed');
 
         category.setIcon(categoryDto.icon);
         category.setName(categoryDto.name);

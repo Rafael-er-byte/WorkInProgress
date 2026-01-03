@@ -1,7 +1,7 @@
 import type { TypeSorting } from "../../types/TypeSorting.type";
 
 export default interface CategoryFilterDto{
-    idCreator:string;
+    idProject:string;
     limit:number;
     page:number;
     titleLike?:string;

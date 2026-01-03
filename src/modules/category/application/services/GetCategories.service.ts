@@ -11,7 +11,7 @@ export default class GetCategories{
     ){}
 
     async execute(categoryFilterDto:CategoryFilterDto):Promise<ResponseCategoryDto[]>{
-        if(!categoryFilterDto.idCreator)throw new InvalidParameters('Invalid id of creator', {idCreator: categoryFilterDto.idCreator});
+        if(!categoryFilterDto.idProject)throw new InvalidParameters('Invalid id of creator', {idProject: categoryFilterDto.idProject});
         if(categoryFilterDto.orderBy && !VALID_SORTS.includes(categoryFilterDto.orderBy)) throw new InvalidParameters('Invalid sort-type', {sortType: categoryFilterDto.orderBy});
         let categories: Category[] = [];
 

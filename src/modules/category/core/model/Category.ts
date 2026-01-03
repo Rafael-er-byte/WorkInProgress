@@ -5,17 +5,17 @@ export default class Category {
     private name!: string;
     private icon?: Url;
     private readonly idCategory!: string;
-    private readonly idCreator!: string;
+    private readonly idProject!: string;
     private readonly createdAt?: string | undefined;
 
-    constructor(name: string, idCreator: string, idCategory: string, icon?: string,  createdAt?: string) {
+    constructor(name: string, idProject: string, idCategory: string, icon?: string,  createdAt?: string) {
         if (!idCategory || idCategory?.trim().length === 0) throw new MissingRequiredParameters("id");
         if (!name || name?.trim().length === 0) throw new MissingRequiredParameters("category_name");
-        if (!idCreator || idCreator?.trim().length === 0) throw new MissingRequiredParameters("id_creator");
+        if (!idProject || idProject?.trim().length === 0) throw new MissingRequiredParameters("id_creator");
 
         this.setName(name);
         this.idCategory = idCategory;
-        this.idCreator = idCreator;
+        this.idProject = idProject;
         this.createdAt = createdAt;
         if(icon)this.icon = new Url(icon);
     }
@@ -28,8 +28,8 @@ export default class Category {
         return this.name;
     }
 
-    public getIdCreator(): string {
-        return this.idCreator;
+    public getIdProject(): string {
+        return this.idProject;
     }
 
     public getCreatedAt(): string | undefined {

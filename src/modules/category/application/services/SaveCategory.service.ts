@@ -16,8 +16,8 @@ export default class SaveCategory{
 
     async execute(categoryDto:CategoryDto): Promise<Action>{
 
-        if(!categoryDto.idCreator)throw new MissingRequiredParameters('Invalid id of creator ', {idCreator: categoryDto.idCreator});
-        const category:Category = new Category(categoryDto.name, categoryDto.idCreator, this.idManager.generateId(), categoryDto.icon, this.dateManager.generate());
+        if(!categoryDto.idProject)throw new MissingRequiredParameters('Invalid id of creator ', {idProject: categoryDto.idProject});
+        const category:Category = new Category(categoryDto.name, categoryDto.idProject, this.idManager.generateId(), categoryDto.icon, this.dateManager.generate());
     
         const savedOnRepo: boolean = await this.repo.create(category);
 

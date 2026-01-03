@@ -18,15 +18,15 @@ describe('Tests for category model', () => {
 
     it('Should throw if when update the category name dont send a valid name', () => {
         expect(() => category.setName('')).toThrow(MissingRequiredParameters);
-        expect(() => category.setName(undefined)).toThrow(MissingRequiredParameters);
+        expect(() => category.setName()).toThrow(MissingRequiredParameters);
     });
 
     it('Should throw if when update the category icon dont send a valid icon', () => {
         expect(() => category.setIcon('')).toThrow(InvalidParameters);
-        expect(() => category.setIcon(undefined)).toThrow(InvalidParameters);
+        expect(() => category.setIcon()).toThrow(InvalidParameters);
     });
 
-    it('Should throw if idCategory, idCreator or name are undefined', () => {
+    it('Should throw if idCategory, idProject or name are undefined', () => {
 
         expect(() =>
             new Category('category1', '123', '', 'http://example.com', 'ValidDate')

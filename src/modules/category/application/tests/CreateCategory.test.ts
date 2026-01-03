@@ -5,7 +5,6 @@ import { createDateManagerMock } from "../../../../shared/mocks/DateManagerMock"
 import type CategoryDto from "../dtos/in/CategoryDto";
 import Action from "../dtos/out/ActionDto";
 import Url from "../../core/objects/URL";
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 import CoreError from "../../../../shared/core/errors/CoreError";
 
@@ -23,7 +22,7 @@ describe('Create category service tests', () => {
     it('Should create an instance of Category and return an action object', async () => {
         let categoryDto: CategoryDto = {
             name:'Category1',
-            idCreator:'mock123',
+            idProject:'mock123',
             icon:'http://example.com'
         }
 
@@ -32,7 +31,7 @@ describe('Create category service tests', () => {
         expect(mockRepo.create).toHaveBeenCalledWith(
             expect.objectContaining({
                 idCategory: 'mock123', 
-                idCreator: 'mock123', 
+                idProject: 'mock123', 
                 name: 'Category1', 
                 createdAt: 'validDate', 
                 icon: expect.any(Url)
@@ -43,7 +42,7 @@ describe('Create category service tests', () => {
     it('Should throw an error if dont send the id of creator', async () => {
         let categoryDto: CategoryDto = {
             name:'Category1',
-            idCreator:'',
+            idProject:'',
             icon:'http://example.com'
         }
 
@@ -53,7 +52,7 @@ describe('Create category service tests', () => {
     it('Should throw an error if dont send the name of category', async () => {
         let categoryDto: CategoryDto = {
             name:'',
-            idCreator:'mock123',
+            idProject:'mock123',
             icon:'http://example.com'
         }
 
@@ -64,7 +63,7 @@ describe('Create category service tests', () => {
     it('Should throw an error if are some internal errors', async () => {
         let categoryDto: CategoryDto = {
             name:'Category1',
-            idCreator:'mock123',
+            idProject:'mock123',
             icon:'http://example.com'
         }
         
