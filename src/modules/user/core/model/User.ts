@@ -39,8 +39,8 @@ export default class User{
     verifyEmail(email:string): void{
         const emailToVerify: Email | undefined = this.emails.get(email);
         if(!emailToVerify) throw new InvalidOperation('Email doesnt exists', email);
-        emailToVerify.verify()
-        this.emails.set(email, emailToVerify);
+        this.emails.delete(emailToVerify.getEmail());
+        this.emails.set(email, new Email(email, true));
     }
 
     hasEmail(email:string): boolean{
@@ -69,8 +69,7 @@ export default class User{
     }
 
     setEmail(email:string): void{
-        const newEmail:Email = new Email();
-        newEmail.setEmail(email);
+        const newEmail:Email = new Email(email, false);
         this.emails.set(email, newEmail);
 
         if(!this.emailPrimary) this.emailPrimary = newEmail;

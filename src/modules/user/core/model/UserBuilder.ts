@@ -2,7 +2,6 @@ import FailedToBuild from "../../../../shared/core/errors/FailedToBuild";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 import BUILD_KEY from "../token/UserBuilderKey";
 import Email from "../objects/Email";
-import Password from "../objects/Password";
 import User from "./User";;
 
 export default class UserBuilder {
@@ -32,10 +31,7 @@ export default class UserBuilder {
 
     setEmail(email: string, isVerified: boolean): this {
         if (!email) throw new MissingRequiredParameters('email');
-        const newEmail:Email = new Email();
-        newEmail.setEmail(email);
-        if(isVerified) newEmail.verify();
-        this.emails.set(email, newEmail);
+        this.emails.set(email, new Email(email, isVerified));
         return this;
     }
 

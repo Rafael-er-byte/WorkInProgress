@@ -6,17 +6,11 @@ export default class Email{
     private verified:boolean = false;
     private readonly emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    constructor(){}
-
-    setEmail(email:string): void{
+    constructor(email:string, isVerified: boolean = false){
         if(!email) throw new MissingRequiredParameters('email');
         if(!this.emailRegex.test(email)) throw new InvalidParameters('email');
         this.email = email;
-        this.verified = false;
-    }
-
-    verify(): void{
-        this.verified = true;
+        this.verified = isVerified;
     }
 
     getEmail(): string{
