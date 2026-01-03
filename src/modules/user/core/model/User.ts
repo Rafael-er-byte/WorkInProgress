@@ -25,7 +25,7 @@ export default class User{
             this.emails.set(email.getEmail(), email);
         });
 
-        if(builder.havePassword) this.password = builder.password!;
+        if(builder.havePassword) this.password = new Password(builder.password!);
 
         this.havePassword = builder.havePassword;
         this.emailPrimary = this.emails.get(builder.emailPrimary);
@@ -53,9 +53,7 @@ export default class User{
 
     setPassword(newPwd:string): void{
         if(!newPwd)throw new MissingRequiredParameters('password');
-        const pwd: Password = new Password();
-        pwd.setPassword(newPwd);
-        this.password = pwd;
+        this.password = new Password(newPwd);
         this.havePassword = true;
     }
 

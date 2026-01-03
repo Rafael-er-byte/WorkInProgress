@@ -3,24 +3,23 @@ import MissingRequiredParameters from "../../../../shared/core/errors/MissingReq
 import Password from "../objects/Password";
 
 describe('Password object tests', () => {
-    const password: Password = new Password();
 
     it('Should set and get a valid password', () => {
-        password.setPassword('23Fjoi$fo');
+        const password: Password = new Password('23Fjoi$fo');
         expect(password.getPassword()).toBe('23Fjoi$fo');
     });
 
     it('Should throw if the password dont match te requirements', () => {
-        expect(() => password.setPassword('12345678')).toThrow(InvalidParameters); //Only numbers
-        expect(() => password.setPassword('aaaaaaaa')).toThrow(InvalidParameters); //Only low case letters
-        expect(() => password.setPassword('GGGGGGGG')).toThrow(InvalidParameters); //Only high level letters
-        expect(() => password.setPassword('12@Rsf')).toThrow(InvalidParameters); //Not minimum size
-        expect(() => password.setPassword('12345')).toThrow(InvalidParameters); //Not minimum size and only numbers
-        expect(() => password.setPassword('12#?foi4o4n')).toThrow(InvalidParameters); //Without high level letters
-        expect(() => password.setPassword('fjo@joSD_?fR')).toThrow(InvalidParameters); //Without numbers
-        expect(() => password.setPassword('92@13SD_?R')).toThrow(InvalidParameters); //Without low level letters
-        expect(() => password.setPassword('ge3B5Fe85')).toThrow(InvalidParameters); //Without symbols
-        expect(() => password.setPassword('')).toThrow(MissingRequiredParameters); //Empty
-        expect(() => password.setPassword()).toThrow(MissingRequiredParameters); //undefined
+        expect(() => new Password('12345678')).toThrow(InvalidParameters); //Only numbers
+        expect(() => new Password('aaaaaaaa')).toThrow(InvalidParameters); //Only low case letters
+        expect(() => new Password('GGGGGGGG')).toThrow(InvalidParameters); //Only high level letters
+        expect(() => new Password('12@Rsf')).toThrow(InvalidParameters); //Not minimum size
+        expect(() => new Password('12345')).toThrow(InvalidParameters); //Not minimum size and only numbers
+        expect(() => new Password('12#?foi4o4n')).toThrow(InvalidParameters); //Without high level letters
+        expect(() => new Password('fjo@joSD_?fR')).toThrow(InvalidParameters); //Without numbers
+        expect(() => new Password('92@13SD_?R')).toThrow(InvalidParameters); //Without low level letters
+        expect(() => new Password('ge3B5Fe85')).toThrow(InvalidParameters); //Without symbols
+        expect(() => new Password('')).toThrow(MissingRequiredParameters); //Empty
+        expect(() => new Password()).toThrow(MissingRequiredParameters); //undefined
     });
 });

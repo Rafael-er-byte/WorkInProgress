@@ -3,14 +3,13 @@ import MissingRequiredParameters from "../../../../shared/core/errors/MissingReq
 import BUILD_KEY from "../token/UserBuilderKey";
 import Email from "../objects/Email";
 import Password from "../objects/Password";
-import Url from "../objects/URL";
 import User from "./User";;
 
 export default class UserBuilder {
     userName!: string;
     emails: Map<string, Email> = new Map();
     emailPrimary!:string;
-    password?: Password;
+    password?: string;
     urlProfile?: string;
     createdAt!: string;
     isVerified: boolean = false;
@@ -47,9 +46,7 @@ export default class UserBuilder {
 
     setPassword(password: string): this {
         if(!password) throw new MissingRequiredParameters('password')
-        const newPwd = new Password();
-        newPwd.setPassword(password);
-        this.password = newPwd;
+        this.password = password;
         this.havePassword = true;
         return this;
     }

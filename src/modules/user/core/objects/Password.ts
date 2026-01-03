@@ -5,7 +5,7 @@ export default class Password{
     private password?: string;
     private readonly passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/;
 
-    setPassword(pwd:string):void{
+    constructor(pwd:string){
         if(!pwd) throw new MissingRequiredParameters('Password');
         if(pwd.length < 8 || !this.passwordRegex.test(pwd)) throw new InvalidParameters('Password', pwd);
         this.password = pwd;
