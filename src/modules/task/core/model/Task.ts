@@ -2,28 +2,75 @@ import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 import Url from "../../../../shared/core/objects/URL";
+import type User from "../../../user/core/model/User";
 import Schedule from "../objects/Schedule";
 import { PRIORITY_LEVEL, type Priority } from "../types/Prioroty.type";
 
 export default class Task {
     private title!: string;
     private priority!: Priority;
+    private idList!:string;
+    private lastUpdate!:string;
+
     private description?: string;
     private urlImage?:Url;
-    private schedule?: Schedule;
+    private startDate?: Schedule;
+    private endDate?: Schedule;
+
     private finished: boolean = false;
     private categories: string[] = [];
+    private contributors: string[] = [];
+    private history: string[] = [];
+    private attachments: Url[] = []
+
+    private readonly id!:string
+    private readonly createdAt!:string;
 
     constructor(
+        id: string,
+        idList:string,
+        createdAt:string,
         title: string,
         description?: string,
         priority:Priority = PRIORITY_LEVEL[0],
         urlImage?:string
     ) {
+        if(!id || !idList || !createdAt)throw new MissingRequiredParameters('This parameters id, idList, createdAt are Required');
+        this.id = id;
+        this.idList = idList;
+        this.createdAt = createdAt;
         this.setTitle(title);
         if (description) this.setDescription(description);
         if(urlImage) this.urlImage = new Url(urlImage);
         this.setPriority(priority);
+    }
+
+    private updateHistory(modifier: User, ): void{
+
+    }
+
+    public moveToList(idList:string): void{
+        if(!idList)return;
+        this.idList = idList;
+    }
+
+    public deleteContributor(user: User){
+        this.contributors = this.contributors.filter(id => id !== user.getId());
+    }
+
+    public deleteAttachment(attachment: string): void{
+        if(this.attachments.length === 0)return;
+        this.attachments = this.attachments.filter(attach => attach.getUrl() !== attachment);
+    }
+
+    public addContributor(user:User): void{
+        if(user.getId().trim().length === 0)throw new MissingRequiredParameters('User id');
+        this.contributors.push(user.getId());
+    }
+
+    public addAtachment(attachment:string):void {
+        const attach: Url = new Url(attachment);
+        this.attachments.push(attach);
     }
 
     public setPriority(priority: Priority): void{
@@ -35,8 +82,12 @@ export default class Task {
         this.priority = priority;
     }
 
-    public setDate(date:string): void{
-        this.schedule = new Schedule(date);
+    public setBeginDate(date:string): void{
+        this.startDate = new Schedule(date);
+    }
+
+    public setEndDate(date:string): void{
+        this.endDate = new Schedule(date);
     }
 
     public setUrlImage(url:string): void{
@@ -102,8 +153,32 @@ export default class Task {
         return [...this.categories]; 
     }
 
-    public getSchedule(): string{
-        if(!this.schedule)throw new InvalidOperation('Cannot get if not exists');
-        return this.schedule.getSchedule();
+    public getStartDate(): string{
+        if(!this.startDate)throw new InvalidOperation('Cannot get if not exists');
+        return this.startDate.getSchedule();
+    }
+
+    public getEndDate(): string{
+        if(!this.endDate)throw new InvalidOperation('Cannot get if not exists');
+        return this.endDate.getSchedule();
+    }
+
+    public getIdList(): string{
+        return this.idList;
+    }
+
+    public getId(): string{
+        return this.id;
+    }
+
+    public getContributors(): string[]{
+        return [...this.contributors];
+    }
+
+    public getAttachments(): string[]{
+        let attachment:string[] = [];
+
+        this.attachments.map((attach) => attachment.push(attach.getUrl()));
+        return attachment;
     }
 };
