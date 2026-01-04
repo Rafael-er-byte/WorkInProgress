@@ -1,9 +1,9 @@
 import type Contributor from "../../../../shared/core/objects/Contributor";
-import type Schedule from "../../../../shared/core/objects/Schedule";
+import type DateTime from "../../../../shared/core/objects/DateTime";
 import TaskEvent from "./TaskEvent";
 
 export default class BeginDateUpdated extends TaskEvent{
-    constructor(modifier: Contributor, date: Schedule){
+    constructor(modifier: Contributor, date: DateTime){
         super(modifier, 'BEGIN_DATE_UPDATED', date);
     }
 };
