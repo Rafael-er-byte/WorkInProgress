@@ -1,15 +1,16 @@
 import type Contributor from "../../../../shared/core/objects/Contributor";
+import type DateTime from "../../../../shared/core/objects/DateTime";
 
 export default class TaskEvent{
     private modifier!:Contributor;
-    private modificationDate!: string;
+    private eventDate!: DateTime;
     private event!: string;
     private info? : unknown;
 
-    constructor(modifier: Contributor, event: string, info?:unknown){
+    constructor(eventDate:DateTime, modifier: Contributor, event: string, info?:unknown){
         this.modifier = modifier;
         this.event = event;
-        this.modificationDate = new Date().toISOString();
+        this.eventDate = eventDate;
         if(info) this.info = info;
     }
 
@@ -17,8 +18,8 @@ export default class TaskEvent{
         return this.modifier;
     }
 
-    public getDate(): string{
-        return this.modificationDate;
+    public getDate(): DateTime{
+        return this.eventDate;
     }
 
     public getEvent(): string{  
