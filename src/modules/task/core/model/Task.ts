@@ -1,6 +1,8 @@
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import type Contributor from "../../../../shared/core/objects/Contributor";
+import Schedule from "../../../../shared/core/objects/Schedule";
 import Url from "../../../../shared/core/objects/URL";
 import AttachmentAdded from "../Events/AttachmentAdded";
 import AttachmentDeleted from "../Events/AttachmentDeleted";
@@ -18,8 +20,6 @@ import TaskFinished from "../Events/TaskFinished";
 import TaskMarkedAsPending from "../Events/TaskMarkedAsPending";
 import TaskMoved from "../Events/TaskMoved";
 import TitleUpdated from "../Events/TitleUpdated";
-import type Contributor from "../objects/Contributor";
-import Schedule from "../objects/Schedule";
 import TaskCategory from "../objects/TaskCategory";
 import type TaskNote from "../objects/TaskNote";
 import { PRIORITY_LEVEL, type Priority } from "../types/Prioroty.type";

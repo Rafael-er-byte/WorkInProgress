@@ -1,4 +1,4 @@
-import type Contributor from "../objects/Contributor";
+import type Contributor from "../../../../shared/core/objects/Contributor";
 import TaskEvent from "./TaskEvent";
 
 export default class TaskFinished extends TaskEvent{

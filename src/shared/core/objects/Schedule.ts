@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import ValidateDateIso from "../helpers/ValidateDateIso.helper";
+import InvalidParameters from "../errors/InvalidParameters";
+import ValidateDateStrIso from "../helpers/ValidateDateIso.helper";
 
 export default class Schedule{
     private schedule!:string;
@@ -7,7 +7,7 @@ export default class Schedule{
     constructor(schedule:string){
         schedule = schedule.trim();
         
-        if(!ValidateDateIso(schedule)) throw new InvalidParameters('date', schedule);
+        if(!ValidateDateStrIso(schedule)) throw new InvalidParameters('date', schedule);
 
         const validDate = new Date(schedule);
         const now = new Date();

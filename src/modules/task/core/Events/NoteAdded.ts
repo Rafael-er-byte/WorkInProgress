@@ -1,4 +1,4 @@
-import type Contributor from "../objects/Contributor";
+import type Contributor from "../../../../shared/core/objects/Contributor";
 import type TaskNote from "../objects/TaskNote";
 import TaskEvent from "./TaskEvent";
 
