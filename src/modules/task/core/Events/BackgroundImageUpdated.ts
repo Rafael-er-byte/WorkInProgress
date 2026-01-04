@@ -1,8 +1,8 @@
 import type Contributor from "../objects/Contributor";
 import TaskEvent from "./TaskEvent";
 
-export default class TaskMarkedAsPending extends TaskEvent{
+export default class BackgroundImageUpdated extends TaskEvent{
     constructor(modifier: Contributor){
-        super(modifier, 'TASK_MARK_AS_PENDING');
+        super(modifier, 'BACKGROUND_IMAGE_UPDATED');
     }
 };

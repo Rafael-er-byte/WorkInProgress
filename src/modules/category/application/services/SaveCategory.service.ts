@@ -23,7 +23,7 @@ export default class SaveCategory{
 
         if(!savedOnRepo)throw new CoreError('Cannot create the category at the moment', categoryDto);
         
-        const action:Action = new Action(true, categoryDto.idCategory);
+        const action:Action = new Action(true, category.getIdCategory());
         return action;
     }
 };
