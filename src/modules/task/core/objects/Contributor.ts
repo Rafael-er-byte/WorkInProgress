@@ -1,6 +1,6 @@
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 
-export default class Contriutor{
+export default class Contributor{
     private id!: string;
     private userName!: string;
 

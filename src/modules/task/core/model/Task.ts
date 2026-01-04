@@ -2,7 +2,7 @@ import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
 import Url from "../../../../shared/core/objects/URL";
-import type User from "../../../user/core/model/User";
+import type Contributor from "../objects/Contributor";
 import Schedule from "../objects/Schedule";
 import { PRIORITY_LEVEL, type Priority } from "../types/Prioroty.type";
 
@@ -19,7 +19,7 @@ export default class Task {
 
     private finished: boolean = false;
     private categories: string[] = [];
-    private contributors: string[] = [];
+    private contributors: Contributor[] = [];
     private history: string[] = [];
     private attachments: Url[] = []
 
@@ -39,41 +39,47 @@ export default class Task {
         this.id = id;
         this.idList = idList;
         this.createdAt = createdAt;
-        this.setTitle(title);
-        if (description) this.setDescription(description);
+        if (!title || title.trim().length === 0) {
+            throw new MissingRequiredParameters('Title');
+        }
+        this.title = title.trim();
+        if (description && description.trim().length !== 0) {
+            this.description = description.trim();
+        }
+        
         if(urlImage) this.urlImage = new Url(urlImage);
-        this.setPriority(priority);
+        if(priority && PRIORITY_LEVEL.includes(priority)) this.priority = priority;
     }
 
-    private updateHistory(modifier: User, ): void{
+    private updateHistory(modifier: Contributor, ): void{
 
     }
 
-    public moveToList(idList:string): void{
+    public moveToList(idList:string, nameList:string, modifier: Contributor): void{
         if(!idList)return;
         this.idList = idList;
     }
 
-    public deleteContributor(user: User){
-        this.contributors = this.contributors.filter(id => id !== user.getId());
+    public deleteContributor(contributor: Contributor, modifier: Contributor){
+        this.contributors = this.contributors.filter(c => c.getId() !== contributor.getId());
     }
 
-    public deleteAttachment(attachment: string): void{
+    public deleteAttachment(attachment: string, modifier: Contributor): void{
         if(this.attachments.length === 0)return;
         this.attachments = this.attachments.filter(attach => attach.getUrl() !== attachment);
     }
 
-    public addContributor(user:User): void{
-        if(user.getId().trim().length === 0)throw new MissingRequiredParameters('User id');
-        this.contributors.push(user.getId());
+    public addContributor(contributor:Contributor, modifier: Contributor): void{
+        if(contributor.getId().trim().length === 0)throw new MissingRequiredParameters('Contributor id');
+        this.contributors.push(contributor);
     }
 
-    public addAtachment(attachment:string):void {
+    public addAtachment(attachment:string, modifier: Contributor):void {
         const attach: Url = new Url(attachment);
         this.attachments.push(attach);
     }
 
-    public setPriority(priority: Priority): void{
+    public setPriority(priority: Priority, modifier: Contributor): void{
         try {
             if(!PRIORITY_LEVEL.includes(priority))throw new InvalidParameters('Priority', priority);
         } catch (error) {
@@ -82,48 +88,48 @@ export default class Task {
         this.priority = priority;
     }
 
-    public setBeginDate(date:string): void{
+    public setBeginDate(date:string, modifier: Contributor): void{
         this.startDate = new Schedule(date);
     }
 
-    public setEndDate(date:string): void{
+    public setEndDate(date:string, modifier: Contributor): void{
         this.endDate = new Schedule(date);
     }
 
-    public setUrlImage(url:string): void{
+    public setUrlImage(url:string, modifier: Contributor): void{
         this.urlImage = new Url(url);
     }
 
-    public setTitle(title: string): void {
+    public setTitle(title: string, modifier: Contributor): void {
         if (!title || title.trim().length === 0) {
             throw new MissingRequiredParameters('Title');
         }
         this.title = title.trim();
     }
 
-    public setDescription(description: string): void {
+    public setDescription(description: string, modifier: Contributor): void {
         if (!description || description.trim().length === 0) {
             throw new MissingRequiredParameters('Description');
         }
         this.description = description.trim();
     }
 
-    public addCategory(categoryId: string): void {
+    public addCategory(categoryId: string, modifier: Contributor): void {
         if (!categoryId || categoryId.trim().length === 0) {
             throw new MissingRequiredParameters('Category id');
         }
         this.categories.push(categoryId);
     }
 
-    public removeCategory(categoryId: string): void {
+    public removeCategory(categoryId: string, modifier: Contributor): void {
         this.categories = this.categories.filter(id => id !== categoryId);
     }
 
-    public markAsFinished(): void {
+    public markAsFinished(modifier: Contributor): void {
         this.finished = true;
     }
 
-    public markAsPending(): void {
+    public markAsPending(modifier: Contributor): void {
         this.finished = false;
     }
 
@@ -171,7 +177,7 @@ export default class Task {
         return this.id;
     }
 
-    public getContributors(): string[]{
+    public getContributors(): Contributor[]{
         return [...this.contributors];
     }
 
