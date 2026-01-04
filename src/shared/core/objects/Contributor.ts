@@ -1,4 +1,4 @@
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import MissingRequiredParameters from "../errors/MissingRequiredParameters";
 
 export default class Contributor{
     private id!: string;

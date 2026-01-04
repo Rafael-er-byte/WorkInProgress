@@ -1,5 +1,5 @@
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import Schedule from "../objects/Schedule";
+import Schedule from "../Schedule";
 
 //When going to execute this tests check if the dates of the tests are currently valid in UTC format to ensure that the tests work as expected
 
