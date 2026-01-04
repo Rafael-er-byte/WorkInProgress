@@ -7,11 +7,8 @@ export default class DateTime{
     private date!:Text;
     private value!:Value;
 
-    constructor(date:Text, valueDate:Value, now: Value){
+    constructor(date:Text, valueDate:Value){
         if(!ValidateDateStrIso(date)) throw new InvalidParameters('date', date);
-        
-        if(valueDate.getValue() < now.getValue())throw new InvalidParameters('date', date);
-
         this.date = date;
         this.value = valueDate;
     }
