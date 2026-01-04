@@ -75,8 +75,6 @@ export default class Task {
         if (description && description.trim().length !== 0) {
             this.description = description.trim();
         }
-        
-        if(!history || !attachments || !notes || !contributors || !finished || !)
 
         if(urlImage) this.urlImage = new Url(urlImage);
         if(priority && PRIORITY_LEVEL.includes(priority)) this.priority = priority;
@@ -87,10 +85,9 @@ export default class Task {
         this.lastUpdate = new Schedule(new Date().toISOString());
     }
 
-    public moveToList(idList:string, nameList:string, modifier: Contributor): void{
-        if(!idList)return;
-        this.idList = idList;
-        this.updateHistory(new TaskMoved(modifier, nameList));
+    public removeCategory(category: TaskCategory, modifier: Contributor): void {
+        this.categories = this.categories.filter(c => c.getId() !== category.getId());
+        this.updateHistory(new CategoryDeleted(modifier, category));
     }
 
     public deleteContributor(contributor: Contributor, modifier: Contributor){
@@ -102,6 +99,12 @@ export default class Task {
         if(this.attachments.length === 0)return;
         this.attachments = this.attachments.filter(attach => attach.getUrl() !== attachment.getUrl());
         this.updateHistory(new AttachmentDeleted(modifier, attachment));
+    }
+
+    public moveToList(idList:string, nameList:string, modifier: Contributor): void{
+        if(!idList)return;
+        this.idList = idList;
+        this.updateHistory(new TaskMoved(modifier, nameList));
     }
 
     public addContributor(contributor:Contributor, modifier: Contributor): void{
@@ -162,11 +165,6 @@ export default class Task {
         this.updateHistory(new CategoryAdded(modifier, category));
     }
 
-    public removeCategory(category: TaskCategory, modifier: Contributor): void {
-        this.categories = this.categories.filter(c => c.getId() !== category.getId());
-        this.updateHistory(new CategoryDeleted(modifier, category));
-    }
-
     public markAsFinished(modifier: Contributor): void {
         this.finished = true;
         this.updateHistory(new TaskFinished(modifier));
@@ -199,7 +197,7 @@ export default class Task {
         return this.finished;
     }
 
-    public getCategories(): string[] {
+    public getCategories(): TaskCategory[] {
         return [...this.categories]; 
     }
 
@@ -221,14 +219,23 @@ export default class Task {
         return this.id;
     }
 
+    public getLastUpdate(): Schedule{
+        return this.lastUpdate;
+    }
+
     public getContributors(): Contributor[]{
         return [...this.contributors];
     }
 
-    public getAttachments(): string[]{
-        let attachment:string[] = [];
+    public getAttachments(): Url[]{
+        return [...this.attachments];
+    }
 
-        this.attachments.map((attach) => attachment.push(attach.getUrl()));
-        return attachment;
+    public getNotes(): TaskNote[]{
+        return [...this.notes];
+    }
+
+    public getHistory(): TaskEvent[]{
+        return [...this.history];
     }
 };
