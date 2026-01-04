@@ -1,7 +1,10 @@
+import type Text from "../objects/Text";
 import validateStrNumber from "./ValidateNumber.helper";
 
-export default function ValidateDateStrIso(schedule:string):boolean{
-        const [dateStr, timeStr] = schedule.split('T');
+export default function ValidateDateStrIso(originalDate:Text):boolean{
+        const date = originalDate.getText();
+
+        const [dateStr, timeStr] = date.split('T');
         if(!dateStr || !timeStr)return false;
 
         const [yearStr, monthStr, dayStr] = dateStr.split('-');
