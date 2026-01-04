@@ -1,14 +1,13 @@
-import InvalidParameters from "../errors/InvalidParameters";
+import type Text from "./Text";
 
 export default class ID{
-    private id!:string;
+    private id!:Text;
 
-    constructor(id:string){
-        if(!id || id.trim().length === 0)throw new InvalidParameters('Invalid ID');
+    constructor(id:Text){
         this.id = id; 
     }
 
-    public getId(): string{
+    public getId(): Text{
         return this.id;
     }
 };

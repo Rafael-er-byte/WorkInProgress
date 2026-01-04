@@ -19,8 +19,6 @@ export default function ValidateDateStrIso(originalDate:Text):boolean{
             || !validateStrNumber(dayStr) || !validateStrNumber(hourStr) 
             || !validateStrNumber(minuteStr) || !validateStrNumber(secondsStr)) return false;
 
-        const now = new Date();
-
         const year = Number(yearStr);
         const month = Number(monthStr);
         const day = Number(dayStr);
@@ -28,13 +26,12 @@ export default function ValidateDateStrIso(originalDate:Text):boolean{
         const minute = Number(minuteStr);
         const seconds = Number(secondsStr);
 
-        if(year < now.getFullYear())return false;
-        if(month < now.getMonth() || month < 0 || month > 12)return false;
+        if(month < 0 || month > 12)return false;
 
         const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
 
-        if(!isLeapYear && (day < now.getDate() || day < 0 || day > 365))return false;
-        else if(isLeapYear && (day < now.getDate() || day < 0 || day > 366))return false;
+        if(!isLeapYear && (day < 0 || day > 365))return false;
+        else if(isLeapYear && (day < 0 || day > 366))return false;
 
         if(!isLeapYear && month === 2 && (day > 28 || day < 0))return false;
         else if(isLeapYear && month === 2 && (day > 29 || day < 0))return false;
