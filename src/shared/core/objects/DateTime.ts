@@ -13,7 +13,7 @@ export default class DateTime{
         this.value = valueDate;
     }
 
-    static isAfterNow(futureDate:DateTime, now:DateTime): boolean{
+    static isAfter(futureDate:DateTime, now:DateTime): boolean{
         if(futureDate.getValue() > now.getValue())return true;
         return false;
     }

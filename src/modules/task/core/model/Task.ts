@@ -1,9 +1,10 @@
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
-import type Contributor from "../../../../shared/core/objects/Contributor";
-import type DateTime from "../../../../shared/core/objects/DateTime";
-import type ID from "../../../../shared/core/objects/ID";
+import Contributor from "../../../../shared/core/objects/Contributor";
+import DateTime from "../../../../shared/core/objects/DateTime";
+import ID from "../../../../shared/core/objects/ID";
+import None from "../../../../shared/core/objects/None";
 import type Text from "../../../../shared/core/objects/Text";
 import Url from "../../../../shared/core/objects/URL";
 import AttachmentAdded from "../Events/AttachmentAdded";
@@ -17,29 +18,30 @@ import ContributorDeleted from "../Events/ContributorDeleted";
 import DescriptionUpdated from "../Events/DescriptionUpdated";
 import EndDateUpdated from "../Events/EndDateUpdated";
 import PriorityUpdated from "../Events/PriorityUpdated";
-import type TaskEvent from "../Events/TaskEvent";
+import TaskEvent from "../Events/TaskEvent";
 import TaskFinished from "../Events/TaskFinished";
 import TaskMarkedAsPending from "../Events/TaskMarkedAsPending";
 import TaskMoved from "../Events/TaskMoved";
 import TitleUpdated from "../Events/TitleUpdated";
-import type Completed from "../objects/Completed";
-import type Pending from "../objects/Pending";
+import Completed from "../objects/Completed";
+import Pending from "../objects/Pending";
 import TaskCategory from "../objects/TaskCategory";
+import type TaskList from "../objects/TaskList";
 import type TaskNote from "../objects/TaskNote";
-import { PRIORITY_LEVEL, type Priority } from "../types/Prioroty.type";
+import type TaskPriority from "../objects/TaskPriority";
 
 export default class Task {
     private title!: Text;
-    private priority!: Priority;
-    private idList!:ID;
+    private priority!: TaskPriority;
+    private belongsTo!:TaskList;
     private lastUpdate!:DateTime;
+     private state!: Completed | Pending;
 
-    private description?: Text;
-    private urlImage?:Url;
-    private startDate?: DateTime;
-    private endDate?: DateTime;
+    private description: Text | None = new None();
+    private urlImage: Url | None = new None();
+    private startDate: DateTime | None = new None();
+    private endDate: DateTime | None = new None();
 
-    private finished!: Completed | Pending;
     private categories: TaskCategory[] = [];
     private contributors: Contributor[] = [];
     private history: TaskEvent[] = [];
@@ -50,25 +52,8 @@ export default class Task {
     private readonly createdAt!:DateTime;
 
     constructor(
-        id: ID,
-        idList:ID,
-        createdAt:Text,
-        title: Text,
-        history: TaskEvent[],
-        attachments: Url[],
-        notes: TaskNote[],
-        contributors: Contributor[],
-        finished: boolean,
-        startDate:DateTime,
-        endDate:DateTime,
-        lastUpdate:DateTime,
-        categories:TaskCategory[],
-        priority:Priority = PRIORITY_LEVEL[0],
-        description?: Text,
-        urlImage?:Text
-
+         
     ) {
-        
     }
 
     private updateHistory(event:TaskEvent): void{
@@ -78,135 +63,130 @@ export default class Task {
 
     public removeCategory(category: TaskCategory, modifier: Contributor, updateTime: DateTime): void {
         this.categories = this.categories.filter(c => c.getId() !== category.getId());
-        this.updateHistory(new CategoryDeleted(modifier, category));
+        this.updateHistory(new CategoryDeleted(updateTime, modifier, category));
     }
 
-    public deleteContributor(contributor: Contributor, modifier: Contributor){
+    public deleteContributor(contributor: Contributor, modifier: Contributor, updateTime: DateTime){
         this.contributors = this.contributors.filter(c => c.getId() !== contributor.getId());
-        this.updateHistory(new ContributorDeleted(modifier, contributor));
+        this.updateHistory(new ContributorDeleted(updateTime, modifier, contributor));
     }
 
-    public deleteAttachment(attachment: Url, modifier: Contributor): void{
+    public deleteAttachment(attachment: Url, modifier: Contributor, updateTime: DateTime): void{
         if(this.attachments.length === 0)return;
         this.attachments = this.attachments.filter(attach => attach.getUrl() !== attachment.getUrl());
-        this.updateHistory(new AttachmentDeleted(modifier, attachment));
+        this.updateHistory(new AttachmentDeleted(updateTime, modifier, attachment));
     }
 
-    public moveToList(idList:Text, nameList:Text, modifier: Contributor): void{
-        if(!idList)return;
-        this.idList = idList;
-        this.updateHistory(new TaskMoved(modifier, nameList));
+    public moveToList(newList:TaskList, modifier: Contributor, updateTime: DateTime): void{
+        this.belongsTo = newList;
+        const nameList:Text = this.belongsTo.getName()
+        this.updateHistory(new TaskMoved(updateTime, modifier, nameList));
     }
 
-    public addContributor(contributor:Contributor, modifier: Contributor): void{
+    public addContributor(contributor:Contributor, modifier: Contributor, updateTime: DateTime): void{
         if(contributor.getId().trim().length === 0)throw new MissingRequiredParameters('Contributor id');
         this.contributors.push(contributor);
-        this.updateHistory(new ContributorAdded(modifier, contributor));
+        this.updateHistory(new ContributorAdded(updateTime, modifier, contributor));
     }
 
-    public addAtachment(attachment:Url, modifier: Contributor):void {
+    public addAtachment(attachment:Url, modifier: Contributor, updateTime: DateTime):void {
         this.attachments.push(attachment);
-        this.updateHistory(new AttachmentAdded(modifier, attachment));
+        this.updateHistory(new AttachmentAdded(updateTime, modifier, attachment));
     }
 
-    public setPriority(priority: Priority, modifier: Contributor): void{
-        try {
-            if(!PRIORITY_LEVEL.includes(priority))throw new InvalidParameters('Priority', priority);
-        } catch (error) {
-            throw new InvalidParameters('Priority', priority)
-        }
+    public setPriority(priority: TaskPriority, modifier: Contributor, updateTime: DateTime): void{
         this.priority = priority;
-
-        this.updateHistory(new PriorityUpdated(modifier, priority));
+        this.updateHistory(new PriorityUpdated(updateTime, modifier, priority));
     }
 
-    public setBeginDate(date:Text, modifier: Contributor): void{
-        this.startDate = new DateTime(date);
-        this.updateHistory(new BeginDateUpdated(modifier, this.startDate));
-    }
-
-    public setEndDate(date:Text, modifier: Contributor): void{
-        this.endDate = new DateTime(date);
-        this.updateHistory(new EndDateUpdated(modifier, this.endDate));
-    }
-
-    public setUrlImage(url:Text, modifier: Contributor): void{
-        this.urlImage = new Url(url);
-        this.updateHistory(new BackgroundImageUpdated(modifier));
-    }
-
-    public setTitle(title: Text, modifier: Contributor): void {
-        if (!title || title.trim().length === 0) {
-            throw new MissingRequiredParameters('Title');
+    public setBeginDate(date:DateTime, modifier: Contributor, updateTime: DateTime): void{
+        if(!DateTime.isAfter(date, updateTime))throw new InvalidParameters('The start date must be in future', date);
+        if(this.endDate instanceof DateTime){
+            if(!DateTime.isAfter(this.endDate, date))throw new InvalidParameters('The end date must be after the start date', {startDate:date, endDate:this.endDate});
         }
-        this.title = title.trim();
-        this.updateHistory(new TitleUpdated(modifier, this.title));
+        this.startDate = date;
+        this.updateHistory(new BeginDateUpdated(updateTime, modifier, this.startDate as DateTime));
     }
 
-    public setDescription(description: Text, modifier: Contributor): void {
-        if (!description || description.trim().length === 0) {
-            throw new MissingRequiredParameters('Description');
+    public setEndDate(date:DateTime, modifier: Contributor, updateTime: DateTime): void{
+        if(!DateTime.isAfter(date, updateTime))throw new InvalidParameters('The end date must be in future', date);
+        if(this.startDate instanceof DateTime){
+            if(!DateTime.isAfter(date, this.startDate))throw new InvalidParameters('The end date must be after the start date', {endDate:date, startDate:this.startDate});
         }
-        this.description = description.trim();
-        this.updateHistory(new DescriptionUpdated(modifier, this.description));
+        this.endDate = date;
+        this.updateHistory(new EndDateUpdated(updateTime, modifier, this.endDate as DateTime));
     }
 
-    public addCategory(category: TaskCategory, modifier: Contributor): void {
+    public setUrlImage(url:Url, modifier: Contributor, updateTime: DateTime): void{
+        this.urlImage = url;
+        this.updateHistory(new BackgroundImageUpdated(updateTime, modifier));
+    }
+
+    public setTitle(title: Text, modifier: Contributor, updateTime: DateTime): void {
+        this.title = title;
+        this.updateHistory(new TitleUpdated(updateTime, modifier, this.title));
+    }
+
+    public setDescription(description: Text, modifier: Contributor, updateTime: DateTime): void {
+        this.description = description;
+        this.updateHistory(new DescriptionUpdated(updateTime, modifier, this.description as Text));
+    }
+
+    public addCategory(category: TaskCategory, modifier: Contributor, updateTime: DateTime): void {
         this.categories.push(category);
-        this.updateHistory(new CategoryAdded(modifier, category));
+        this.updateHistory(new CategoryAdded(updateTime, modifier, category));
     }
 
-    public markAsFinished(modifier: Contributor): void {
-        this.finished = true;
-        this.updateHistory(new TaskFinished(modifier));
+    public markAsFinished(completed:Completed): void {
+        if(this.state instanceof Completed) return;
+        this.state = completed;
+        this.updateHistory(new TaskFinished(this.state.getCompletedDate(), this.state.getContributor()));
     }
 
-    public markAsPending(modifier: Contributor): void {
-        this.finished = false;
-        this.updateHistory(new TaskMarkedAsPending(modifier));
+    public markAsPending(pending: Pending): void {
+        if(this.state instanceof Pending)return;
+        this.state = pending;
+        this.updateHistory(new TaskMarkedAsPending(this.state.getCompletedDate() as DateTime, this.state.getContributor() as Contributor));
     }
 
     public getTitle(): Text {
         return this.title;
     }
 
-    public getDescription(): Text{
+    public getDescription(): Text | None{
         if(!this.description)throw new InvalidOperation('Cannot get if not exists');
         return this.description;
     }
 
-    public getPriority(): Priority{
+    public getPriority(): TaskPriority{
         return this.priority;
     }
 
-    public getImageUrl(): Text{
-        if(!this.urlImage)throw new InvalidOperation('Cannot get if not exists');
-        return this.urlImage!.getUrl();
+    public getImageUrl(): Url | None{
+       return this.urlImage;
     }
 
-    public isFinished(): boolean {
-        return this.finished;
+    public isFinished(): Completed | Pending {
+        return this.state;
     }
 
     public getCategories(): TaskCategory[] {
         return [...this.categories]; 
     }
 
-    public getStartDate(): Text{
-        if(!this.startDate)throw new InvalidOperation('Cannot get if not exists');
-        return this.startDate.getDateTime();
+    public getStartDate(): DateTime | None{
+        return this.startDate;
     }
 
-    public getEndDate(): Text{
-        if(!this.endDate)throw new InvalidOperation('Cannot get if not exists');
-        return this.endDate.getDateTime();
+    public getEndDate(): DateTime | None{
+        return this.endDate;
     }
 
-    public getIdList(): Text{
+    public getIdList(): ID{
         return this.idList;
     }
 
-    public getId(): Text{
+    public getId(): ID{
         return this.id;
     }
 

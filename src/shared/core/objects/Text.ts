@@ -11,4 +11,8 @@ export default class Text{
     public getText():string{
         return this.text;
     }
+
+    public size(): number{
+        return this.text.length;
+    }
 };

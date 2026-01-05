@@ -5,6 +5,8 @@ import ID from "../../../../shared/core/objects/ID";
 import Text from "../../../../shared/core/objects/Text";
 
 export default class Note{
+    private readonly limitSize:number = 223;
+
     private readonly createdAt!:DateTime;
     private readonly id!: ID;
     private readonly creator!:Contributor;
@@ -25,11 +27,12 @@ export default class Note{
         this.creator = creator;
         this.taskId = taskId;
         this.lastUpdate = lastUpdate;
+        if(content.size() > this.limitSize) throw new InvalidParameters('Content too large', content);
         this.content = content;
     }
 
     public setContent(newContent:Text, now:DateTime):void{
-        if(!(newContent instanceof Text))throw new InvalidParameters('content cant be empty or different from text');
+        if(newContent.size() > this.limitSize) throw new InvalidParameters('Content too large', newContent);
         this.content = newContent;
         this.lastUpdate = now;
     }
