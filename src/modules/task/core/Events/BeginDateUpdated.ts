@@ -3,7 +3,7 @@ import type DateTime from "../../../../shared/core/objects/DateTime";
 import TaskEvent from "./TaskEvent";
 
 export default class BeginDateUpdated extends TaskEvent{
-    constructor(modifier: Contributor, date: DateTime){
-        super(modifier, 'BEGIN_DATE_UPDATED', date);
+    constructor(date:DateTime, modifier: Contributor, newDate: DateTime){
+        super(date, modifier, 'BEGIN_DATE_UPDATED', newDate);
     }
 };

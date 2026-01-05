@@ -71,12 +71,12 @@ export default class Task {
         
     }
 
-    private updateHistory(event:TaskEvent, updateTime:DateTime): void{
+    private updateHistory(event:TaskEvent): void{
         this.history.push(event);
-        this.lastUpdate = updateTime;
+        this.lastUpdate = event.getDate();
     }
 
-    public removeCategory(category: TaskCategory, modifier: Contributor): void {
+    public removeCategory(category: TaskCategory, modifier: Contributor, updateTime: DateTime): void {
         this.categories = this.categories.filter(c => c.getId() !== category.getId());
         this.updateHistory(new CategoryDeleted(modifier, category));
     }
