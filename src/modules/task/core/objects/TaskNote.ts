@@ -1,22 +1,13 @@
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import type ID from "../../../../shared/core/objects/ID";
 
 export default class TaskNote{
-    private id!:string;
-    private titile!:string;
+    private id!:ID;
 
-    constructor(id: string, title: string){
-        if(!id || !title) throw new MissingRequiredParameters('Parameters id and title are required');
-        if(id.trim().length === 0 || title.trim().length === 0)throw new MissingRequiredParameters('Parameters id and title are required');
-
+    constructor(id: ID){
         this.id = id;
-        this.titile = title;
     }
 
-    public getId():string{
+    public getId():ID{
         return this.id;
-    }
-
-    public getTitle():string{
-        return this.titile;
     }
 };

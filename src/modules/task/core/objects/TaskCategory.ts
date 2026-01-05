@@ -1,14 +1,13 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
+import type ID from "../../../../shared/core/objects/ID";
 
 export default class TaskCategory{
-    private id!:string;
+    private id!:ID;
 
-    constructor(id:string){
-        if(!id || id.trim().length === 0)throw new InvalidParameters('Invalid id');
+    constructor(id:ID){
         this.id = id;
     }
 
-    public getId():string{
+    public getId():ID{
         return this.id;
     }
 };

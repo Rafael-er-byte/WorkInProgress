@@ -1,22 +1,20 @@
-import MissingRequiredParameters from "../errors/MissingRequiredParameters";
+import type ID from "./ID";
+import type Text from "./Text";
 
 export default class Contributor{
-    private id!: string;
-    private userName!: string;
+    private id!: ID;
+    private userName!: Text;
 
-    constructor(id:string, userName:string){
-        if(!id || id.trim().length === 0)throw new MissingRequiredParameters('id');
-        if(!userName || userName.trim().length === 0)throw new MissingRequiredParameters('userName');
-
+    constructor(id:ID, userName:Text){
         this.id = id;
         this.userName = userName;
     }
 
-    public getId():string{
+    public getId():ID{
         return this.id;
     }
 
-    public getUserName(): string{
+    public getUserName(): Text{
         return this.userName;
     }
 };
