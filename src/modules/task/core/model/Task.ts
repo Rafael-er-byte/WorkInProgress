@@ -105,33 +105,30 @@ export default class Task {
         const nameList:Text = this.belongsTo.getName()
         this.updateHistory(new TaskMoved(updateTime, modifier, nameList));
     }
-
-     public createNote(note:Note):void{
-        if(this.notes.length + 1 > Task.MAX_NOTES)throw new InvalidOperation('Notes limit exceded');
-        const taskNote: TaskNote = new TaskNote(note.getID());
-        this.notes.push(taskNote);
-    }
     
     public addContributor(contributor:Contributor, modifier: Contributor, updateTime: DateTime): void{
-        if(this.contributors.length + 1 > Task.MAX_CONTRIBUTORS)throw new InvalidOperation('Contributor limit exceded');
+        if(this.contributors.length + 1 > Task.MAX_CONTRIBUTORS)throw new InvalidOperation('Contributor limit exceeded');
         this.contributors.push(contributor);
         this.updateHistory(new ContributorAdded(updateTime, modifier, contributor));
     }
 
     public addAtachment(attachment:Attachment, modifier: Contributor, updateTime: DateTime):void {
-        if(this.attachments.length + 1 > Task.MAX_ATTACHMENTS)throw new InvalidOperation('Attachments limit exceded');
+        if(this.attachments.length + 1 > Task.MAX_ATTACHMENTS)throw new InvalidOperation('Attachments limit exceeded');
         const exists = this.attachments.find(a => a.getUrl() === attachment.getUrl());
         if(exists) throw new ConflictDuplicateResource('This attachment already exists in this task', attachment);
         this.attachments.push(attachment);
         this.updateHistory(new AttachmentAdded(updateTime, modifier, attachment));
     }
 
-    public addNote(note:Note, updateTime:DateTime): void{
-        const exists = this.notes.find(savedNote => savedNote.getId() === note.getID());
-        if(exists)throw new ConflictDuplicateResource('This Note already exists', note);
-        const newNote = new TaskNote(note.getID());
-        this.notes.push(newNote);
-        this.updateHistory(new NoteAdded(updateTime, note.getCreator(), newNote));
+    public addNote(now:DateTime, idNote:ID, creator:Contributor, content:Text): Note{
+        if(this.notes.length + 1 > Task.MAX_NOTES)throw new InvalidOperation('Note limit exeeded')
+        const exists = this.notes.find(savedNote => savedNote.getId() === idNote);
+        if(exists)throw new ConflictDuplicateResource('This Note already exists', idNote);
+        const newTaskNote = new TaskNote(idNote);
+        const note = new Note(now, idNote, creator, this.id, now, content);
+        this.notes.push(newTaskNote);
+        this.updateHistory(new NoteAdded(now, creator, newTaskNote));
+        return note;
     }
 
     public setPriority(priority: TaskPriority, modifier: Contributor, updateTime: DateTime): void{
@@ -164,19 +161,19 @@ export default class Task {
     }
 
     public setTitle(title: Text, modifier: Contributor, updateTime: DateTime): void {
-        if(title.size() > Task.TITLE_LIMIT_SIZE)throw new InvalidOperation('Title size limit exceded');
+        if(title.size() > Task.TITLE_LIMIT_SIZE)throw new InvalidOperation('Title size limit exceeded');
         this.title = title;
         this.updateHistory(new TitleUpdated(updateTime, modifier, this.title));
     }
 
     public setDescription(description: Text, modifier: Contributor, updateTime: DateTime): void {
-        if(description.size() > Task.DESCRIPTION_LIMIT_SIZE)throw new InvalidOperation('Description size limit exceded');
+        if(description.size() > Task.DESCRIPTION_LIMIT_SIZE)throw new InvalidOperation('Description size limit exceeded');
         this.description = description;
         this.updateHistory(new DescriptionUpdated(updateTime, modifier, this.description as Text));
     }
 
     public addCategory(category: TaskCategory, modifier: Contributor, updateTime: DateTime): void {
-        if(this.categories.length + 1 > Task.MAX_CATEGORIES)throw new InvalidOperation('Categories limit exceded');
+        if(this.categories.length + 1 > Task.MAX_CATEGORIES)throw new InvalidOperation('Categories limit exceeded');
         const exists = this.categories.find(c => c.getId() === category.getId());
         if(exists)throw new ConflictDuplicateResource('This category already exists in this task', category);
         this.categories.push(category);
