@@ -1,12 +1,12 @@
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import type Attachment from "../../../../shared/core/objects/Attachment";
 import Contributor from "../../../../shared/core/objects/Contributor";
 import DateTime from "../../../../shared/core/objects/DateTime";
 import ID from "../../../../shared/core/objects/ID";
 import None from "../../../../shared/core/objects/None";
 import type Text from "../../../../shared/core/objects/Text";
-import Url from "../../../../shared/core/objects/URL";
+import Value from "../../../../shared/core/objects/Value";
 import AttachmentAdded from "../Events/AttachmentAdded";
 import AttachmentDeleted from "../Events/AttachmentDeleted";
 import BackgroundImageUpdated from "../Events/BackgroundImageUpdated";
@@ -31,21 +31,28 @@ import type TaskNote from "../objects/TaskNote";
 import type TaskPriority from "../objects/TaskPriority";
 
 export default class Task {
+    private readonly titleLimit:Value = new Value(100);
+    private readonly descriptionLimits:Value = new Value(400);
+    private readonly categoryLimits:Value = new Value(6);
+    private readonly notesLimits:Value = new Value(100);
+    private readonly attachmentsLimits:Value = new Value(8);
+    private readonly contributorLimits:Value = new Value(10);
+
     private title!: Text;
     private priority!: TaskPriority;
     private belongsTo!:TaskList;
     private lastUpdate!:DateTime;
-     private state!: Completed | Pending;
+    private state!: Completed | Pending;
 
     private description: Text | None = new None();
-    private urlImage: Url | None = new None();
+    private image: Attachment | None = new None();
     private startDate: DateTime | None = new None();
     private endDate: DateTime | None = new None();
 
     private categories: TaskCategory[] = [];
     private contributors: Contributor[] = [];
     private history: TaskEvent[] = [];
-    private attachments: Url[] = [];
+    private attachments: Attachment[] = [];
     private notes: TaskNote[] = [];
 
     private readonly id!:ID
@@ -67,11 +74,12 @@ export default class Task {
     }
 
     public deleteContributor(contributor: Contributor, modifier: Contributor, updateTime: DateTime){
+        if(this.contributors.length === 0)return;
         this.contributors = this.contributors.filter(c => c.getId() !== contributor.getId());
         this.updateHistory(new ContributorDeleted(updateTime, modifier, contributor));
     }
 
-    public deleteAttachment(attachment: Url, modifier: Contributor, updateTime: DateTime): void{
+    public deleteAttachment(attachment: Attachment, modifier: Contributor, updateTime: DateTime): void{
         if(this.attachments.length === 0)return;
         this.attachments = this.attachments.filter(attach => attach.getUrl() !== attachment.getUrl());
         this.updateHistory(new AttachmentDeleted(updateTime, modifier, attachment));
@@ -84,12 +92,13 @@ export default class Task {
     }
 
     public addContributor(contributor:Contributor, modifier: Contributor, updateTime: DateTime): void{
-        if(contributor.getId().trim().length === 0)throw new MissingRequiredParameters('Contributor id');
+        if(this.contributors.length + 1 > this.contributorLimits.getValue())throw new InvalidOperation('Contributor limit exceded');
         this.contributors.push(contributor);
         this.updateHistory(new ContributorAdded(updateTime, modifier, contributor));
     }
 
-    public addAtachment(attachment:Url, modifier: Contributor, updateTime: DateTime):void {
+    public addAtachment(attachment:Attachment, modifier: Contributor, updateTime: DateTime):void {
+        if(this.attachments.length + 1 > this.attachmentsLimits.getValue())throw new InvalidOperation('Attachments limit exceded');
         this.attachments.push(attachment);
         this.updateHistory(new AttachmentAdded(updateTime, modifier, attachment));
     }
@@ -117,22 +126,26 @@ export default class Task {
         this.updateHistory(new EndDateUpdated(updateTime, modifier, this.endDate as DateTime));
     }
 
-    public setUrlImage(url:Url, modifier: Contributor, updateTime: DateTime): void{
-        this.urlImage = url;
+    public setImage(image:Attachment, modifier: Contributor, updateTime: DateTime): void{
+        if(image.getType() !== 'image')throw new InvalidParameters('The resource must be an image');
+        this.image = image;
         this.updateHistory(new BackgroundImageUpdated(updateTime, modifier));
     }
 
     public setTitle(title: Text, modifier: Contributor, updateTime: DateTime): void {
+        if(title.size() > this.titleLimit.getValue())throw new InvalidOperation('Title size limit exceded');
         this.title = title;
         this.updateHistory(new TitleUpdated(updateTime, modifier, this.title));
     }
 
     public setDescription(description: Text, modifier: Contributor, updateTime: DateTime): void {
+        if(description.size() > this.descriptionLimits.getValue())throw new InvalidOperation('Description size limit exceded');
         this.description = description;
         this.updateHistory(new DescriptionUpdated(updateTime, modifier, this.description as Text));
     }
 
     public addCategory(category: TaskCategory, modifier: Contributor, updateTime: DateTime): void {
+        if(this.categories.length + 1 > this.categoryLimits.getValue())throw new InvalidOperation('Categories limit exceded');
         this.categories.push(category);
         this.updateHistory(new CategoryAdded(updateTime, modifier, category));
     }
@@ -154,7 +167,6 @@ export default class Task {
     }
 
     public getDescription(): Text | None{
-        if(!this.description)throw new InvalidOperation('Cannot get if not exists');
         return this.description;
     }
 
@@ -162,8 +174,8 @@ export default class Task {
         return this.priority;
     }
 
-    public getImageUrl(): Url | None{
-       return this.urlImage;
+    public getImageUrl(): Attachment | None{
+       return this.image
     }
 
     public isFinished(): Completed | Pending {
@@ -182,8 +194,8 @@ export default class Task {
         return this.endDate;
     }
 
-    public getIdList(): ID{
-        return this.idList;
+    public getIdList(): TaskList{
+        return this.belongsTo;
     }
 
     public getId(): ID{
@@ -198,7 +210,7 @@ export default class Task {
         return [...this.contributors];
     }
 
-    public getAttachments(): Url[]{
+    public getAttachments(): Attachment[]{
         return [...this.attachments];
     }
 

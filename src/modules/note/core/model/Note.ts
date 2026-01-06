@@ -3,10 +3,9 @@ import Contributor from "../../../../shared/core/objects/Contributor";
 import type DateTime from "../../../../shared/core/objects/DateTime";
 import ID from "../../../../shared/core/objects/ID";
 import Text from "../../../../shared/core/objects/Text";
-import Value from "../../../../shared/core/objects/Value";
 
 export default class Note{
-    private readonly limitSize:Value = new Value(223);
+    private static readonly LIMIT_CONTENT_SIZE: number = 223;
 
     private readonly createdAt!:DateTime;
     private readonly id!: ID;
@@ -28,12 +27,12 @@ export default class Note{
         this.creator = creator;
         this.taskId = taskId;
         this.lastUpdate = lastUpdate;
-        if(content.size() > this.limitSize.getValue()) throw new InvalidParameters('Content too large', content);
+        if(content.size() > Note.LIMIT_CONTENT_SIZE)throw new InvalidParameters('Content too large', content);
         this.content = content;
     }
 
     public setContent(newContent:Text, now:DateTime):void{
-        if(newContent.size() > this.limitSize.getValue()) throw new InvalidParameters('Content too large', newContent);
+        if(newContent.size() > Note.LIMIT_CONTENT_SIZE)throw new InvalidParameters('Content too large', newContent);
         this.content = newContent;
         this.lastUpdate = now;
     }
