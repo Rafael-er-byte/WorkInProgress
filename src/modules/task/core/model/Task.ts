@@ -1,12 +1,14 @@
+import ConflictDuplicateResource from "../../../../shared/core/errors/ConflictDuplicatedResource";
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
+import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
 import type Attachment from "../../../../shared/core/objects/Attachment";
 import Contributor from "../../../../shared/core/objects/Contributor";
 import DateTime from "../../../../shared/core/objects/DateTime";
 import ID from "../../../../shared/core/objects/ID";
 import None from "../../../../shared/core/objects/None";
 import type Text from "../../../../shared/core/objects/Text";
-import Value from "../../../../shared/core/objects/Value";
+import Note from "../../../note/core/model/Note";
 import AttachmentAdded from "../Events/AttachmentAdded";
 import AttachmentDeleted from "../Events/AttachmentDeleted";
 import BackgroundImageUpdated from "../Events/BackgroundImageUpdated";
@@ -17,6 +19,8 @@ import ContributorAdded from "../Events/ContributorAdded";
 import ContributorDeleted from "../Events/ContributorDeleted";
 import DescriptionUpdated from "../Events/DescriptionUpdated";
 import EndDateUpdated from "../Events/EndDateUpdated";
+import NoteAdded from "../Events/NoteAdded";
+import NoteDeleted from "../Events/NoteDeleted";
 import PriorityUpdated from "../Events/PriorityUpdated";
 import TaskEvent from "../Events/TaskEvent";
 import TaskFinished from "../Events/TaskFinished";
@@ -27,16 +31,16 @@ import Completed from "../objects/Completed";
 import Pending from "../objects/Pending";
 import TaskCategory from "../objects/TaskCategory";
 import type TaskList from "../objects/TaskList";
-import type TaskNote from "../objects/TaskNote";
+import TaskNote from "../objects/TaskNote";
 import type TaskPriority from "../objects/TaskPriority";
 
 export default class Task {
-    private readonly titleLimit:Value = new Value(100);
-    private readonly descriptionLimits:Value = new Value(400);
-    private readonly categoryLimits:Value = new Value(6);
-    private readonly notesLimits:Value = new Value(100);
-    private readonly attachmentsLimits:Value = new Value(8);
-    private readonly contributorLimits:Value = new Value(10);
+    private static readonly TITLE_LIMIT_SIZE:number = 100;
+    private static readonly DESCRIPTION_LIMIT_SIZE: number = 400;
+    private static readonly MAX_CATEGORIES: number = 6;
+    private static readonly MAX_NOTES:number = 100;
+    private static readonly MAX_ATTACHMENTS:number = 8;
+    private static readonly MAX_CONTRIBUTORS:number = 10;
 
     private title!: Text;
     private priority!: TaskPriority;
@@ -68,21 +72,32 @@ export default class Task {
         this.lastUpdate = event.getDate();
     }
 
-    public removeCategory(category: TaskCategory, modifier: Contributor, updateTime: DateTime): void {
-        this.categories = this.categories.filter(c => c.getId() !== category.getId());
-        this.updateHistory(new CategoryDeleted(updateTime, modifier, category));
+    public deleteNote(note:Note, updateTime:DateTime):void{
+        const deleteNote = this.notes.find(savedNote => savedNote.getId() === note.getID());
+        if(!deleteNote)throw new ResourceNotFoud('This Note doesnt exists in this task', note);
+        this.notes = this.notes.filter(savedNote => savedNote.getId() !== note.getID());
+        this.updateHistory(new NoteDeleted(updateTime, note.getCreator(), deleteNote));
     }
 
-    public deleteContributor(contributor: Contributor, modifier: Contributor, updateTime: DateTime){
-        if(this.contributors.length === 0)return;
+    public removeCategory(category: TaskCategory, modifier: Contributor, updateTime: DateTime): void {
+        const deleteCategory = this.categories.find(c => c.getId() === category.getId());
+        if(!deleteCategory)throw new ResourceNotFoud('This category doesnt exist in this task');
+        this.categories = this.categories.filter(c => c.getId() !== category.getId());
+        this.updateHistory(new CategoryDeleted(updateTime, modifier, deleteCategory));
+    }
+
+    public deleteContributor(contributor: Contributor, modifier: Contributor, updateTime: DateTime): void{
+        const deleteContributor = this.contributors.find(c => c.getId() === contributor.getId());
+        if(!deleteContributor)throw new ResourceNotFoud('This contributor doesnt exist in this task');
         this.contributors = this.contributors.filter(c => c.getId() !== contributor.getId());
-        this.updateHistory(new ContributorDeleted(updateTime, modifier, contributor));
+        this.updateHistory(new ContributorDeleted(updateTime, modifier, deleteContributor));
     }
 
     public deleteAttachment(attachment: Attachment, modifier: Contributor, updateTime: DateTime): void{
-        if(this.attachments.length === 0)return;
+        const deleteAttachment = this.attachments.find(a => a.getUrl() === attachment.getUrl());
+        if(!deleteAttachment)throw new ResourceNotFoud('This attachment doesnt exist in this task');
         this.attachments = this.attachments.filter(attach => attach.getUrl() !== attachment.getUrl());
-        this.updateHistory(new AttachmentDeleted(updateTime, modifier, attachment));
+        this.updateHistory(new AttachmentDeleted(updateTime, modifier, deleteAttachment));
     }
 
     public moveToList(newList:TaskList, modifier: Contributor, updateTime: DateTime): void{
@@ -91,16 +106,32 @@ export default class Task {
         this.updateHistory(new TaskMoved(updateTime, modifier, nameList));
     }
 
+     public createNote(note:Note):void{
+        if(this.notes.length + 1 > Task.MAX_NOTES)throw new InvalidOperation('Notes limit exceded');
+        const taskNote: TaskNote = new TaskNote(note.getID());
+        this.notes.push(taskNote);
+    }
+    
     public addContributor(contributor:Contributor, modifier: Contributor, updateTime: DateTime): void{
-        if(this.contributors.length + 1 > this.contributorLimits.getValue())throw new InvalidOperation('Contributor limit exceded');
+        if(this.contributors.length + 1 > Task.MAX_CONTRIBUTORS)throw new InvalidOperation('Contributor limit exceded');
         this.contributors.push(contributor);
         this.updateHistory(new ContributorAdded(updateTime, modifier, contributor));
     }
 
     public addAtachment(attachment:Attachment, modifier: Contributor, updateTime: DateTime):void {
-        if(this.attachments.length + 1 > this.attachmentsLimits.getValue())throw new InvalidOperation('Attachments limit exceded');
+        if(this.attachments.length + 1 > Task.MAX_ATTACHMENTS)throw new InvalidOperation('Attachments limit exceded');
+        const exists = this.attachments.find(a => a.getUrl() === attachment.getUrl());
+        if(exists) throw new ConflictDuplicateResource('This attachment already exists in this task', attachment);
         this.attachments.push(attachment);
         this.updateHistory(new AttachmentAdded(updateTime, modifier, attachment));
+    }
+
+    public addNote(note:Note, updateTime:DateTime): void{
+        const exists = this.notes.find(savedNote => savedNote.getId() === note.getID());
+        if(exists)throw new ConflictDuplicateResource('This Note already exists', note);
+        const newNote = new TaskNote(note.getID());
+        this.notes.push(newNote);
+        this.updateHistory(new NoteAdded(updateTime, note.getCreator(), newNote));
     }
 
     public setPriority(priority: TaskPriority, modifier: Contributor, updateTime: DateTime): void{
@@ -133,19 +164,21 @@ export default class Task {
     }
 
     public setTitle(title: Text, modifier: Contributor, updateTime: DateTime): void {
-        if(title.size() > this.titleLimit.getValue())throw new InvalidOperation('Title size limit exceded');
+        if(title.size() > Task.TITLE_LIMIT_SIZE)throw new InvalidOperation('Title size limit exceded');
         this.title = title;
         this.updateHistory(new TitleUpdated(updateTime, modifier, this.title));
     }
 
     public setDescription(description: Text, modifier: Contributor, updateTime: DateTime): void {
-        if(description.size() > this.descriptionLimits.getValue())throw new InvalidOperation('Description size limit exceded');
+        if(description.size() > Task.DESCRIPTION_LIMIT_SIZE)throw new InvalidOperation('Description size limit exceded');
         this.description = description;
         this.updateHistory(new DescriptionUpdated(updateTime, modifier, this.description as Text));
     }
 
     public addCategory(category: TaskCategory, modifier: Contributor, updateTime: DateTime): void {
-        if(this.categories.length + 1 > this.categoryLimits.getValue())throw new InvalidOperation('Categories limit exceded');
+        if(this.categories.length + 1 > Task.MAX_CATEGORIES)throw new InvalidOperation('Categories limit exceded');
+        const exists = this.categories.find(c => c.getId() === category.getId());
+        if(exists)throw new ConflictDuplicateResource('This category already exists in this task', category);
         this.categories.push(category);
         this.updateHistory(new CategoryAdded(updateTime, modifier, category));
     }
@@ -220,5 +253,9 @@ export default class Task {
 
     public getHistory(): TaskEvent[]{
         return [...this.history];
+    }
+
+    public getCreationDate():DateTime{
+        return this.createdAt;
     }
 };
