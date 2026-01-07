@@ -9,24 +9,25 @@ import ID from "../../../../shared/core/objects/ID";
 import None from "../../../../shared/core/objects/None";
 import type Text from "../../../../shared/core/objects/Text";
 import Note from "../../../note/core/model/Note";
-import AttachmentAdded from "../Events/AttachmentAdded";
-import AttachmentDeleted from "../Events/AttachmentDeleted";
-import BackgroundImageUpdated from "../Events/BackgroundImageUpdated";
-import BeginDateUpdated from "../Events/BeginDateUpdated";
-import CategoryAdded from "../Events/CategoryAdded";
-import CategoryDeleted from "../Events/CategoryDeleted";
-import ContributorAdded from "../Events/ContributorAdded";
-import ContributorDeleted from "../Events/ContributorDeleted";
-import DescriptionUpdated from "../Events/DescriptionUpdated";
-import EndDateUpdated from "../Events/EndDateUpdated";
-import NoteAdded from "../Events/NoteAdded";
-import NoteDeleted from "../Events/NoteDeleted";
-import PriorityUpdated from "../Events/PriorityUpdated";
-import TaskEvent from "../Events/TaskEvent";
-import TaskFinished from "../Events/TaskFinished";
-import TaskMarkedAsPending from "../Events/TaskMarkedAsPending";
-import TaskMoved from "../Events/TaskMoved";
-import TitleUpdated from "../Events/TitleUpdated";
+import TaskBusinessRules from "../constants/TaskBuisnessRules";
+import AttachmentAdded from "../events/AttachmentAdded";
+import AttachmentDeleted from "../events/AttachmentDeleted";
+import BackgroundImageUpdated from "../events/BackgroundImageUpdated";
+import BeginDateUpdated from "../events/BeginDateUpdated";
+import CategoryAdded from "../events/CategoryAdded";
+import CategoryDeleted from "../events/CategoryDeleted";
+import ContributorAdded from "../events/ContributorAdded";
+import ContributorDeleted from "../events/ContributorDeleted";
+import DescriptionUpdated from "../events/DescriptionUpdated";
+import EndDateUpdated from "../events/EndDateUpdated";
+import NoteAdded from "../events/NoteAdded";
+import NoteDeleted from "../events/NoteDeleted";
+import PriorityUpdated from "../events/PriorityUpdated";
+import TaskEvent from "../events/TaskEvent";
+import TaskFinished from "../events/TaskFinished";
+import TaskMarkedAsPending from "../events/TaskMarkedAsPending";
+import TaskMoved from "../events/TaskMoved";
+import TitleUpdated from "../events/TitleUpdated";
 import Completed from "../objects/Completed";
 import Pending from "../objects/Pending";
 import TaskCategory from "../objects/TaskCategory";
@@ -35,13 +36,6 @@ import TaskNote from "../objects/TaskNote";
 import type TaskPriority from "../objects/TaskPriority";
 
 export default class Task {
-    private static readonly TITLE_LIMIT_SIZE:number = 100;
-    private static readonly DESCRIPTION_LIMIT_SIZE: number = 400;
-    private static readonly MAX_CATEGORIES: number = 6;
-    private static readonly MAX_NOTES:number = 100;
-    private static readonly MAX_ATTACHMENTS:number = 8;
-    private static readonly MAX_CONTRIBUTORS:number = 10;
-
     private title!: Text;
     private priority!: TaskPriority;
     private belongsTo!:TaskList;
@@ -107,13 +101,13 @@ export default class Task {
     }
     
     public addContributor(contributor:Contributor, modifier: Contributor, updateTime: DateTime): void{
-        if(this.contributors.length + 1 > Task.MAX_CONTRIBUTORS)throw new InvalidOperation('Contributor limit exceeded');
+        if(this.contributors.length + 1 > TaskBusinessRules.maxContributors())throw new InvalidOperation('Contributor limit exceeded');
         this.contributors.push(contributor);
         this.updateHistory(new ContributorAdded(updateTime, modifier, contributor));
     }
 
     public addAtachment(attachment:Attachment, modifier: Contributor, updateTime: DateTime):void {
-        if(this.attachments.length + 1 > Task.MAX_ATTACHMENTS)throw new InvalidOperation('Attachments limit exceeded');
+        if(this.attachments.length + 1 > TaskBusinessRules.maxAttachments())throw new InvalidOperation('Attachments limit exceeded');
         const exists = this.attachments.find(a => a.getUrl() === attachment.getUrl());
         if(exists) throw new ConflictDuplicateResource('This attachment already exists in this task', attachment);
         this.attachments.push(attachment);
@@ -121,7 +115,7 @@ export default class Task {
     }
 
     public addNote(now:DateTime, idNote:ID, creator:Contributor, content:Text): Note{
-        if(this.notes.length + 1 > Task.MAX_NOTES)throw new InvalidOperation('Note limit exeeded')
+        if(this.notes.length + 1 > TaskBusinessRules.maxNotes())throw new InvalidOperation('Note limit exeeded')
         const exists = this.notes.find(savedNote => savedNote.getId() === idNote);
         if(exists)throw new ConflictDuplicateResource('This Note already exists', idNote);
         const newTaskNote = new TaskNote(idNote);
@@ -161,19 +155,19 @@ export default class Task {
     }
 
     public setTitle(title: Text, modifier: Contributor, updateTime: DateTime): void {
-        if(title.size() > Task.TITLE_LIMIT_SIZE)throw new InvalidOperation('Title size limit exceeded');
+        if(title.size() > TaskBusinessRules.titleLimit())throw new InvalidOperation('Title size limit exceeded');
         this.title = title;
         this.updateHistory(new TitleUpdated(updateTime, modifier, this.title));
     }
 
     public setDescription(description: Text, modifier: Contributor, updateTime: DateTime): void {
-        if(description.size() > Task.DESCRIPTION_LIMIT_SIZE)throw new InvalidOperation('Description size limit exceeded');
+        if(description.size() > TaskBusinessRules.descriptionLimit())throw new InvalidOperation('Description size limit exceeded');
         this.description = description;
         this.updateHistory(new DescriptionUpdated(updateTime, modifier, this.description as Text));
     }
 
     public addCategory(category: TaskCategory, modifier: Contributor, updateTime: DateTime): void {
-        if(this.categories.length + 1 > Task.MAX_CATEGORIES)throw new InvalidOperation('Categories limit exceeded');
+        if(this.categories.length + 1 > TaskBusinessRules.maxCategories())throw new InvalidOperation('Categories limit exceeded');
         const exists = this.categories.find(c => c.getId() === category.getId());
         if(exists)throw new ConflictDuplicateResource('This category already exists in this task', category);
         this.categories.push(category);
