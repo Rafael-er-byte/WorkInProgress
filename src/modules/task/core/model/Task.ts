@@ -95,14 +95,14 @@ export default class Task {
     }
 
     public addAtachment(attachment:Attachment, modifier: Contributor):void {
-        this.attachments.addItem(attachment);
+        this.attachments = this.attachments.addItem(attachment);
         this.updateHistory(new AttachmentAdded(DateTime.now(), modifier, attachment));
     }
 
     public addNote(creator:Contributor, content:Text): Note{
         const idNote = ID.generateId();
         const newTaskNote = new TaskNote(idNote);
-        this.notes.addItem(newTaskNote);
+        this.notes = this.notes.addItem(newTaskNote);
         const now = DateTime.now();
         const note = new Note(now, idNote, creator, this.id, new NoteContent(content));
         this.updateHistory(new NoteAdded(now, creator, newTaskNote));
