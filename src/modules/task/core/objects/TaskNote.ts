@@ -1,9 +1,11 @@
 import type ID from "../../../../shared/core/objects/ID";
+import ValueObject from "../../../../shared/core/objects/ValueObject";
 
-export default class TaskNote{
+export default class TaskNote extends ValueObject{
     private id!:ID;
 
     constructor(id: ID){
+        super();
         this.id = id;
     }
 

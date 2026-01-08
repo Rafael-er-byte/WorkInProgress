@@ -6,9 +6,8 @@ export default class NoteContent extends ValueObject{
     private content!: Text;
     private readonly LIMIT_CONTENT_SIZE: number = 223;
     
-    constructor(content:string){
+    constructor(content:Text){
         super();
-        this.content = new Text(content);
         if(this.content.size() > this.LIMIT_CONTENT_SIZE)throw new InvalidParameters('Content too large', content);
     }
 
