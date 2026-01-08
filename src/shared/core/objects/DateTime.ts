@@ -1,16 +1,62 @@
-import InvalidParameters from "../errors/InvalidParameters";
-import ValidateDateStrIso from "../helpers/ValidateDate.helper";
+import isStringANumber from "../helpers/ValidateNumber.helper";
 import type Text from "./Text";
-import type Value from "./Value";
+import ValueObject from "./ValueObject";
 
-export default class DateTime{
-    private date!:Text;
-    private value!:Value;
+export default class DateTime extends ValueObject{
+    private date!:Date;
 
-    constructor(date:Text, valueDate:Value){
-        if(!ValidateDateStrIso(date)) throw new InvalidParameters('date', date);
+    private constructor(date:Date){
+        super();
         this.date = date;
-        this.value = valueDate;
+    }
+
+    static now(): DateTime{
+        return new DateTime(new Date());
+    }
+
+    static validateDate(originalDate:Text):boolean{
+        const date = originalDate.getText();
+
+        const [dateStr, timeStr] = date.split('T');
+        if(!dateStr || !timeStr)return false;
+
+        const [yearStr, monthStr, dayStr] = dateStr.split('-');
+        if(!yearStr || !monthStr || !dayStr)return false;
+
+        let [hourStr, minuteStr, secondsStr] = timeStr.split(':');
+        if(!hourStr || !minuteStr || !secondsStr || !secondsStr.includes('Z'))return false;
+
+        secondsStr = secondsStr.substring(0, secondsStr.length - 1);
+
+        if(!isStringANumber(yearStr) || !isStringANumber(monthStr) 
+            || !isStringANumber(dayStr) || !isStringANumber(hourStr) 
+            || !isStringANumber(minuteStr) || !isStringANumber(secondsStr)) return false;
+
+        const year = Number(yearStr);
+        const month = Number(monthStr);
+        const day = Number(dayStr);
+        const hour = Number(hourStr);
+        const minute = Number(minuteStr);
+        const seconds = Number(secondsStr);
+
+        if(month < 0 || month > 12)return false;
+
+        const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+
+        if(!isLeapYear && (day < 0 || day > 365))return false;
+        else if(isLeapYear && (day < 0 || day > 366))return false;
+
+        if(!isLeapYear && month === 2 && (day > 28 || day < 0))return false;
+        else if(isLeapYear && month === 2 && (day > 29 || day < 0))return false;
+
+        if(month % 2 !== 0 && day > 31)return false;
+        else if(month % 2 === 0 && day > 30)return false;
+
+        if(hour > 24 || hour < 0)return false;
+        if(minute > 60 || minute < 0)return false;
+        if(seconds > 60 || minute < 0)return false;
+
+        return true;
     }
 
     static isAfter(futureDate:DateTime, now:DateTime): boolean{
@@ -19,10 +65,10 @@ export default class DateTime{
     }
 
     public getDate(): string{
-        return this.date.getText();
+        return this.date.toISOString();
     }
 
     public getValue():number{
-        return this.value.getValue();
+        return this.date.getTime();
     }
 };

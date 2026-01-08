@@ -1,11 +1,13 @@
 import InvalidParameters from "../errors/InvalidParameters";
+import ValueObject from "./ValueObject";
 
-export default class Url{
+export default class Url extends ValueObject{
     private url!: string;
     private readonly hostnameRegex = /^[a-zA-Z0-9-.]+$/;
     private readonly tldRegex = /^[a-zA-Z]{2,}$/
 
     constructor(newUrl:string){
+        super();
         let tmpUrl: URL;
         try {
             tmpUrl = new URL(newUrl);

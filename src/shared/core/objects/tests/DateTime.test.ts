@@ -1,7 +1,7 @@
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import DateTime from "../DateTime";
 import Text from "../Text";
-import Value from "../Value";
+import IntNumber from "../IntNumber";
 
 describe('DateTime tests', () => {
 

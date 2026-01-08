@@ -1,9 +1,11 @@
 import type Text from "./Text";
+import ValueObject from "./ValueObject";
 
-export default class ID{
+export default class ID extends ValueObject{
     private id!:Text;
 
     constructor(id:Text){
+        super();
         this.id = id; 
     }
 
