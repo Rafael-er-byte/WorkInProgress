@@ -34,9 +34,10 @@ import TaskCategory from "../objects/TaskCategory";
 import type TaskList from "../objects/TaskList";
 import TaskNote from "../objects/TaskNote";
 import type TaskPriority from "../objects/TaskPriority";
+import type TaskTitle from "../objects/TaskTitle";
 
 export default class Task {
-    private title!: Text;
+    private title!: TaskTitle;
     private priority!: TaskPriority;
     private belongsTo!:TaskList;
     private lastUpdate!:DateTime;
@@ -154,10 +155,9 @@ export default class Task {
         this.updateHistory(new BackgroundImageUpdated(updateTime, modifier));
     }
 
-    public setTitle(title: Text, modifier: Contributor, updateTime: DateTime): void {
-        if(title.size() > TaskBusinessRules.titleLimit())throw new InvalidOperation('Title size limit exceeded');
+    public setTitle(title: TaskTitle, modifier: Contributor, updateTime: DateTime): void {
         this.title = title;
-        this.updateHistory(new TitleUpdated(updateTime, modifier, this.title));
+        this.updateHistory(new TitleUpdated(updateTime, modifier, this.title.getTitle()));
     }
 
     public setDescription(description: Text, modifier: Contributor, updateTime: DateTime): void {
@@ -187,7 +187,7 @@ export default class Task {
     }
 
     public getTitle(): Text {
-        return this.title;
+        return this.title.getTitle();
     }
 
     public getDescription(): Text | None{
