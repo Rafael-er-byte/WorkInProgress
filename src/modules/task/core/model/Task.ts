@@ -99,7 +99,8 @@ export default class Task {
         this.updateHistory(new AttachmentAdded(DateTime.now(), modifier, attachment));
     }
 
-    public addNote(idNote:ID, creator:Contributor, content:Text): Note{
+    public addNote(creator:Contributor, content:Text): Note{
+        const idNote = ID.generateId();
         const newTaskNote = new TaskNote(idNote);
         this.notes.addItem(newTaskNote);
         const now = DateTime.now();

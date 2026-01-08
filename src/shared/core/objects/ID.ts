@@ -1,5 +1,6 @@
-import type Text from "./Text";
+import Text from "./Text";
 import ValueObject from "./ValueObject";
+import {v4 as uuidv4} from 'uuid';
 
 export default class ID extends ValueObject{
     private id!:Text;
@@ -7,6 +8,11 @@ export default class ID extends ValueObject{
     constructor(id:Text){
         super();
         this.id = id; 
+    }
+
+    static generateId(): ID{
+        const uuid = uuidv4();
+        return new ID(new Text(uuid));
     }
 
     public getId(): Text{
