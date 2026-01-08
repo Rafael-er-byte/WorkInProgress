@@ -1,8 +1,8 @@
 import CoreError from "./CoreError";
 
-export default class ResourceNotFoud extends CoreError{
+export default class ResourceNotFound extends CoreError{
     constructor(message: string, info?: any){
         super(message, info);
-        Object.setPrototypeOf(this, ResourceNotFoud.prototype);
+        Object.setPrototypeOf(this, ResourceNotFound.prototype);
     }
 };

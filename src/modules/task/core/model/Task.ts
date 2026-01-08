@@ -1,16 +1,14 @@
-import ConflictDuplicateResource from "../../../../shared/core/errors/ConflictDuplicatedResource";
-import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
 import type Attachment from "../../../../shared/core/objects/Attachment";
+import CategoryCollection from "../../../../shared/core/objects/CategoryCollection";
 import Contributor from "../../../../shared/core/objects/Contributor";
+import ContributorCollection from "../../../../shared/core/objects/ContributorCollection";
 import DateTime from "../../../../shared/core/objects/DateTime";
 import ID from "../../../../shared/core/objects/ID";
 import None from "../../../../shared/core/objects/None";
 import type Text from "../../../../shared/core/objects/Text";
 import Note from "../../../note/core/model/Note";
 import NoteContent from "../../../note/core/objects/NoteContent";
-import TaskBusinessRules from "../constants/TaskBuisnessRules";
 import AttachmentAdded from "../events/AttachmentAdded";
 import AttachmentDeleted from "../events/AttachmentDeleted";
 import BackgroundImageUpdated from "../events/BackgroundImageUpdated";
@@ -28,7 +26,9 @@ import TaskFinished from "../events/TaskFinished";
 import TaskMarkedAsPending from "../events/TaskMarkedAsPending";
 import TaskMoved from "../events/TaskMoved";
 import TitleUpdated from "../events/TitleUpdated";
+import AttachmentCollection from "../objects/AttachmentCollection";
 import Completed from "../objects/Completed";
+import NoteCollection from "../objects/NoteCollection";
 import Pending from "../objects/Pending";
 import TaskCategory from "../objects/TaskCategory";
 import type TaskDescription from "../objects/TaskDescription";
@@ -49,11 +49,11 @@ export default class Task {
     private startDate: DateTime | None = new None();
     private endDate: DateTime | None = new None();
 
-    private categories: TaskCategory[] = [];
-    private contributors: Contributor[] = [];
+    private categories: CategoryCollection = new CategoryCollection();
+    private contributors: ContributorCollection = new ContributorCollection();
     private history: TaskEvent[] = [];
-    private attachments: Attachment[] = [];
-    private notes: TaskNote[] = [];
+    private attachments: AttachmentCollection = new AttachmentCollection();
+    private notes: NoteCollection = new NoteCollection();
 
     private readonly id!:ID
     private readonly createdAt!:DateTime;
@@ -69,24 +69,18 @@ export default class Task {
     }
 
     public removeCategory(category: TaskCategory, modifier: Contributor): void {
-        const deleteCategory = this.categories.find(c => c.getId() === category.getId());
-        if(!deleteCategory)throw new ResourceNotFoud('This category doesnt exist in this task');
-        this.categories = this.categories.filter(c => c.getId() !== category.getId());
-        this.updateHistory(new CategoryDeleted(DateTime.now(), modifier, deleteCategory));
+        this.categories = this.categories.deleteItem(category);
+        this.updateHistory(new CategoryDeleted(DateTime.now(), modifier, category));
     }
 
     public removeContributor(contributor: Contributor, modifier: Contributor): void{
-        const deleteContributor = this.contributors.find(c => c.getId() === contributor.getId());
-        if(!deleteContributor)throw new ResourceNotFoud('This contributor doesnt exist in this task');
-        this.contributors = this.contributors.filter(c => c.getId() !== contributor.getId());
-        this.updateHistory(new ContributorDeleted(DateTime.now(), modifier, deleteContributor));
+        this.contributors = this.contributors.deleteItem(contributor);
+        this.updateHistory(new ContributorDeleted(DateTime.now(), modifier, contributor));
     }
 
     public deleteAttachment(attachment: Attachment, modifier: Contributor): void{
-        const deleteAttachment = this.attachments.find(a => a.getUrl() === attachment.getUrl());
-        if(!deleteAttachment)throw new ResourceNotFoud('This attachment doesnt exist in this task');
-        this.attachments = this.attachments.filter(attach => attach.getUrl() !== attachment.getUrl());
-        this.updateHistory(new AttachmentDeleted(DateTime.now(), modifier, deleteAttachment));
+        this.attachments = this.attachments.deleteItem(attachment);
+        this.updateHistory(new AttachmentDeleted(DateTime.now(), modifier, attachment));
     }
 
     public moveToList(newList:TaskList, modifier: Contributor): void{
@@ -96,28 +90,20 @@ export default class Task {
     }
     
     public addContributor(contributor:Contributor, modifier: Contributor): void{
-        if(this.contributors.length + 1 > TaskBusinessRules.maxContributors())throw new InvalidOperation('Contributor limit exceeded');
-        this.contributors.push(contributor);
+        this.contributors = this.contributors.addItem(contributor);
         this.updateHistory(new ContributorAdded(DateTime.now(), modifier, contributor));
     }
 
     public addAtachment(attachment:Attachment, modifier: Contributor):void {
-        if(this.attachments.length + 1 > TaskBusinessRules.maxAttachments())throw new InvalidOperation('Attachments limit exceeded');
-        const exists = this.attachments.find(a => a.getUrl() === attachment.getUrl());
-        if(exists) throw new ConflictDuplicateResource('This attachment already exists in this task', attachment);
-        this.attachments.push(attachment);
+        this.attachments.addItem(attachment);
         this.updateHistory(new AttachmentAdded(DateTime.now(), modifier, attachment));
     }
 
     public addNote(idNote:ID, creator:Contributor, content:Text): Note{
-        if(this.notes.length + 1 > TaskBusinessRules.maxNotes())throw new InvalidOperation('Note limit exeeded')
-        const exists = this.notes.find(savedNote => savedNote.getId() === idNote);
-        if(exists)throw new ConflictDuplicateResource('This Note already exists', idNote);
         const newTaskNote = new TaskNote(idNote);
-
+        this.notes.addItem(newTaskNote);
         const now = DateTime.now();
         const note = new Note(now, idNote, creator, this.id, new NoteContent(content));
-        this.notes.push(newTaskNote);
         this.updateHistory(new NoteAdded(now, creator, newTaskNote));
         return note;
     }
@@ -145,28 +131,25 @@ export default class Task {
         this.updateHistory(new EndDateUpdated(DateTime.now(), modifier, this.endDate as DateTime));
     }
 
-    public setImage(image:Attachment, modifier: Contributor): void{
+    public updateBackGroundImage(image:Attachment, modifier: Contributor): void{
         if(image.getType() !== 'image')throw new InvalidParameters('The resource must be an image');
         this.image = image;
         this.updateHistory(new BackgroundImageUpdated(DateTime.now(), modifier));
     }
 
-    public setTitle(title: TaskTitle, modifier: Contributor): void {
+    public updateTitle(title: TaskTitle, modifier: Contributor): void {
         this.title = title;
         this.updateHistory(new TitleUpdated(DateTime.now(), modifier, this.title.getTitle()));
     }
 
-    public setDescription(description: TaskDescription, modifier: Contributor): void {
+    public updateDescription(description: TaskDescription, modifier: Contributor): void {
         this.description = description;
         const descriptionText = description.getDescription();
         this.updateHistory(new DescriptionUpdated(DateTime.now(), modifier, descriptionText));
     }
 
     public addCategory(category: TaskCategory, modifier: Contributor): void {
-        if(this.categories.length + 1 > TaskBusinessRules.maxCategories())throw new InvalidOperation('Categories limit exceeded');
-        const exists = this.categories.find(c => c.getId() === category.getId());
-        if(exists)throw new ConflictDuplicateResource('This category already exists in this task', category);
-        this.categories.push(category);
+        this.categories = this.categories.addItem(category);
         this.updateHistory(new CategoryAdded(DateTime.now(), modifier, category));
     }
 
@@ -202,8 +185,8 @@ export default class Task {
         return this.state;
     }
 
-    public getCategories(): TaskCategory[] {
-        return [...this.categories]; 
+    public getCategories(): CategoryCollection {
+        return this.categories; 
     }
 
     public getStartDate(): DateTime | None{
@@ -226,16 +209,16 @@ export default class Task {
         return this.lastUpdate;
     }
 
-    public getContributors(): Contributor[]{
-        return [...this.contributors];
+    public getContributors(): ContributorCollection{
+        return this.contributors;
     }
 
-    public getAttachments(): Attachment[]{
-        return [...this.attachments];
+    public getAttachments(): AttachmentCollection{
+        return this.attachments;
     }
 
-    public getNotes(): TaskNote[]{
-        return [...this.notes];
+    public getNotes(): NoteCollection{
+        return this.notes;
     }
 
     public getHistory(): TaskEvent[]{
