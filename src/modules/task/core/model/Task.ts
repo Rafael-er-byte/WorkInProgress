@@ -31,6 +31,7 @@ import TitleUpdated from "../events/TitleUpdated";
 import Completed from "../objects/Completed";
 import Pending from "../objects/Pending";
 import TaskCategory from "../objects/TaskCategory";
+import type TaskDescription from "../objects/TaskDescription";
 import type TaskList from "../objects/TaskList";
 import TaskNote from "../objects/TaskNote";
 import type TaskPriority from "../objects/TaskPriority";
@@ -43,7 +44,7 @@ export default class Task {
     private lastUpdate!:DateTime;
     private state!: Completed | Pending;
 
-    private description: Text | None = new None();
+    private description: TaskDescription | None = new None();
     private image: Attachment | None = new None();
     private startDate: DateTime | None = new None();
     private endDate: DateTime | None = new None();
@@ -160,10 +161,10 @@ export default class Task {
         this.updateHistory(new TitleUpdated(updateTime, modifier, this.title.getTitle()));
     }
 
-    public setDescription(description: Text, modifier: Contributor, updateTime: DateTime): void {
-        if(description.size() > TaskBusinessRules.descriptionLimit())throw new InvalidOperation('Description size limit exceeded');
+    public setDescription(description: TaskDescription, modifier: Contributor, updateTime: DateTime): void {
         this.description = description;
-        this.updateHistory(new DescriptionUpdated(updateTime, modifier, this.description as Text));
+        const descriptionText = description.getDescription();
+        this.updateHistory(new DescriptionUpdated(updateTime, modifier, descriptionText));
     }
 
     public addCategory(category: TaskCategory, modifier: Contributor, updateTime: DateTime): void {
