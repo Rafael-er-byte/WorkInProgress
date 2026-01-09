@@ -1,9 +1,10 @@
-import TaskBusinessRules from "../../../modules/task/core/constants/TaskBuisnessRules";
-import ConflictDuplicateResource from "../errors/ConflictDuplicatedResource";
-import InvalidOperation from "../errors/InvalidOperation";
-import ResourceNotFoud from "../errors/ResourceNotFound";
-import type Collection from "./Collection";
-import type Contributor from "./Contributor";
+import TaskBusinessRules from "../constants/TaskBuisnessRules";
+import type Contributor from "../../../../shared/core/objects/Contributor";
+import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
+import ConflictDuplicateResource from "../../../../shared/core/errors/ConflictDuplicatedResource";
+import ResourceNotFound from "../../../../shared/core/errors/ResourceNotFound";
+import type Collection from "../../../../shared/core/objects/Collection";
+import IntNumber from "../../../../shared/core/objects/IntNumber";
 
 export default class ContributorCollection implements Collection{
     private readonly limitOfcontributors = TaskBusinessRules.maxContributors();
@@ -22,7 +23,17 @@ export default class ContributorCollection implements Collection{
 
     public deleteItem(contributor:Contributor): ContributorCollection {
         const deletecontributor = this.contributors.find(c => c.getId() === contributor.getId());
-        if(!deletecontributor)throw new ResourceNotFoud('This contributor doesnt exist in this task');
+        if(!deletecontributor)throw new ResourceNotFound('This contributor doesnt exist in this task');
         return new ContributorCollection(this.contributors.filter(c => c.getId() !== contributor.getId()));
+    }
+
+    public find(contributor: Contributor):boolean{
+        const exists = this.contributors.find(obj => obj.getId() === contributor.getId());
+        if(exists)return true;
+        return false;
+    }
+
+    public size(): IntNumber{
+        return new IntNumber(this.contributors.length);
     }
 };

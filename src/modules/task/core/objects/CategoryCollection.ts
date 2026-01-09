@@ -1,9 +1,10 @@
-import TaskBusinessRules from "../../../modules/task/core/constants/TaskBuisnessRules";
-import type TaskCategory from "../../../modules/task/core/objects/TaskCategory";
-import ConflictDuplicateResource from "../errors/ConflictDuplicatedResource";
-import InvalidOperation from "../errors/InvalidOperation";
-import ResourceNotFoud from "../errors/ResourceNotFound";
-import type Collection from "./Collection";
+import ConflictDuplicateResource from "../../../../shared/core/errors/ConflictDuplicatedResource";
+import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
+import ResourceNotFound from "../../../../shared/core/errors/ResourceNotFound";
+import type Collection from "../../../../shared/core/objects/Collection";
+import IntNumber from "../../../../shared/core/objects/IntNumber";
+import TaskBusinessRules from "../constants/TaskBuisnessRules";
+import type TaskCategory from "./TaskCategory";
 
 export default class CategoryCollection implements Collection{
     private readonly limitOfCategories = TaskBusinessRules.maxCategories();
@@ -22,7 +23,17 @@ export default class CategoryCollection implements Collection{
 
     public deleteItem(category:TaskCategory): CategoryCollection {
         const deleteCategory = this.categories.find(c => c.getId() === category.getId());
-        if(!deleteCategory)throw new ResourceNotFoud('This category doesnt exist in this task');
+        if(!deleteCategory)throw new ResourceNotFound('This category doesnt exist in this task');
         return new CategoryCollection(this.categories.filter(c => c.getId() !== category.getId()));
+    }
+
+    public find(category: TaskCategory): boolean {
+        const exists = this.categories.find(obj => obj.getId() === category.getId());
+        if(exists)return true;
+        return false;
+    }
+
+    public size(): IntNumber {
+        return new IntNumber(this.categories.length);
     }
 };
