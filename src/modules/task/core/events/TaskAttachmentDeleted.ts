@@ -1,10 +1,10 @@
 import type Contributor from "../../../../shared/core/objects/Contributor";
-import TaskEvent from "./TaskEvent";
 import DateTime from "../../../../shared/core/objects/DateTime";
 import type Attachment from "../../../../shared/core/objects/Attachment";
+import DomainEvent from "../../../../shared/core/events/DomainEvent";
 
-export default class AttachmentDeleted extends TaskEvent{
+export default class TaskAttachmentDeleted extends DomainEvent{
     constructor(date:DateTime, modifier: Contributor, attachment: Attachment){
-        super(date, modifier, 'ATTACHMENT_DELETD', attachment);
+        super(date, modifier, 'TASK_ATTACHMENT_DELETED', attachment);
     }
 };

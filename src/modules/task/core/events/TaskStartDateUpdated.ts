@@ -1,9 +1,9 @@
+import DomainEvent from "../../../../shared/core/events/DomainEvent";
 import type Contributor from "../../../../shared/core/objects/Contributor";
 import type DateTime from "../../../../shared/core/objects/DateTime";
-import TaskEvent from "./TaskEvent";
 
-export default class DueDateUpdated extends TaskEvent{
+export default class TaskBeginDateUpdated extends DomainEvent{
     constructor(date:DateTime, modifier: Contributor, newDate: DateTime){
-        super(date, modifier, 'END_DATE_UPDATED', newDate);
+        super(date, modifier, 'TASK_BEGIN_DATE_UPDATED', newDate);
     }
 };
