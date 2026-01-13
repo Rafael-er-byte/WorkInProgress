@@ -19,7 +19,7 @@ import CategoryDeleted from "../events/CategoryDeleted";
 import ContributorAdded from "../events/ContributorAdded";
 import ContributorDeleted from "../events/ContributorDeleted";
 import DescriptionUpdated from "../events/DescriptionUpdated";
-import EndDateUpdated from "../events/EndDateUpdated";
+import DueDateUpdated from "../events/DueDateUpdated";
 import NoteAdded from "../events/NoteAdded";
 import PriorityUpdated from "../events/PriorityUpdated";
 import TaskEvent from "../events/TaskEvent";
@@ -51,7 +51,7 @@ export default class Task {
     private description: TaskDescription | None = new None();
     private image: Attachment | None = new None();
     private startDate: DateTime | None = new None();
-    private endDate: DateTime | None = new None();
+    private dueDate: DateTime | None = new None();
 
     private categories: CategoryCollection = new CategoryCollection();
     private contributors: ContributorCollection = new ContributorCollection();
@@ -133,30 +133,30 @@ export default class Task {
         return note;
     }
 
-    public setPriority(priority: TaskPriority, modifier: Contributor): void{
+    public updatePriority(priority: TaskPriority, modifier: Contributor): void{
         this.validateAccess(modifier);
         this.priority = priority;
         this.updateHistory(new PriorityUpdated(DateTime.now(), modifier, priority));
     }
 
-    public setBeginDate(date:DateTime, modifier: Contributor): void{
+    public updateStartDate(date:DateTime, modifier: Contributor): void{
         this.validateAccess(modifier);
         if(!DateTime.isAfter(date, DateTime.now()))throw new InvalidParameters('The start date must be in future', date);
-        if(this.endDate instanceof DateTime){
-            if(!DateTime.isAfter(this.endDate, date))throw new InvalidParameters('The end date must be after the start date', {startDate:date, endDate:this.endDate});
+        if(this.dueDate instanceof DateTime){
+            if(!DateTime.isAfter(this.dueDate, date))throw new InvalidParameters('The end date must be after the start date', {startDate:date, dueDate:this.dueDate});
         }
         this.startDate = date;
         this.updateHistory(new BeginDateUpdated(DateTime.now(), modifier, this.startDate as DateTime));
     }
 
-    public setEndDate(date:DateTime, modifier: Contributor): void{
+    public updateDueDate(date:DateTime, modifier: Contributor): void{
         this.validateAccess(modifier);
         if(!DateTime.isAfter(date, DateTime.now()))throw new InvalidParameters('The end date must be in future', date);
         if(this.startDate instanceof DateTime){
-            if(!DateTime.isAfter(date, this.startDate))throw new InvalidParameters('The end date must be after the start date', {endDate:date, startDate:this.startDate});
+            if(!DateTime.isAfter(date, this.startDate))throw new InvalidParameters('The end date must be after the start date', {dueDate:date, startDate:this.startDate});
         }
-        this.endDate = date;
-        this.updateHistory(new EndDateUpdated(DateTime.now(), modifier, this.endDate as DateTime));
+        this.dueDate = date;
+        this.updateHistory(new DueDateUpdated(DateTime.now(), modifier, this.dueDate as DateTime));
     }
 
     public updateBackGroundImage(image:Attachment, modifier: Contributor): void{
@@ -227,8 +227,8 @@ export default class Task {
         return this.startDate;
     }
 
-    public getEndDate(): DateTime | None{
-        return this.endDate;
+    public getdueDate(): DateTime | None{
+        return this.dueDate;
     }
 
     public getIdList(): TaskList{
