@@ -34,6 +34,7 @@ import Completed from "../objects/Completed";
 import ContributorCollection from "../objects/ContributorCollection";
 import Pending from "../objects/Pending";
 import TaskCategory from "../objects/TaskCategory";
+import type TaskDateTime from "../objects/TaskDateTime";
 import type TaskDescription from "../objects/TaskDescription";
 import type TaskList from "../objects/TaskList";
 import type TaskPriority from "../objects/TaskPriority";
@@ -124,21 +125,19 @@ export default class Task extends Entity{
         this.addEvent(new TaskPriorityUpdated(DateTime.now(), modifier, priority));
     }
 
-    public updateStartDate(date:DateTime, modifier: Contributor): void{
+    public updateStartDate(date:TaskDateTime, modifier: Contributor): void{
         if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
-        if(!DateTime.isAfter(date, DateTime.now()))throw new InvalidParameters('The start date must be in future', date);
         if(this.dueDate instanceof DateTime){
-            if(!DateTime.isAfter(this.dueDate, date))throw new InvalidParameters('The end date must be after the start date', {startDate:date, dueDate:this.dueDate});
+            if(!DateTime.isAfter(this.dueDate, date.getDate()))throw new InvalidParameters('The end date must be after the start date', {startDate:date, dueDate:this.dueDate});
         }
         this.startDate = date;
         this.addEvent(new TaskBeginDateUpdated(DateTime.now(), modifier, this.startDate as DateTime));
     }
 
-    public updateDueDate(date:DateTime, modifier: Contributor): void{
+    public updateDueDate(date:TaskDateTime, modifier: Contributor): void{
         if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
-        if(!DateTime.isAfter(date, DateTime.now()))throw new InvalidParameters('The end date must be in future', date);
         if(this.startDate instanceof DateTime){
-            if(!DateTime.isAfter(date, this.startDate))throw new InvalidParameters('The end date must be after the start date', {dueDate:date, startDate:this.startDate});
+            if(!DateTime.isAfter(date.getDate(), this.startDate))throw new InvalidParameters('The end date must be after the start date', {dueDate:date, startDate:this.startDate});
         }
         this.dueDate = date;
         this.addEvent(new TaskDueDateUpdated(DateTime.now(), modifier, this.dueDate as DateTime));
