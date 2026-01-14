@@ -1,63 +1,60 @@
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import Unauthorized from "../../../../shared/core/errors/Unauthorized";
+import Entity from "../../../../shared/core/model/Entity";
 import Archived from "../../../../shared/core/objects/Archived";
 import type Attachment from "../../../../shared/core/objects/Attachment";
 import Contributor from "../../../../shared/core/objects/Contributor";
 import DateTime from "../../../../shared/core/objects/DateTime";
 import ID from "../../../../shared/core/objects/ID";
+import type IntNumber from "../../../../shared/core/objects/IntNumber";
 import None from "../../../../shared/core/objects/None";
 import type Text from "../../../../shared/core/objects/Text";
-import Note from "../../../note/core/model/Note";
-import NoteContent from "../../../note/core/objects/NoteContent";
-import AttachmentAdded from "../events/AttachmentAdded";
-import AttachmentDeleted from "../events/AttachmentDeleted";
-import BackgroundImageUpdated from "../events/BackgroundImageUpdated";
-import BeginDateUpdated from "../events/BeginDateUpdated";
-import CategoryAdded from "../events/CategoryAdded";
-import CategoryDeleted from "../events/CategoryDeleted";
-import ContributorAdded from "../events/ContributorAdded";
-import ContributorDeleted from "../events/ContributorDeleted";
-import DescriptionUpdated from "../events/DescriptionUpdated";
-import DueDateUpdated from "../events/DueDateUpdated";
-import NoteAdded from "../events/NoteAdded";
-import PriorityUpdated from "../events/PriorityUpdated";
-import TaskEvent from "../events/TaskEvent";
+import TaskArchived from "../events/TaskArchived";
+import TaskAttachmentAdded from "../events/TaskAttachmentAdded";
+import TaskAttachmentDeleted from "../events/TaskAttachmentDeleted";
+import TaskBackgroundImageUpdated from "../events/TaskBackgroundImageUpdated";
+import TaskCategoryAdded from "../events/TaskCategoryAdded";
+import TaskCategoryDeleted from "../events/TaskCategoryDeleted";
+import TaskContributorAdded from "../events/TaskContributorAdded";
+import TaskContributorDeleted from "../events/TaskContributorDeleted";
+import TaskDescriptionUpdated from "../events/TaskDescriptionUpdated";
+import TaskDueDateUpdated from "../events/TaskDueDateUpdated";
 import TaskFinished from "../events/TaskFinished";
 import TaskMarkedAsPending from "../events/TaskMarkedAsPending";
 import TaskMoved from "../events/TaskMoved";
+import TaskMovedToPositionInList from "../events/TaskMovedToPositionInList";
+import TaskPriorityUpdated from "../events/TaskPriorityUpdated";
+import TaskBeginDateUpdated from "../events/TaskStartDateUpdated";
+import TaskUnarchived from "../events/TaskUnarchived";
 import TitleUpdated from "../events/TitleUpdated";
 import AttachmentCollection from "../objects/AttachmentCollection";
+import type BackGroundImage from "../objects/BackGroundImage";
 import CategoryCollection from "../objects/CategoryCollection";
 import Completed from "../objects/Completed";
 import ContributorCollection from "../objects/ContributorCollection";
-import NoteCollection from "../objects/NoteCollection";
 import Pending from "../objects/Pending";
 import TaskCategory from "../objects/TaskCategory";
 import type TaskDescription from "../objects/TaskDescription";
 import type TaskList from "../objects/TaskList";
-import TaskNote from "../objects/TaskNote";
 import type TaskPriority from "../objects/TaskPriority";
 import type TaskTitle from "../objects/TaskTitle";
 
-export default class Task {
+export default class Task extends Entity{
     private title!: TaskTitle;
     private priority!: TaskPriority;
     private currentList!:TaskList;
-    private lastUpdate!:DateTime;
     private state!: Completed | Pending;
     private archived!: Archived | None;
+    private position!: IntNumber
 
     private description: TaskDescription | None = new None();
-    private image: Attachment | None = new None();
+    private image: BackGroundImage | None = new None();
     private startDate: DateTime | None = new None();
     private dueDate: DateTime | None = new None();
 
     private categories: CategoryCollection = new CategoryCollection();
     private contributors: ContributorCollection = new ContributorCollection();
-    private history: TaskEvent[] = [];
     private attachments: AttachmentCollection = new AttachmentCollection();
-    private notes: NoteCollection = new NoteCollection();
 
     private readonly id!:ID
     private readonly createdAt!:DateTime;
@@ -65,138 +62,125 @@ export default class Task {
     constructor(
          
     ) {
-    }
-
-    private updateHistory(event:TaskEvent): void{
-        this.history.push(event);
-        this.lastUpdate = event.getDate();
-    }
-
-    private validateAccess(modifier:Contributor):void{
-        if(this.archived instanceof Archived)throw new InvalidOperation('Archived task');
-        if(this.contributors.size().getValue() !== 0 && !this.contributors.find(modifier))throw new Unauthorized('Cannot modify this task');
+        super()
     }
 
     public removeCategory(category: TaskCategory, modifier: Contributor): void {
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.categories = this.categories.deleteItem(category);
-        this.updateHistory(new CategoryDeleted(DateTime.now(), modifier, category));
+        this.addEvent(new TaskCategoryDeleted(DateTime.now(), modifier, category));
     }
 
     public removeContributor(contributor: Contributor, modifier: Contributor): void{
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.contributors = this.contributors.deleteItem(contributor);
-        this.updateHistory(new ContributorDeleted(DateTime.now(), modifier, contributor));
+        this.addEvent(new TaskContributorDeleted(DateTime.now(), modifier, contributor));
     }
 
     public deleteAttachment(attachment: Attachment, modifier: Contributor): void{
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.attachments = this.attachments.deleteItem(attachment);
-        this.updateHistory(new AttachmentDeleted(DateTime.now(), modifier, attachment));
+        this.addEvent(new TaskAttachmentDeleted(DateTime.now(), modifier, attachment));
     }
 
-    public moveToList(newList:TaskList, modifier: Contributor): void{
-        this.validateAccess(modifier);
+    public moveToList(newList:TaskList, modifier: Contributor, position:IntNumber): void{
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.currentList = newList;
         const nameList:Text = this.currentList.getName()
-        this.updateHistory(new TaskMoved(DateTime.now(), modifier, nameList));
+        this.position = position;
+        this.addEvent(new TaskMoved(DateTime.now(), modifier, nameList, position));
     }
 
-    public unarchive():void{
+    public unarchive(modifier: Contributor):void{
         this.archived = new None();
+        this.addEvent(new TaskUnarchived(DateTime.now(), modifier));
+    }
+
+    public movePosition(modifier: Contributor, newPosition: IntNumber): void{
+        this.position = newPosition;
+        this.addEvent(new TaskMovedToPositionInList(DateTime.now(), modifier, newPosition));
     }
     
-    public archive():void{
+    public archive(modifier:Contributor):void{
         this.archived = new Archived();
+        this.addEvent(new TaskArchived(DateTime.now(), modifier))
     }
 
     public addContributor(contributor:Contributor, modifier: Contributor): void{
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.contributors = this.contributors.addItem(contributor);
-        this.updateHistory(new ContributorAdded(DateTime.now(), modifier, contributor));
+        this.addEvent(new TaskContributorAdded(DateTime.now(), modifier, contributor));
     }
 
     public addAtachment(attachment:Attachment, modifier: Contributor):void {
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.attachments = this.attachments.addItem(attachment);
-        this.updateHistory(new AttachmentAdded(DateTime.now(), modifier, attachment));
-    }
-
-    public addNote(creator:Contributor, content:Text): Note{
-        this.validateAccess(creator);
-        const idNote = ID.generateId();
-        const newTaskNote = new TaskNote(idNote);
-        const now = DateTime.now();
-        const note = new Note(now, idNote, creator, this.id, new NoteContent(content));
-        this.notes = this.notes.addItem(note);
-        this.updateHistory(new NoteAdded(now, creator, newTaskNote));
-        return note;
+        this.addEvent(new TaskAttachmentAdded(DateTime.now(), modifier, attachment));
     }
 
     public updatePriority(priority: TaskPriority, modifier: Contributor): void{
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.priority = priority;
-        this.updateHistory(new PriorityUpdated(DateTime.now(), modifier, priority));
+        this.addEvent(new TaskPriorityUpdated(DateTime.now(), modifier, priority));
     }
 
     public updateStartDate(date:DateTime, modifier: Contributor): void{
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         if(!DateTime.isAfter(date, DateTime.now()))throw new InvalidParameters('The start date must be in future', date);
         if(this.dueDate instanceof DateTime){
             if(!DateTime.isAfter(this.dueDate, date))throw new InvalidParameters('The end date must be after the start date', {startDate:date, dueDate:this.dueDate});
         }
         this.startDate = date;
-        this.updateHistory(new BeginDateUpdated(DateTime.now(), modifier, this.startDate as DateTime));
+        this.addEvent(new TaskBeginDateUpdated(DateTime.now(), modifier, this.startDate as DateTime));
     }
 
     public updateDueDate(date:DateTime, modifier: Contributor): void{
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         if(!DateTime.isAfter(date, DateTime.now()))throw new InvalidParameters('The end date must be in future', date);
         if(this.startDate instanceof DateTime){
             if(!DateTime.isAfter(date, this.startDate))throw new InvalidParameters('The end date must be after the start date', {dueDate:date, startDate:this.startDate});
         }
         this.dueDate = date;
-        this.updateHistory(new DueDateUpdated(DateTime.now(), modifier, this.dueDate as DateTime));
+        this.addEvent(new TaskDueDateUpdated(DateTime.now(), modifier, this.dueDate as DateTime));
     }
 
-    public updateBackGroundImage(image:Attachment, modifier: Contributor): void{
-        this.validateAccess(modifier);
-        if(image.getType() !== 'image')throw new InvalidParameters('The resource must be an image');
+    public updateBackGroundImage(image:BackGroundImage, modifier: Contributor): void{
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.image = image;
-        this.updateHistory(new BackgroundImageUpdated(DateTime.now(), modifier));
+        this.addEvent(new TaskBackgroundImageUpdated(DateTime.now(), modifier));
     }
 
     public updateTitle(title: TaskTitle, modifier: Contributor): void {
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.title = title;
-        this.updateHistory(new TitleUpdated(DateTime.now(), modifier, this.title.getTitle()));
+        this.addEvent(new TitleUpdated(DateTime.now(), modifier, this.title.getTitle()));
     }
 
     public updateDescription(description: TaskDescription, modifier: Contributor): void {
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.description = description;
         const descriptionText = description.getDescription();
-        this.updateHistory(new DescriptionUpdated(DateTime.now(), modifier, descriptionText));
+        this.addEvent(new TaskDescriptionUpdated(DateTime.now(), modifier, descriptionText));
     }
 
     public addCategory(category: TaskCategory, modifier: Contributor): void {
-        this.validateAccess(modifier);
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         this.categories = this.categories.addItem(category);
-        this.updateHistory(new CategoryAdded(DateTime.now(), modifier, category));
+        this.addEvent(new TaskCategoryAdded(DateTime.now(), modifier, category));
     }
 
     public markAsFinished(completed:Completed): void {
-        this.validateAccess(completed.getContributor());
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         if(this.state instanceof Completed) return;
         this.state = completed;
-        this.updateHistory(new TaskFinished(this.state.getCompletedDate(), this.state.getContributor()));
+        this.addEvent(new TaskFinished(this.state.getCompletedDate(), this.state.getContributor()));
     }
 
     public markAsPending(pending: Pending): void {
-        this.validateAccess(pending.getContributor());
+        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
         if(this.state instanceof Pending)return;
         this.state = pending;
-        this.updateHistory(new TaskMarkedAsPending(this.state.getCompletedDate() as DateTime, this.state.getContributor() as Contributor));
+        this.addEvent(new TaskMarkedAsPending(this.state.getCompletedDate() as DateTime, this.state.getContributor() as Contributor));
     }
 
     public getTitle(): Text {
@@ -215,7 +199,7 @@ export default class Task {
        return this.image
     }
 
-    public isFinished(): Completed | Pending {
+    public getState(): Completed | Pending {
         return this.state;
     }
 
@@ -225,6 +209,10 @@ export default class Task {
 
     public getStartDate(): DateTime | None{
         return this.startDate;
+    }
+
+    public getPosition(): IntNumber{
+        return this.position;
     }
 
     public getdueDate(): DateTime | None{
@@ -239,10 +227,6 @@ export default class Task {
         return this.id;
     }
 
-    public getLastUpdate(): DateTime{
-        return this.lastUpdate;
-    }
-
     public getContributors(): ContributorCollection{
         return this.contributors;
     }
@@ -251,15 +235,12 @@ export default class Task {
         return this.attachments;
     }
 
-    public getNotes(): NoteCollection{
-        return this.notes;
-    }
-
-    public getHistory(): TaskEvent[]{
-        return [...this.history];
-    }
-
     public getCreationDate():DateTime{
         return this.createdAt;
+    }
+
+    public isArchived(): boolean{
+        if(this.archived instanceof Archived)return true;
+        return false;
     }
 };
