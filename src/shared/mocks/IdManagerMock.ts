@@ -1,4 +1,4 @@
-import type IDManager from "../../modules/contracts/utils/IDManager";
+import type IDManager from "../../context/contracts/utils/IDManager";
 
 export function createIdManagerMock():jest.Mocked<IDManager>{
     let idManagerMock: jest.Mocked<IDManager>; 

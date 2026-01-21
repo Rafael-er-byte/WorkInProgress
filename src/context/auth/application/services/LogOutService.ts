@@ -2,7 +2,7 @@ import type Enviroment from "../../../../shared/config/env/Enviroment";
 import Unauthorized from "../../../../shared/core/errors/api/Unauthorized";
 import type TokenPayLoad from "../dtos/out/TokenPayLoad";
 import type iToken from "../interfaces/utils/iToken";
-import type iTokenRepository from "../../../auth/application/interfaces/cache/iTokenRepository";
+import type iTokenRepository from "../interfaces/cache/iTokenRepository";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
 import Action from "../dtos/out/Action";
 import type TokenDto from "../dtos/in/TokenDto";

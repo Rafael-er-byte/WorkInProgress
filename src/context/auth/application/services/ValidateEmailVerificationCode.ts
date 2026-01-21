@@ -2,7 +2,7 @@ import BadRequest from "../../../../shared/core/errors/api/BadRequest";
 import type User from "../../core/model/User";
 import type VerificationCode from "../dtos/in/VerificationCode";
 import Action from "../dtos/out/Action";
-import type iCodeRepository from "../../../auth/application/interfaces/cache/iCodeRepository";
+import type iCodeRepository from "../interfaces/cache/iCodeRepository";
 import type iUserRepository from "../interfaces/repository/iUserRepository";
 
 export default class ValidateEmailVerificationCode{

@@ -1,4 +1,4 @@
-import type DateManager from "../../modules/contracts/utils/DateManager";
+import type DateManager from "../../context/contracts/utils/DateManager";
 
 export function createDateManagerMock(): jest.Mocked<DateManager>{
     let dateManagerMock: jest.Mocked<DateManager>;

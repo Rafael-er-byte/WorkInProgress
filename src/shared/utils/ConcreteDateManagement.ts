@@ -1,4 +1,4 @@
-import type DateManager from "../../modules/contracts/utils/DateManager";
+import type DateManager from "../../context/contracts/utils/DateManager";
 
 export default class ConcreteDateManager implements DateManager{
     private readonly isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
