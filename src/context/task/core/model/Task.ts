@@ -5,7 +5,6 @@ import Archived from "../../../../shared/core/objects/Archived";
 import type Attachment from "../../../../shared/core/objects/Attachment";
 import Contributor from "../../../../shared/core/objects/Contributor";
 import DateTime from "../../../../shared/core/objects/DateTime";
-import type IntNumber from "../../../../shared/core/objects/IntNumber";
 import None from "../../../../shared/core/objects/None";
 import type Text from "../../../../shared/core/objects/Text";
 import TaskArchived from "../events/TaskArchived";
@@ -21,7 +20,6 @@ import TaskDueDateUpdated from "../events/TaskDueDateUpdated";
 import TaskFinished from "../events/TaskFinished";
 import TaskMarkedAsPending from "../events/TaskMarkedAsPending";
 import TaskMoved from "../events/TaskMoved";
-import TaskMovedToPositionInList from "../events/TaskMovedToPositionInList";
 import TaskPriorityUpdated from "../events/TaskPriorityUpdated";
 import TaskBeginDateUpdated from "../events/TaskStartDateUpdated";
 import TaskUnarchived from "../events/TaskUnarchived";
@@ -36,17 +34,16 @@ import TaskCategory from "../objects/TaskCategory";
 import type TaskDateTime from "../objects/TaskDateTime";
 import type TaskDescription from "../objects/TaskDescription";
 import type TaskId from "../objects/TaskId";
-import type TaskList from "../objects/TaskList";
+import type TaskPosition from "../objects/TaskPosition";
 import type TaskPriority from "../objects/TaskPriority";
 import type TaskTitle from "../objects/TaskTitle";
 
 export default class Task extends Entity{
     private title!: TaskTitle;
     private priority!: TaskPriority;
-    private currentList!:TaskList;
+    private position!:TaskPosition;
     private state!: Completed | Pending;
     private archived!: Archived | None;
-    private position!: IntNumber
 
     private description: TaskDescription | None = new None();
     private image: BackGroundImage | None = new None();
@@ -60,7 +57,7 @@ export default class Task extends Entity{
     private readonly id!:TaskId;
     private readonly createdAt!:DateTime;
 
-    constructor(
+    public constructor(
          
     ) {
         super()
@@ -84,22 +81,15 @@ export default class Task extends Entity{
         this.addEvent(new TaskAttachmentDeleted(DateTime.now(), modifier, attachment));
     }
 
-    public moveToList(newList:TaskList, modifier: Contributor, position:IntNumber): void{
+    public move(list:TaskPosition, modifier: Contributor): void{
         if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
-        this.currentList = newList;
-        const nameList:Text = this.currentList.getName()
-        this.position = position;
-        this.addEvent(new TaskMoved(DateTime.now(), modifier, nameList, position));
+        this.position = list;
+        this.addEvent(new TaskMoved(DateTime.now(), modifier, this.position));
     }
 
     public unarchive(modifier: Contributor):void{
         this.archived = new None();
         this.addEvent(new TaskUnarchived(DateTime.now(), modifier));
-    }
-
-    public movePosition(modifier: Contributor, newPosition: IntNumber): void{
-        this.position = newPosition;
-        this.addEvent(new TaskMovedToPositionInList(DateTime.now(), modifier, newPosition));
     }
     
     public archive(modifier:Contributor):void{
@@ -210,16 +200,12 @@ export default class Task extends Entity{
         return this.startDate;
     }
 
-    public getPosition(): IntNumber{
+    public getPosition(): TaskPosition{
         return this.position;
     }
 
     public getdueDate(): DateTime | None{
         return this.dueDate;
-    }
-
-    public getIdList(): TaskList{
-        return this.currentList;
     }
 
     public getId(): TaskId{
