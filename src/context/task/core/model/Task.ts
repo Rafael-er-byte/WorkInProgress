@@ -5,7 +5,6 @@ import Archived from "../../../../shared/core/objects/Archived";
 import type Attachment from "../../../../shared/core/objects/Attachment";
 import Contributor from "../../../../shared/core/objects/Contributor";
 import DateTime from "../../../../shared/core/objects/DateTime";
-import ID from "../../../../shared/core/objects/ID";
 import type IntNumber from "../../../../shared/core/objects/IntNumber";
 import None from "../../../../shared/core/objects/None";
 import type Text from "../../../../shared/core/objects/Text";
@@ -36,6 +35,7 @@ import Pending from "../objects/Pending";
 import TaskCategory from "../objects/TaskCategory";
 import type TaskDateTime from "../objects/TaskDateTime";
 import type TaskDescription from "../objects/TaskDescription";
+import type TaskId from "../objects/TaskId";
 import type TaskList from "../objects/TaskList";
 import type TaskPriority from "../objects/TaskPriority";
 import type TaskTitle from "../objects/TaskTitle";
@@ -57,7 +57,7 @@ export default class Task extends Entity{
     private contributors: ContributorCollection = new ContributorCollection();
     private attachments: AttachmentCollection = new AttachmentCollection();
 
-    private readonly id!:ID
+    private readonly id!:TaskId;
     private readonly createdAt!:DateTime;
 
     constructor(
@@ -222,7 +222,7 @@ export default class Task extends Entity{
         return this.currentList;
     }
 
-    public getId(): ID{
+    public getId(): TaskId{
         return this.id;
     }
 
