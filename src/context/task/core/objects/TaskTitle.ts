@@ -1,4 +1,4 @@
-import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
+import LimitExceeded from "../../../../shared/core/errors/LimitExceeded";
 import Text from "../../../../shared/core/objects/Text";
 import ValueObject from "../../../../shared/core/objects/ValueObject";
 import TaskBusinessRules from "../constants/TaskBuisnessRules";
@@ -9,7 +9,7 @@ export default class TaskTitle extends ValueObject{
     constructor(title:string){
         super();
         const textTitle = new Text(title);
-        if(textTitle.size() > TaskBusinessRules.titleLimit())throw new InvalidOperation('Title size limit exceeded');
+        if(textTitle.size() > TaskBusinessRules.titleLimit())throw new LimitExceeded('Title size limit exceeded');
     }
 
     public getTitle():string{

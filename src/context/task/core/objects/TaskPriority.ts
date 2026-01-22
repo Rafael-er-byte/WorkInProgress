@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import ValueObject from "../../../../shared/core/objects/ValueObject";
+import TaskPriorityNorSupported from "../error/TaskPriorityNotSupported";
 import { PRIORITY_LEVEL, type Priority } from "../types/Prioroty.type";
 
 export default class TaskPriority extends ValueObject{ 
@@ -7,7 +7,7 @@ export default class TaskPriority extends ValueObject{
 
     constructor(priority: Priority){
         super();
-        if(!PRIORITY_LEVEL.includes(priority))throw new InvalidParameters('The parameter is nt allowed like a priority type', priority);
+        if(!PRIORITY_LEVEL.includes(priority))throw new TaskPriorityNorSupported(priority);
         this.priority = priority;
     }
 

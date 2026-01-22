@@ -1,5 +1,5 @@
 import ConflictDuplicateResource from "../../../../shared/core/errors/ConflictDuplicatedResource";
-import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
+import LimitExceeded from "../../../../shared/core/errors/LimitExceeded";
 import ResourceNotFound from "../../../../shared/core/errors/ResourceNotFound";
 import type Attachment from "../../../../shared/core/objects/Attachment";
 import type Collection from "../../../../shared/core/objects/Collection";
@@ -15,7 +15,7 @@ export default class AttachmentCollection implements Collection{
     }
 
     public addItem(attachment:Attachment):AttachmentCollection{
-        if(this.attachments.length + 1 > this.limitOfattachments)throw new InvalidOperation('attachment limit exeeded')
+        if(this.attachments.length + 1 > this.limitOfattachments)throw new LimitExceeded('attachment limit exeeded')
         const exists = this.attachments.find(savedattachment => savedattachment.getUrl() === attachment.getUrl());
         if(exists)throw new ConflictDuplicateResource('This attachment already exists', attachment);
         return new AttachmentCollection([...this.attachments, attachment]);
@@ -33,8 +33,8 @@ export default class AttachmentCollection implements Collection{
         return false;
     }
 
-    public size(): IntNumber {
-        return new IntNumber(this.attachments.length);
+    public size(): number {
+        return this.attachments.length;
     }
 
     public primitiveCollection(): Attachment[] {

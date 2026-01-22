@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import ValueObject from "../../../../shared/core/objects/ValueObject";
+import TaskStateNotSupported from "../error/TaskStateNotSupported";
 import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState.type";
 
 export default class TaskState extends ValueObject{
@@ -8,7 +8,7 @@ export default class TaskState extends ValueObject{
     constructor(state: AllowedTaskState){
         super();
 
-        if(!ALLOWED_TASK_STATE.includes(state)) throw new InvalidParameters("Task state no supported", state);
+        if(!ALLOWED_TASK_STATE.includes(state)) throw new TaskStateNotSupported(state);
         this.state = state;
     }
 

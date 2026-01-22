@@ -1,5 +1,5 @@
 import ConflictDuplicateResource from "../../../../shared/core/errors/ConflictDuplicatedResource";
-import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
+import LimitExceeded from "../../../../shared/core/errors/LimitExceeded";
 import ResourceNotFound from "../../../../shared/core/errors/ResourceNotFound";
 import type Collection from "../../../../shared/core/objects/Collection";
 import IntNumber from "../../../../shared/core/objects/IntNumber";
@@ -15,7 +15,7 @@ export default class CategoryCollection implements Collection{
     }
 
     public addItem(category: TaskCategory): CategoryCollection {
-        if(this.categories.length + 1 > this.limitOfCategories)throw new InvalidOperation('Categories limit exceeded');
+        if(this.categories.length + 1 > this.limitOfCategories)throw new LimitExceeded('Categories limit exceeded');
         const exists = this.categories.find(c => c.getId() === category.getId());
         if(exists)throw new ConflictDuplicateResource('This category already exists in this task', category);
         return new CategoryCollection([...this.categories, category]);        
@@ -33,8 +33,8 @@ export default class CategoryCollection implements Collection{
         return false;
     }
 
-    public size(): IntNumber {
-        return new IntNumber(this.categories.length);
+    public size(): number {
+        return this.categories.length;
     }
 
     public primitiveCollection(): TaskCategory[] {
