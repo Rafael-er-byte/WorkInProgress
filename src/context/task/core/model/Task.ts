@@ -39,6 +39,7 @@ import TaskCreated from "../events/TaskCreated";
 import type { Priority } from "../types/Prioroty.type";
 import TaskState from "../objects/TaskState";
 import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState.type";
+import TaskDeleted from "../events/TaskDeleted";
 
 export default class Task extends Entity{
     private title!: TaskTitle;
@@ -86,6 +87,12 @@ export default class Task extends Entity{
         const task = new Task(params);
         task.addEvent(new TaskCreated(DateTime.now(), contributor, new TaskId(params.id)));
         return task;
+    }
+
+    public static delete(task:Task, contributor: Contributor):TaskId{
+        if(!task.isArchived())throw new InvalidOperation("Task needs to be archived before delete it", task.getID());
+        task.addEvent(new TaskDeleted(DateTime.now(), contributor, task.getID()));
+        return task.getID();
     }
 
     public static fromPrimitives(params: iTaskParams): Task {
@@ -213,6 +220,10 @@ export default class Task extends Entity{
     public isOverDue(): boolean{
         if(this.dueDate instanceof DateTime && DateTime.isAfter(this.dueDate, DateTime.now()))return false;
         return true;
+    }
+
+    public getID(): TaskId{
+        return this.id;
     }
 
     public toPrimitives(): iTaskParams {
