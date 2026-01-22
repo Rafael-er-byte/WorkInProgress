@@ -67,7 +67,11 @@ export default class Task extends Entity{
 
     }
 
-    static fromPrimitives(params: iTaskParams): Entity {
+    public static create(params: iTaskParams): Task{
+
+    }
+
+    public static fromPrimitives(params: iTaskParams): Task {
         return new Task(params);
     }
 
