@@ -1,4 +1,4 @@
-import ValueObject from "../../../../shared/core/objects/ValueObject";
+import ValueObject from "../../../shared/core/objects/ValueObject";
 import TaskPriorityNorSupported from "../error/TaskPriorityNotSupported";
 import { PRIORITY_LEVEL, type Priority } from "../types/Prioroty.type";
 

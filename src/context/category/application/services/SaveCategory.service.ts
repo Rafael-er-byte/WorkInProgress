@@ -4,8 +4,8 @@ import Action from "../dtos/out/ActionDto";
 import type iCategoryRepository from "../contracts/repository/iRepository";
 import type IDManager from "../../../contracts/utils/IDManager";
 import type DateManager from "../../../contracts/utils/DateManager";
-import CoreError from "../../../../shared/core/errors/CoreError";
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import CoreError from "../../../shared/core/errors/CoreError";
+import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
 
 export default class SaveCategory{
     constructor(

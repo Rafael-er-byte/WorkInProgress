@@ -1,7 +1,7 @@
-import CoreError from "../../../../shared/core/errors/CoreError";
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import OperationNotAllowed from "../../../../shared/core/errors/OperationNotAllowed";
-import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
+import CoreError from "../../../shared/core/errors/CoreError";
+import InvalidParameters from "../../../shared/core/errors/InvalidParameters";
+import OperationNotAllowed from "../../../shared/core/errors/OperationNotAllowed";
+import ResourceNotFoud from "../../../shared/core/errors/ResourceNotFound";
 import type iCategoryRepository from "../contracts/repository/iRepository";
 import type TaskService from "../contracts/services/TaskService";
 import Action from "../dtos/out/ActionDto";

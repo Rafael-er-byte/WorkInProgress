@@ -1,4 +1,4 @@
-import ID from "../../../../shared/core/objects/ID";
+import ID from "../../../shared/core/objects/ID";
 
 export default class TaskId{
     private id!:ID;

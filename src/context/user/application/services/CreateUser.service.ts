@@ -1,4 +1,4 @@
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
 import type DateManager from "../../../contracts/utils/DateManager";
 import type IDManager from "../../../contracts/utils/IDManager";
 import UserBuilder from "../../core/model/UserBuilder";

@@ -1,5 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
-import type IDManager from '../../context/contracts/utils/IDManager';
+import type IDManager from '../../contracts/utils/IDManager';
 
 export default class UUID implements IDManager{
     generateId():string{

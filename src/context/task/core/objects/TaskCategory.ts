@@ -1,5 +1,5 @@
-import type ID from "../../../../shared/core/objects/ID";
-import ValueObject from "../../../../shared/core/objects/ValueObject";
+import type ID from "../../../shared/core/objects/ID";
+import ValueObject from "../../../shared/core/objects/ValueObject";
 
 export default class TaskCategory extends ValueObject{
     private id!:ID;

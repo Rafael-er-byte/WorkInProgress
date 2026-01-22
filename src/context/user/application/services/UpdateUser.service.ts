@@ -1,4 +1,4 @@
-import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
+import ResourceNotFoud from "../../../shared/core/errors/ResourceNotFound";
 import type User from "../../core/model/User";
 import type iUserRepository from "../contracts/repository/iUserRepository.repository";
 import type UpdateUserDto from "../dtos/in/UpdateUserDto";

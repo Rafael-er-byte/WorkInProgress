@@ -1,7 +1,7 @@
-import ID from "../../../../shared/core/objects/ID";
-import type IntNumber from "../../../../shared/core/objects/IntNumber";
-import Text from "../../../../shared/core/objects/Text";
-import ValueObject from "../../../../shared/core/objects/ValueObject";
+import ID from "../../../shared/core/objects/ID";
+import type IntNumber from "../../../shared/core/objects/IntNumber";
+import Text from "../../../shared/core/objects/Text";
+import ValueObject from "../../../shared/core/objects/ValueObject";
 
 export default class TaskPosition extends ValueObject{
     private id!: ID;

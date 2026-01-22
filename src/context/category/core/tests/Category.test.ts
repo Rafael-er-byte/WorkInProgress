@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import InvalidParameters from "../../../shared/core/errors/InvalidParameters";
+import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
 import Category from "../model/Category";
 
 describe('Tests for category model', () => {

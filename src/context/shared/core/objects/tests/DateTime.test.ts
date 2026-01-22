@@ -1,4 +1,4 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
+import InvalidParameters from "../../errors/InvalidParameters";
 import DateTime from "../DateTime";
 import Text from "../Text";
 import IntNumber from "../IntNumber";

@@ -1,2 +1,2 @@
-import URL from '../../../../shared/core/objects/URL';
+import URL from '../../../shared/core/objects/URL';
 export default URL;

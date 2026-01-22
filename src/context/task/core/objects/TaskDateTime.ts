@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import DateTime from "../../../../shared/core/objects/DateTime";
+import InvalidParameters from "../../../shared/core/errors/InvalidParameters";
+import DateTime from "../../../shared/core/objects/DateTime";
 
 export default class TaskDateTime{
     private date!:DateTime;

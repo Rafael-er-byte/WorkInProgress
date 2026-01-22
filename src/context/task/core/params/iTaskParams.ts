@@ -1,5 +1,5 @@
-import type Attachment from "../../../../shared/core/objects/Attachment";
-import type Contributor from "../../../../shared/core/objects/Contributor";
+import type Attachment from "../../../shared/core/objects/Attachment";
+import type Contributor from "../../../shared/core/objects/Contributor";
 import type TaskCategory from "../objects/TaskCategory";
 import type TaskPosition from "../objects/TaskPosition";
 

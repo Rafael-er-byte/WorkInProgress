@@ -1,5 +1,5 @@
-import IntNumber from "../../../../shared/core/objects/IntNumber";
-import ValueObject from "../../../../shared/core/objects/ValueObject";
+import IntNumber from "../../../shared/core/objects/IntNumber";
+import ValueObject from "../../../shared/core/objects/ValueObject";
 
 export default class TaskNoteCounter extends ValueObject{
     private quantity:number = 0;

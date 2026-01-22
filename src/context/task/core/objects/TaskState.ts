@@ -1,4 +1,4 @@
-import ValueObject from "../../../../shared/core/objects/ValueObject";
+import ValueObject from "../../../shared/core/objects/ValueObject";
 import TaskStateNotSupported from "../error/TaskStateNotSupported";
 import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState.type";
 

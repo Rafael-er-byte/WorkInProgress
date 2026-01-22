@@ -2,7 +2,7 @@ import type CategoryFilterDto from "../dtos/in/CategoryFilterDto";
 import type Category from "../../core/model/Category";
 import type iCategoryRepository from "../contracts/repository/iRepository";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
+import InvalidParameters from "../../../shared/core/errors/InvalidParameters";
 import { VALID_SORTS } from "../types/TypeSorting.type";
 
 export default class GetCategories{

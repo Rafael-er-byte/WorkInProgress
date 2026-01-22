@@ -1,5 +1,5 @@
-import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import InvalidOperation from "../../../shared/core/errors/InvalidOperation";
+import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
 import type User from "../../core/model/User";
 import type iUserRepository from "../contracts/repository/iUserRepository.repository";
 import type EmailDto from "../dtos/in/EmailDto";

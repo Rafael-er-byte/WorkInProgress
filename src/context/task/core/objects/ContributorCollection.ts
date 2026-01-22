@@ -1,10 +1,10 @@
 import TaskBusinessRules from "../constants/TaskBuisnessRules";
-import Contributor from "../../../../shared/core/objects/Contributor";
-import ConflictDuplicateResource from "../../../../shared/core/errors/ConflictDuplicatedResource";
-import ResourceNotFound from "../../../../shared/core/errors/ResourceNotFound";
-import type Collection from "../../../../shared/core/objects/Collection";
-import IntNumber from "../../../../shared/core/objects/IntNumber";
-import LimitExceeded from "../../../../shared/core/errors/LimitExceeded";
+import Contributor from "../../../shared/core/objects/Contributor";
+import ConflictDuplicateResource from "../../../shared/core/errors/ConflictDuplicatedResource";
+import ResourceNotFound from "../../../shared/core/errors/ResourceNotFound";
+import type Collection from "../../../shared/core/objects/Collection";
+import IntNumber from "../../../shared/core/objects/IntNumber";
+import LimitExceeded from "../../../shared/core/errors/LimitExceeded";
 
 export default class ContributorCollection implements Collection{
     private readonly limitOfcontributors = TaskBusinessRules.maxContributors();

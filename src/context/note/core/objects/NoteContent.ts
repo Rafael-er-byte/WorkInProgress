@@ -1,6 +1,6 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import Text from "../../../../shared/core/objects/Text";
-import ValueObject from "../../../../shared/core/objects/ValueObject";
+import InvalidParameters from "../../../shared/core/errors/InvalidParameters";
+import Text from "../../../shared/core/objects/Text";
+import ValueObject from "../../../shared/core/objects/ValueObject";
 
 export default class NoteContent extends ValueObject{
     private content!: Text;

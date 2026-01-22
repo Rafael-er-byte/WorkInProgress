@@ -1,4 +1,4 @@
-import type { Languages } from "../../../../../shared/config/constants/AllowedLanguages";
+import type { Languages } from "../../../../shared/config/constants/AllowedLanguages";
 import type User from "../../../../user/core/model/User";
 
 export default interface iAppConfig{

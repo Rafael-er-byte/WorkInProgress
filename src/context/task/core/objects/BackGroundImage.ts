@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import type Attachment from "../../../../shared/core/objects/Attachment";
+import InvalidParameters from "../../../shared/core/errors/InvalidParameters";
+import type Attachment from "../../../shared/core/objects/Attachment";
 
 export default class BackGroundImage{
     private image!: Attachment;

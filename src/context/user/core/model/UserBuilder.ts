@@ -1,5 +1,5 @@
-import FailedToBuild from "../../../../shared/core/errors/FailedToBuild";
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import FailedToBuild from "../../../shared/core/errors/FailedToBuild";
+import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
 import BUILD_KEY from "../token/UserBuilderKey";
 import Email from "../objects/Email";
 import User from "./User";;

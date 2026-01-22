@@ -1,11 +1,11 @@
-import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import InvalidOperation from "../../../shared/core/errors/InvalidOperation";
+import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
 import Email from "../objects/Email";
 import Password from "../objects/Password";
 import Url from "../objects/URL";
 import type UserBuilder from "./UserBuilder";
 import type BUILD_KEY from "../token/UserBuilderKey";
-import FailedToBuild from "../../../../shared/core/errors/FailedToBuild";
+import FailedToBuild from "../../../shared/core/errors/FailedToBuild";
 
 export default class User{
     private id!:string;

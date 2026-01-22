@@ -1,9 +1,9 @@
-import ConflictDuplicateResource from "../../../../shared/core/errors/ConflictDuplicatedResource";
-import LimitExceeded from "../../../../shared/core/errors/LimitExceeded";
-import ResourceNotFound from "../../../../shared/core/errors/ResourceNotFound";
-import type Attachment from "../../../../shared/core/objects/Attachment";
-import type Collection from "../../../../shared/core/objects/Collection";
-import IntNumber from "../../../../shared/core/objects/IntNumber";
+import ConflictDuplicateResource from "../../../shared/core/errors/ConflictDuplicatedResource";
+import LimitExceeded from "../../../shared/core/errors/LimitExceeded";
+import ResourceNotFound from "../../../shared/core/errors/ResourceNotFound";
+import type Attachment from "../../../shared/core/objects/Attachment";
+import type Collection from "../../../shared/core/objects/Collection";
+import IntNumber from "../../../shared/core/objects/IntNumber";
 import TaskBusinessRules from "../constants/TaskBuisnessRules";
 
 export default class AttachmentCollection implements Collection{

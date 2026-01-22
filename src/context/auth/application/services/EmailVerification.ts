@@ -6,9 +6,9 @@ import type iUserRepository from "../interfaces/repository/iUserRepository";
 import type iCodeGenerator from "../interfaces/utils/iCodeGenerator";
 import EmailDto from "../dtos/in/EmailDto";
 import type iMessageFactory from "../interfaces/types/iMessageFactory";
-import { MessageTypes } from "../../../../shared/config/constants/MessageTypes";
-import AppError from "../../../../shared/core/errors/api/AppError";
-import Unauthorized from "../../../../shared/core/errors/api/Unauthorized";
+import { MessageTypes } from "../../../shared/config/constants/MessageTypes";
+import AppError from "../../../shared/core/errors/api/AppError";
+import Unauthorized from "../../../shared/core/errors/api/Unauthorized";
 import type Msg from "../interfaces/types/Msg";
 import type UserIdDto from "../dtos/in/UserIdDtos";
 

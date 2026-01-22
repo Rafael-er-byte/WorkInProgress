@@ -2,10 +2,10 @@ import type CategoryDto from "../dtos/in/CategoryDto";
 import type iCategoryRepository from "../contracts/repository/iRepository";
 import Category from "../../core/model/Category";
 import Action from "../dtos/out/ActionDto";
-import CoreError from "../../../../shared/core/errors/CoreError";
-import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
-import OperationNotAllowed from "../../../../shared/core/errors/OperationNotAllowed";
+import CoreError from "../../../shared/core/errors/CoreError";
+import ResourceNotFoud from "../../../shared/core/errors/ResourceNotFound";
+import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
+import OperationNotAllowed from "../../../shared/core/errors/OperationNotAllowed";
 
 export default class UpdateCategory{
     constructor(

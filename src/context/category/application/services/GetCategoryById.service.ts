@@ -1,6 +1,6 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
-import OperationNotAllowed from "../../../../shared/core/errors/OperationNotAllowed";
-import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
+import InvalidParameters from "../../../shared/core/errors/InvalidParameters";
+import OperationNotAllowed from "../../../shared/core/errors/OperationNotAllowed";
+import ResourceNotFoud from "../../../shared/core/errors/ResourceNotFound";
 import Category from "../../core/model/Category";
 import type iCategoryRepository from "../contracts/repository/iRepository";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";

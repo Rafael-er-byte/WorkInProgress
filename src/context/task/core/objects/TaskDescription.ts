@@ -1,6 +1,6 @@
-import LimitExceeded from "../../../../shared/core/errors/LimitExceeded";
-import Text from "../../../../shared/core/objects/Text";
-import ValueObject from "../../../../shared/core/objects/ValueObject";
+import LimitExceeded from "../../../shared/core/errors/LimitExceeded";
+import Text from "../../../shared/core/objects/Text";
+import ValueObject from "../../../shared/core/objects/ValueObject";
 import TaskBusinessRules from "../constants/TaskBuisnessRules";
 
 export default class TaskDescription extends ValueObject{

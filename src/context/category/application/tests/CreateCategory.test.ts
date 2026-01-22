@@ -1,12 +1,12 @@
 import SaveCategory from "../services/SaveCategory.service";
 import { mockRepo } from "./mocks/repository/MockRepository";
-import { createIdManagerMock } from "../../../../shared/mocks/IdManagerMock";
-import { createDateManagerMock } from "../../../../shared/mocks/DateManagerMock";
+import { createIdManagerMock } from "../../../shared/mocks/IdManagerMock";
+import { createDateManagerMock } from "../../../shared/mocks/DateManagerMock";
 import type CategoryDto from "../dtos/in/CategoryDto";
 import Action from "../dtos/out/ActionDto";
 import Url from "../../core/objects/URL";
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
-import CoreError from "../../../../shared/core/errors/CoreError";
+import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
+import CoreError from "../../../shared/core/errors/CoreError";
 
 describe('Create category service tests', () => {
     let idManagerMock:ReturnType<typeof createIdManagerMock>;

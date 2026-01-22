@@ -1,7 +1,7 @@
-import Contributor from "../../../../shared/core/objects/Contributor";
-import type DateTime from "../../../../shared/core/objects/DateTime";
-import ID from "../../../../shared/core/objects/ID";
-import Text from "../../../../shared/core/objects/Text";
+import Contributor from "../../../shared/core/objects/Contributor";
+import type DateTime from "../../../shared/core/objects/DateTime";
+import ID from "../../../shared/core/objects/ID";
+import Text from "../../../shared/core/objects/Text";
 import type NoteContent from "../objects/NoteContent";
 
 export default class Note{

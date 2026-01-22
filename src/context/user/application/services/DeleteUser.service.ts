@@ -1,5 +1,5 @@
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
-import ResourceNotFoud from "../../../../shared/core/errors/ResourceNotFound";
+import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
+import ResourceNotFoud from "../../../shared/core/errors/ResourceNotFound";
 import type iUserRepository from "../contracts/repository/iUserRepository.repository";
 import type UserIdDto from "../dtos/in/UserIdDto";
 import Action from "../dtos/out/Action";

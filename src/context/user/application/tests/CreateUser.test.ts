@@ -1,13 +1,13 @@
 import { userRespository } from "./mocks/UserRepository.mock";
-import { createIdManagerMock } from "../../../../shared/mocks/IdManagerMock";
-import { createDateManagerMock } from "../../../../shared/mocks/DateManagerMock";
+import { createIdManagerMock } from "../../../shared/mocks/IdManagerMock";
+import { createDateManagerMock } from "../../../shared/mocks/DateManagerMock";
 import { hasherMock } from "./mocks/Hasher.mock";
 import CreateUser from "../services/CreateUser.service";
 import GenerateUserName from "../utils/GenerateUserName";
 import type UserDto from "../dtos/in/UserDto";
 import Action from "../dtos/out/Action";
 import User from "../../core/model/User";
-import MissingRequiredParameters from "../../../../shared/core/errors/MissingRequiredParameters";
+import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
 
 describe('Create user service tests', () => {
     let IdManager!: ReturnType<typeof createIdManagerMock>;

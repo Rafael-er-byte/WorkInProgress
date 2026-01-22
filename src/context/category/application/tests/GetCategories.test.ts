@@ -1,4 +1,4 @@
-import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
+import InvalidParameters from "../../../shared/core/errors/InvalidParameters";
 import Category from "../../core/model/Category";
 import type CategoryFilterDto from "../dtos/in/CategoryFilterDto";
 import ResponseCategoryDto from "../dtos/out/ResponseCategoryDto";
