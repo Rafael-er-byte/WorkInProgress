@@ -1,4 +1,3 @@
-import { title } from "process";
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import Entity from "../../../../shared/core/model/Entity";
@@ -7,7 +6,6 @@ import type Attachment from "../../../../shared/core/objects/Attachment";
 import Contributor from "../../../../shared/core/objects/Contributor";
 import DateTime from "../../../../shared/core/objects/DateTime";
 import None from "../../../../shared/core/objects/None";
-import type Text from "../../../../shared/core/objects/Text";
 import TaskArchived from "../events/TaskArchived";
 import TaskAttachmentAdded from "../events/TaskAttachmentAdded";
 import TaskAttachmentDeleted from "../events/TaskAttachmentDeleted";
@@ -28,23 +26,25 @@ import TitleUpdated from "../events/TitleUpdated";
 import AttachmentCollection from "../objects/AttachmentCollection";
 import BackGroundImage from "../objects/BackGroundImage";
 import CategoryCollection from "../objects/CategoryCollection";
-import Completed from "../objects/Completed";
 import ContributorCollection from "../objects/ContributorCollection";
-import Pending from "../objects/Pending";
 import TaskCategory from "../objects/TaskCategory";
 import TaskDateTime from "../objects/TaskDateTime";
 import TaskDescription from "../objects/TaskDescription";
-import type TaskId from "../objects/TaskId";
-import type TaskPosition from "../objects/TaskPosition";
-import type TaskPriority from "../objects/TaskPriority";
+import TaskId from "../objects/TaskId";
+import TaskPosition from "../objects/TaskPosition";
+import TaskPriority from "../objects/TaskPriority";
 import TaskTitle from "../objects/TaskTitle";
 import type iTaskParams from "../params/iTaskParams";
+import TaskCreated from "../events/TaskCreated";
+import type { Priority } from "../types/Prioroty.type";
+import TaskState from "../objects/TaskState";
+import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState.type";
 
 export default class Task extends Entity{
     private title!: TaskTitle;
     private priority!: TaskPriority;
     private position!:TaskPosition;
-    private state!: Completed | Pending;
+    private state!: TaskState
     private archived!: Archived | None;
 
     private description: TaskDescription | None = new None();
@@ -63,12 +63,29 @@ export default class Task extends Entity{
          params: iTaskParams
     ) {
         super();
+        this.title = new TaskTitle(params.title);
+        this.id = new TaskId(params.id);
+        this.createdAt = DateTime.create(params.createdAt);
+        this.priority = new TaskPriority(params.priority as Priority);
+        if(!(params.position instanceof TaskPosition)) throw new InvalidParameters("The position of the task is not valid", params.position);
+        this.position = params.position;
+        this.state = new TaskState(params.state as AllowedTaskState);
+        this.archived = params.archived === true? new Archived: new None();
 
+        if(params.description) this.description = new TaskDescription(params.description);
+        if(params.image) this.image = new BackGroundImage(params.image);
+        if(params.startDate) this.startDate = DateTime.create(params.startDate);
+        if(params.dueDate) this.dueDate = DateTime.create(params.dueDate);
 
+        this.categories = new CategoryCollection(params.categories);
+        this.attachments = new AttachmentCollection(params.attachments);
+        this.contributors = new ContributorCollection(params.contributors);
     }
 
-    public static create(params: iTaskParams): Task{
-
+    public static create(params: iTaskParams, contributor: Contributor): Task{
+        const task = new Task(params);
+        task.addEvent(new TaskCreated(DateTime.now(), contributor, new TaskId(params.id)));
+        return task;
     }
 
     public static fromPrimitives(params: iTaskParams): Task {
@@ -170,18 +187,18 @@ export default class Task extends Entity{
         this.addEvent(new TaskCategoryAdded(DateTime.now(), modifier, category));
     }
 
-    public markAsFinished(completed:Completed): void {
+    public markAsFinished(contributor: Contributor): void {
         if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
-        if(this.state instanceof Completed) return;
-        this.state = completed;
-        this.addEvent(new TaskFinished(this.state.getCompletedDate(), this.state.getContributor()));
+        if(this.state.isCompleted()) return;
+        this.state = new TaskState(ALLOWED_TASK_STATE[0]);
+        this.addEvent(new TaskFinished(DateTime.now(), contributor));
     }
 
-    public markAsPending(pending: Pending): void {
+    public markAsPending(contributor: Contributor): void {
         if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
-        if(this.state instanceof Pending)return;
-        this.state = pending;
-        this.addEvent(new TaskMarkedAsPending(this.state.getCompletedDate() as DateTime, this.state.getContributor() as Contributor));
+        if(!this.state.isCompleted())return;
+        this.state = new TaskState(ALLOWED_TASK_STATE[1]);
+        this.addEvent(new TaskMarkedAsPending(DateTime.now(), contributor));
     }
 
     public isArchived(): boolean{
@@ -190,8 +207,7 @@ export default class Task extends Entity{
     }
 
     public isCompleted(): boolean{
-        if(this.state instanceof Completed)return true;
-        return false;
+        return this.state.isCompleted();
     }
 
     public isOverDue(): boolean{
@@ -205,7 +221,7 @@ export default class Task extends Entity{
         const imageTask = this.image instanceof BackGroundImage? this.image.getImage(): undefined;
         const startDate = this.startDate instanceof TaskDateTime? this.startDate.getDate().getDate(): undefined;
         const dueDate = this.dueDate instanceof TaskDateTime? this.dueDate.getDate().getDate(): undefined;
-        const state = this.state instanceof Completed? "completed": "pending";
+        const state = this.state.isCompleted()? ALLOWED_TASK_STATE[0]: ALLOWED_TASK_STATE[1];
 
         return {
             title: this.title.getTitle(),

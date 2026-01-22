@@ -1,5 +1,6 @@
+import InvalidParameters from "../errors/InvalidParameters";
 import isStringANumber from "../helpers/ValidateNumber.helper";
-import type Text from "./Text";
+import Text from "./Text";
 import ValueObject from "./ValueObject";
 
 export default class DateTime extends ValueObject{
@@ -14,8 +15,14 @@ export default class DateTime extends ValueObject{
         return new DateTime(new Date());
     }
 
-    static validateDate(originalDate:Text):boolean{
-        const date = originalDate.getText();
+    static create(date:string): DateTime{
+        if(!this.validateDate(date))throw new InvalidParameters("Invalid date");
+        return new DateTime(new Date(date));
+    }
+
+    static validateDate(originalDate:string):boolean{
+        const textDate = new Text(originalDate);
+        const date = textDate.getText();
 
         const [dateStr, timeStr] = date.split('T');
         if(!dateStr || !timeStr)return false;

@@ -1,5 +1,5 @@
 import TaskBusinessRules from "../constants/TaskBuisnessRules";
-import type Contributor from "../../../../shared/core/objects/Contributor";
+import Contributor from "../../../../shared/core/objects/Contributor";
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import ConflictDuplicateResource from "../../../../shared/core/errors/ConflictDuplicatedResource";
 import ResourceNotFound from "../../../../shared/core/errors/ResourceNotFound";

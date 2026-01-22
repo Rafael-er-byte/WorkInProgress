@@ -23,5 +23,4 @@ export default abstract class Entity{
     }
 
     abstract toPrimitives():unknown
-    abstract fromPrimitives(params:unknown): Entity
 };
