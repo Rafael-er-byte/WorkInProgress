@@ -1,7 +1,7 @@
 import type DomainEvent from "../events/DomainEvent";
 import DateTime from "../objects/DateTime";
 
-export default class Entity{
+export default abstract class Entity{
     private history:DomainEvent[] = [];
     private lastUpdate!:DateTime
     
@@ -21,4 +21,7 @@ export default class Entity{
     public getLastUpdate(): DateTime{
         return this.lastUpdate;
     }
+
+    abstract toPrimitives():unknown
+    abstract fromPrimitives(params:unknown): Entity
 };

@@ -1,17 +1,18 @@
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
-import type Text from "../../../../shared/core/objects/Text";
+import Text from "../../../../shared/core/objects/Text";
 import ValueObject from "../../../../shared/core/objects/ValueObject";
 import TaskBusinessRules from "../constants/TaskBuisnessRules";
 
 export default class TaskTitle extends ValueObject{
     private title!:Text;
 
-    constructor(title:Text){
+    constructor(title:string){
         super();
-        if(title.size() > TaskBusinessRules.titleLimit())throw new InvalidOperation('Title size limit exceeded');
+        const textTitle = new Text(title);
+        if(textTitle.size() > TaskBusinessRules.titleLimit())throw new InvalidOperation('Title size limit exceeded');
     }
 
-    public getTitle():Text{
-        return this.title;
+    public getTitle():string{
+        return this.title.getText();
     }
 };

@@ -5,4 +5,5 @@ export default interface Collection{
     deleteItem(object:unknown): Collection;
     find(object:unknown): boolean;
     size():IntNumber;
+    primitiveCollection(): unknown[];
 };

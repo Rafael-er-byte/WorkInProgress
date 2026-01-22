@@ -36,4 +36,8 @@ export default class AttachmentCollection implements Collection{
     public size(): IntNumber {
         return new IntNumber(this.attachments.length);
     }
+
+    public primitiveCollection(): Attachment[] {
+        return [...this.attachments];
+    }
 };

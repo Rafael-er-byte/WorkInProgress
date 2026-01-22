@@ -36,4 +36,8 @@ export default class ContributorCollection implements Collection{
     public size(): IntNumber{
         return new IntNumber(this.contributors.length);
     }
+
+    public primitiveCollection(): Contributor[] {
+        return [...this.contributors];
+    }
 };

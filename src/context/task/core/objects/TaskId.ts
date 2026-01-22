@@ -7,11 +7,7 @@ export default class TaskId{
         this.id = new ID(id);
     }
 
-    static generateTaskId(): TaskId{
-        return new TaskId(ID.generateId().getId());
-    }
-
-    getID():string{
+    public getID():string{
         return this.id.getId();
     }
 };

@@ -1,18 +1,19 @@
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
-import type Text from "../../../../shared/core/objects/Text";
+import Text from "../../../../shared/core/objects/Text";
 import ValueObject from "../../../../shared/core/objects/ValueObject";
 import TaskBusinessRules from "../constants/TaskBuisnessRules";
 
 export default class TaskDescription extends ValueObject{
     private description!:Text;
 
-    constructor(description:Text){
+    constructor(description:string){
         super();
-        if(description.size() > TaskBusinessRules.descriptionLimit())throw new InvalidOperation('Description size limit exceeded');
-        this.description = description;
+        const textDescription = new Text(description);
+        if(textDescription.size() > TaskBusinessRules.descriptionLimit())throw new InvalidOperation('Description size limit exceeded');
+        this.description = textDescription;
     }
 
-    public getDescription():Text{
-        return this.description;
+    public getDescription():string{
+        return this.description.getText();
     }
 };

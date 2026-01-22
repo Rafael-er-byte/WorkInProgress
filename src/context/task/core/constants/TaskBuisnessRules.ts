@@ -1,10 +1,9 @@
 export default class TaskBusinessRules {
-    private static readonly TITLE_LIMIT_SIZE: number = 100;
-    private static readonly DESCRIPTION_LIMIT_SIZE: number = 400;
-    private static readonly MAX_CATEGORIES: number = 6;
-    private static readonly MAX_NOTES: number = 25;
-    private static readonly MAX_ATTACHMENTS: number = 5;
-    private static readonly MAX_CONTRIBUTORS: number = 20;
+    private static readonly TITLE_LIMIT_SIZE: number = 150;
+    private static readonly DESCRIPTION_LIMIT_SIZE: number = 600;
+    private static readonly MAX_CATEGORIES: number = 10;
+    private static readonly MAX_ATTACHMENTS: number = 8;
+    private static readonly MAX_CONTRIBUTORS: number = 200;
 
     public static titleLimit(): number {
         return this.TITLE_LIMIT_SIZE;
@@ -16,10 +15,6 @@ export default class TaskBusinessRules {
 
     public static maxCategories(): number {
         return this.MAX_CATEGORIES;
-    }
-
-    public static maxNotes(): number {
-        return this.MAX_NOTES;
     }
 
     public static maxAttachments(): number {

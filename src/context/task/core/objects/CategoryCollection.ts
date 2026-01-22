@@ -36,4 +36,8 @@ export default class CategoryCollection implements Collection{
     public size(): IntNumber {
         return new IntNumber(this.categories.length);
     }
+
+    public primitiveCollection(): TaskCategory[] {
+        return [...this.categories];
+    }
 };

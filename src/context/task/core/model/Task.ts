@@ -1,3 +1,4 @@
+import { title } from "process";
 import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import Entity from "../../../../shared/core/model/Entity";
@@ -25,18 +26,19 @@ import TaskBeginDateUpdated from "../events/TaskStartDateUpdated";
 import TaskUnarchived from "../events/TaskUnarchived";
 import TitleUpdated from "../events/TitleUpdated";
 import AttachmentCollection from "../objects/AttachmentCollection";
-import type BackGroundImage from "../objects/BackGroundImage";
+import BackGroundImage from "../objects/BackGroundImage";
 import CategoryCollection from "../objects/CategoryCollection";
 import Completed from "../objects/Completed";
 import ContributorCollection from "../objects/ContributorCollection";
 import Pending from "../objects/Pending";
 import TaskCategory from "../objects/TaskCategory";
-import type TaskDateTime from "../objects/TaskDateTime";
-import type TaskDescription from "../objects/TaskDescription";
+import TaskDateTime from "../objects/TaskDateTime";
+import TaskDescription from "../objects/TaskDescription";
 import type TaskId from "../objects/TaskId";
 import type TaskPosition from "../objects/TaskPosition";
 import type TaskPriority from "../objects/TaskPriority";
-import type TaskTitle from "../objects/TaskTitle";
+import TaskTitle from "../objects/TaskTitle";
+import type iTaskParams from "../params/iTaskParams";
 
 export default class Task extends Entity{
     private title!: TaskTitle;
@@ -58,9 +60,15 @@ export default class Task extends Entity{
     private readonly createdAt!:DateTime;
 
     public constructor(
-         
+         params: iTaskParams
     ) {
-        super()
+        super();
+
+
+    }
+
+    static fromPrimitives(params: iTaskParams): Entity {
+        return new Task(params);
     }
 
     public removeCategory(category: TaskCategory, modifier: Contributor): void {
@@ -172,60 +180,47 @@ export default class Task extends Entity{
         this.addEvent(new TaskMarkedAsPending(this.state.getCompletedDate() as DateTime, this.state.getContributor() as Contributor));
     }
 
-    public getTitle(): Text {
-        return this.title.getTitle();
-    }
-
-    public getDescription(): Text | None{
-        return this.description;
-    }
-
-    public getPriority(): TaskPriority{
-        return this.priority;
-    }
-
-    public getImageUrl(): Attachment | None{
-       return this.image
-    }
-
-    public getState(): Completed | Pending {
-        return this.state;
-    }
-
-    public getCategories(): CategoryCollection {
-        return this.categories; 
-    }
-
-    public getStartDate(): DateTime | None{
-        return this.startDate;
-    }
-
-    public getPosition(): TaskPosition{
-        return this.position;
-    }
-
-    public getdueDate(): DateTime | None{
-        return this.dueDate;
-    }
-
-    public getId(): TaskId{
-        return this.id;
-    }
-
-    public getContributors(): ContributorCollection{
-        return this.contributors;
-    }
-
-    public getAttachments(): AttachmentCollection{
-        return this.attachments;
-    }
-
-    public getCreationDate():DateTime{
-        return this.createdAt;
-    }
-
     public isArchived(): boolean{
         if(this.archived instanceof Archived)return true;
         return false;
+    }
+
+    public isCompleted(): boolean{
+        if(this.state instanceof Completed)return true;
+        return false;
+    }
+
+    public isOverDue(): boolean{
+        if(this.dueDate instanceof DateTime && DateTime.isAfter(this.dueDate, DateTime.now()))return false;
+        return true;
+    }
+
+    public toPrimitives(): iTaskParams {
+        const archivedTask = this.archived instanceof Archived? true: false;
+        const descriptionTask = this.description instanceof TaskDescription? this.description.getDescription(): undefined;
+        const imageTask = this.image instanceof BackGroundImage? this.image.getImage(): undefined;
+        const startDate = this.startDate instanceof TaskDateTime? this.startDate.getDate().getDate(): undefined;
+        const dueDate = this.dueDate instanceof TaskDateTime? this.dueDate.getDate().getDate(): undefined;
+        const state = this.state instanceof Completed? "completed": "pending";
+
+        return {
+            title: this.title.getTitle(),
+            priority: this.priority.getPriority(),
+            position: this.position,
+            state: state,
+            archived: archivedTask,
+
+            description: descriptionTask,
+            image: imageTask,
+            startDate: startDate,
+            dueDate: dueDate,
+
+            categories: this.categories.primitiveCollection(),
+            contributors: this.contributors.primitiveCollection(),
+            attachments: this.attachments.primitiveCollection(),
+
+            id:this.id.getID(),
+            createdAt:this.createdAt.getDate()
+        };
     }
 };
