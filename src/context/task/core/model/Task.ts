@@ -1,4 +1,3 @@
-import InvalidOperation from "../../../../shared/core/errors/InvalidOperation";
 import InvalidParameters from "../../../../shared/core/errors/InvalidParameters";
 import Entity from "../../../../shared/core/model/Entity";
 import Archived from "../../../../shared/core/objects/Archived";
@@ -41,6 +40,10 @@ import TaskState from "../objects/TaskState";
 import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState.type";
 import TaskDeleted from "../events/TaskDeleted";
 import TaskNoteCounter from "../objects/TaskNotesCounter";
+import CannotModifyArchivedTasks from "../error/CannotModifyArchivedTasks";
+import TaskNeedsToBeArchivedBeforeDeleteIt from "../error/TaskNeedsToBeArchivedBeforeDeleteIt";
+import InvalidStartDate from "../error/InvalidStartDateTime";
+import InvalidDueDate from "../error/InvalidDueDateTime";
 
 export default class Task extends Entity{
     private title!: TaskTitle;
@@ -94,7 +97,7 @@ export default class Task extends Entity{
     }
 
     public static delete(task:Task, contributor: Contributor):TaskId{
-        if(!task.isArchived())throw new InvalidOperation("Task needs to be archived before delete it", task.getID());
+        if(!task.isArchived())throw new TaskNeedsToBeArchivedBeforeDeleteIt(task.getID());
         task.addEvent(new TaskDeleted(DateTime.now(), contributor, task.getID()));
         return task.getID();
     }
@@ -104,25 +107,25 @@ export default class Task extends Entity{
     }
 
     public removeCategory(category: TaskCategory, modifier: Contributor): void {
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.categories = this.categories.deleteItem(category);
         this.addEvent(new TaskCategoryDeleted(DateTime.now(), modifier, category));
     }
 
     public removeContributor(contributor: Contributor, modifier: Contributor): void{
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.contributors = this.contributors.deleteItem(contributor);
         this.addEvent(new TaskContributorDeleted(DateTime.now(), modifier, contributor));
     }
 
     public deleteAttachment(attachment: Attachment, modifier: Contributor): void{
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.attachments = this.attachments.deleteItem(attachment);
         this.addEvent(new TaskAttachmentDeleted(DateTime.now(), modifier, attachment));
     }
 
     public move(list:TaskPosition, modifier: Contributor): void{
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.position = list;
         this.addEvent(new TaskMoved(DateTime.now(), modifier, this.position));
     }
@@ -138,75 +141,75 @@ export default class Task extends Entity{
     }
 
     public addContributor(contributor:Contributor, modifier: Contributor): void{
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.contributors = this.contributors.addItem(contributor);
         this.addEvent(new TaskContributorAdded(DateTime.now(), modifier, contributor));
     }
 
     public addAtachment(attachment:Attachment, modifier: Contributor):void {
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.attachments = this.attachments.addItem(attachment);
         this.addEvent(new TaskAttachmentAdded(DateTime.now(), modifier, attachment));
     }
 
     public updatePriority(priority: TaskPriority, modifier: Contributor): void{
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.priority = priority;
         this.addEvent(new TaskPriorityUpdated(DateTime.now(), modifier, priority));
     }
 
     public updateStartDate(date:TaskDateTime, modifier: Contributor): void{
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         if(this.dueDate instanceof DateTime){
-            if(!DateTime.isAfter(this.dueDate, date.getDate()))throw new InvalidParameters('The end date must be after the start date', {startDate:date, dueDate:this.dueDate});
+            if(!DateTime.isAfter(this.dueDate, date.getDate()))throw new InvalidStartDate({startDate:date, dueDate:this.dueDate});
         }
         this.startDate = date;
         this.addEvent(new TaskBeginDateUpdated(DateTime.now(), modifier, this.startDate as DateTime));
     }
 
     public updateDueDate(date:TaskDateTime, modifier: Contributor): void{
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         if(this.startDate instanceof DateTime){
-            if(!DateTime.isAfter(date.getDate(), this.startDate))throw new InvalidParameters('The end date must be after the start date', {dueDate:date, startDate:this.startDate});
+            if(!DateTime.isAfter(date.getDate(), this.startDate))throw new InvalidDueDate({dueDate:date, startDate:this.startDate});
         }
         this.dueDate = date;
         this.addEvent(new TaskDueDateUpdated(DateTime.now(), modifier, this.dueDate as DateTime));
     }
 
     public updateBackGroundImage(image:BackGroundImage, modifier: Contributor): void{
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.image = image;
         this.addEvent(new TaskBackgroundImageUpdated(DateTime.now(), modifier));
     }
 
     public updateTitle(title: TaskTitle, modifier: Contributor): void {
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.title = title;
         this.addEvent(new TitleUpdated(DateTime.now(), modifier, this.title.getTitle()));
     }
 
     public updateDescription(description: TaskDescription, modifier: Contributor): void {
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.description = description;
         const descriptionText = description.getDescription();
         this.addEvent(new TaskDescriptionUpdated(DateTime.now(), modifier, descriptionText));
     }
 
     public addCategory(category: TaskCategory, modifier: Contributor): void {
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.categories = this.categories.addItem(category);
         this.addEvent(new TaskCategoryAdded(DateTime.now(), modifier, category));
     }
 
     public markAsFinished(contributor: Contributor): void {
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         if(this.state.isCompleted()) return;
         this.state = new TaskState(ALLOWED_TASK_STATE[0]);
         this.addEvent(new TaskFinished(DateTime.now(), contributor));
     }
 
     public markAsPending(contributor: Contributor): void {
-        if(this.isArchived())throw new InvalidOperation('Task is archived and cannot be modified');
+        if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         if(!this.state.isCompleted())return;
         this.state = new TaskState(ALLOWED_TASK_STATE[1]);
         this.addEvent(new TaskMarkedAsPending(DateTime.now(), contributor));
@@ -225,7 +228,7 @@ export default class Task extends Entity{
         return this.state.isCompleted();
     }
 
-    protected isOverDue(): boolean{
+    public overDue(): boolean{
         if(this.dueDate instanceof DateTime && DateTime.isAfter(this.dueDate, DateTime.now()))return false;
         return true;
     }
