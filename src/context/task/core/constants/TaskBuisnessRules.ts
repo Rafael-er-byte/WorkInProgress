@@ -1,8 +1,8 @@
 export default class TaskBusinessRules {
-    private static readonly TITLE_LIMIT_SIZE: number = 150;
-    private static readonly DESCRIPTION_LIMIT_SIZE: number = 600;
+    private static readonly TITLE_LIMIT_SIZE: number = 200;
+    private static readonly DESCRIPTION_LIMIT_SIZE: number = 800;
     private static readonly MAX_CATEGORIES: number = 10;
-    private static readonly MAX_ATTACHMENTS: number = 8;
+    private static readonly MAX_ATTACHMENTS: number = 50;
     private static readonly MAX_CONTRIBUTORS: number = 200;
 
     public static titleLimit(): number {

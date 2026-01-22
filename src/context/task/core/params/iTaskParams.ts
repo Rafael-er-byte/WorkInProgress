@@ -11,7 +11,8 @@ export default interface iTaskParams{
     archived: boolean;
     id: string;
     createdAt: string;
-
+    
+    notesQuantity?:number;
     description?: string | undefined;
     image?: Attachment | undefined;
     startDate?: string | undefined;

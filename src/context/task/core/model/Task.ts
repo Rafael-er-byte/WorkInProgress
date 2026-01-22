@@ -40,6 +40,7 @@ import type { Priority } from "../types/Prioroty.type";
 import TaskState from "../objects/TaskState";
 import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState.type";
 import TaskDeleted from "../events/TaskDeleted";
+import TaskNoteCounter from "../objects/TaskNotesCounter";
 
 export default class Task extends Entity{
     private title!: TaskTitle;
@@ -47,6 +48,7 @@ export default class Task extends Entity{
     private position!:TaskPosition;
     private state!: TaskState
     private archived!: Archived | None;
+    private notesQuantity!: TaskNoteCounter;
 
     private description: TaskDescription | None = new None();
     private image: BackGroundImage | None = new None();
@@ -73,6 +75,8 @@ export default class Task extends Entity{
         this.state = new TaskState(params.state as AllowedTaskState);
         this.archived = params.archived === true? new Archived: new None();
 
+        if(params.notesQuantity) this.notesQuantity = new TaskNoteCounter(params.notesQuantity);
+        else this.notesQuantity = new TaskNoteCounter(0);
         if(params.description) this.description = new TaskDescription(params.description);
         if(params.image) this.image = new BackGroundImage(params.image);
         if(params.startDate) this.startDate = DateTime.create(params.startDate);
@@ -208,16 +212,20 @@ export default class Task extends Entity{
         this.addEvent(new TaskMarkedAsPending(DateTime.now(), contributor));
     }
 
-    public isArchived(): boolean{
+    public addNote():void {
+        this.notesQuantity = this.notesQuantity.increment();
+    }
+
+    protected isArchived(): boolean{
         if(this.archived instanceof Archived)return true;
         return false;
     }
 
-    public isCompleted(): boolean{
+    protected isCompleted(): boolean{
         return this.state.isCompleted();
     }
 
-    public isOverDue(): boolean{
+    protected isOverDue(): boolean{
         if(this.dueDate instanceof DateTime && DateTime.isAfter(this.dueDate, DateTime.now()))return false;
         return true;
     }
@@ -241,6 +249,7 @@ export default class Task extends Entity{
             state: state,
             archived: archivedTask,
 
+            notesQuantity: this.notesQuantity.getNotesQuantity(),
             description: descriptionTask,
             image: imageTask,
             startDate: startDate,
