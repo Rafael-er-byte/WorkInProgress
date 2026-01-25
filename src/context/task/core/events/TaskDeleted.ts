@@ -5,6 +5,6 @@ import type TaskId from "../objects/TaskId";
 
 export default class TaskDeleted extends DomainEvent{
     constructor(date:DateTime, modifier: Contributor, taskid: TaskId){
-        super(date, modifier, 'TASK_DELETED', taskid);
+        super(date, modifier, taskid,  'TASK_DELETED', taskid);
     }
 };

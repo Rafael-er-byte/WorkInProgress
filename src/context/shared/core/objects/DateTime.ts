@@ -71,8 +71,8 @@ export default class DateTime extends ValueObject{
         return false;
     }
 
-    public getDate(): string{
-        return this.date.toISOString();
+    public getDate(): Date{
+        return this.date;
     }
 
     public getValue():number{

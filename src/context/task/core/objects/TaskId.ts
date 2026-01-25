@@ -1,13 +1,7 @@
-import ID from "../../../shared/core/objects/ID";
+import IdEntity from "../../../shared/core/objects/IdEntity";
 
-export default class TaskId{
-    private id!:ID;
-
+export default class TaskId extends IdEntity{
     constructor(id:string){
-        this.id = new ID(id);
-    }
-
-    public getID():string{
-        return this.id.getId();
+        super(id);
     }
 };

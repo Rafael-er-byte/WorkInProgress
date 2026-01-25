@@ -71,7 +71,7 @@ export default class Task extends Entity{
         super();
         this.title = new TaskTitle(params.title);
         this.id = new TaskId(params.id);
-        this.createdAt = DateTime.create(params.createdAt);
+        this.createdAt = DateTime.create(params.createdAt as string);
         this.priority = new TaskPriority(params.priority as Priority);
         if(!(params.position instanceof TaskPosition)) throw new InvalidParameters("The position of the task is not valid", params.position);
         this.position = params.position;
@@ -82,8 +82,8 @@ export default class Task extends Entity{
         else this.notesQuantity = new TaskNoteCounter(0);
         if(params.description) this.description = new TaskDescription(params.description);
         if(params.image) this.image = new BackGroundImage(params.image);
-        if(params.startDate) this.startDate = DateTime.create(params.startDate);
-        if(params.dueDate) this.dueDate = DateTime.create(params.dueDate);
+        if(params.startDate) this.startDate = DateTime.create(params.startDate as string);
+        if(params.dueDate) this.dueDate = DateTime.create(params.dueDate as string);
 
         this.categories = new CategoryCollection(params.categories);
         this.attachments = new AttachmentCollection(params.attachments);
@@ -109,53 +109,53 @@ export default class Task extends Entity{
     public removeCategory(category: TaskCategory, modifier: Contributor): void {
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.categories = this.categories.deleteItem(category);
-        this.addEvent(new TaskCategoryDeleted(DateTime.now(), modifier, category));
+        this.addEvent(new TaskCategoryDeleted(DateTime.now(), modifier, this.id, category));
     }
 
     public removeContributor(contributor: Contributor, modifier: Contributor): void{
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.contributors = this.contributors.deleteItem(contributor);
-        this.addEvent(new TaskContributorDeleted(DateTime.now(), modifier, contributor));
+        this.addEvent(new TaskContributorDeleted(DateTime.now(), modifier, this.id, contributor));
     }
 
     public deleteAttachment(attachment: Attachment, modifier: Contributor): void{
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.attachments = this.attachments.deleteItem(attachment);
-        this.addEvent(new TaskAttachmentDeleted(DateTime.now(), modifier, attachment));
+        this.addEvent(new TaskAttachmentDeleted(DateTime.now(), modifier, this.id, attachment));
     }
 
     public move(list:TaskPosition, modifier: Contributor): void{
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.position = list;
-        this.addEvent(new TaskMoved(DateTime.now(), modifier, this.position));
+        this.addEvent(new TaskMoved(DateTime.now(), modifier, this.id, this.position));
     }
 
     public unarchive(modifier: Contributor):void{
         this.archived = new None();
-        this.addEvent(new TaskUnarchived(DateTime.now(), modifier));
+        this.addEvent(new TaskUnarchived(DateTime.now(), modifier, this.id));
     }
     
     public archive(modifier:Contributor):void{
         this.archived = new Archived();
-        this.addEvent(new TaskArchived(DateTime.now(), modifier))
+        this.addEvent(new TaskArchived(DateTime.now(), modifier, this.id))
     }
 
     public addContributor(contributor:Contributor, modifier: Contributor): void{
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.contributors = this.contributors.addItem(contributor);
-        this.addEvent(new TaskContributorAdded(DateTime.now(), modifier, contributor));
+        this.addEvent(new TaskContributorAdded(DateTime.now(), modifier, this.id, contributor));
     }
 
     public addAtachment(attachment:Attachment, modifier: Contributor):void {
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.attachments = this.attachments.addItem(attachment);
-        this.addEvent(new TaskAttachmentAdded(DateTime.now(), modifier, attachment));
+        this.addEvent(new TaskAttachmentAdded(DateTime.now(), modifier, this.id, attachment));
     }
 
     public updatePriority(priority: TaskPriority, modifier: Contributor): void{
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.priority = priority;
-        this.addEvent(new TaskPriorityUpdated(DateTime.now(), modifier, priority));
+        this.addEvent(new TaskPriorityUpdated(DateTime.now(), modifier, this.id, priority));
     }
 
     public updateStartDate(date:TaskDateTime, modifier: Contributor): void{
@@ -164,7 +164,7 @@ export default class Task extends Entity{
             if(!DateTime.isAfter(this.dueDate, date.getDate()))throw new InvalidStartDate({startDate:date, dueDate:this.dueDate});
         }
         this.startDate = date;
-        this.addEvent(new TaskBeginDateUpdated(DateTime.now(), modifier, this.startDate as DateTime));
+        this.addEvent(new TaskBeginDateUpdated(DateTime.now(), modifier, this.id, this.startDate as DateTime));
     }
 
     public updateDueDate(date:TaskDateTime, modifier: Contributor): void{
@@ -173,46 +173,46 @@ export default class Task extends Entity{
             if(!DateTime.isAfter(date.getDate(), this.startDate))throw new InvalidDueDate({dueDate:date, startDate:this.startDate});
         }
         this.dueDate = date;
-        this.addEvent(new TaskDueDateUpdated(DateTime.now(), modifier, this.dueDate as DateTime));
+        this.addEvent(new TaskDueDateUpdated(DateTime.now(), modifier, this.id, this.dueDate as DateTime));
     }
 
     public updateBackGroundImage(image:BackGroundImage, modifier: Contributor): void{
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.image = image;
-        this.addEvent(new TaskBackgroundImageUpdated(DateTime.now(), modifier));
+        this.addEvent(new TaskBackgroundImageUpdated(DateTime.now(), modifier, this.id));
     }
 
     public updateTitle(title: TaskTitle, modifier: Contributor): void {
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.title = title;
-        this.addEvent(new TitleUpdated(DateTime.now(), modifier, this.title.getTitle()));
+        this.addEvent(new TitleUpdated(DateTime.now(), modifier, this.id, this.title.getTitle()));
     }
 
     public updateDescription(description: TaskDescription, modifier: Contributor): void {
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.description = description;
         const descriptionText = description.getDescription();
-        this.addEvent(new TaskDescriptionUpdated(DateTime.now(), modifier, descriptionText));
+        this.addEvent(new TaskDescriptionUpdated(DateTime.now(), modifier, this.id, descriptionText));
     }
 
     public addCategory(category: TaskCategory, modifier: Contributor): void {
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         this.categories = this.categories.addItem(category);
-        this.addEvent(new TaskCategoryAdded(DateTime.now(), modifier, category));
+        this.addEvent(new TaskCategoryAdded(DateTime.now(), modifier, this.id, category));
     }
 
     public markAsFinished(contributor: Contributor): void {
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         if(this.state.isCompleted()) return;
         this.state = new TaskState(ALLOWED_TASK_STATE[0]);
-        this.addEvent(new TaskFinished(DateTime.now(), contributor));
+        this.addEvent(new TaskFinished(DateTime.now(), contributor, this.id));
     }
 
     public markAsPending(contributor: Contributor): void {
         if(this.isArchived())throw new CannotModifyArchivedTasks(this.id);
         if(!this.state.isCompleted())return;
         this.state = new TaskState(ALLOWED_TASK_STATE[1]);
-        this.addEvent(new TaskMarkedAsPending(DateTime.now(), contributor));
+        this.addEvent(new TaskMarkedAsPending(DateTime.now(), contributor, this.id));
     }
 
     public addNote():void {

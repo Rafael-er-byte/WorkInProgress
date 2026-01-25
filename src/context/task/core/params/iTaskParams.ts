@@ -10,13 +10,13 @@ export default interface iTaskParams{
     state: string;
     archived: boolean;
     id: string;
-    createdAt: string;
+    createdAt: Date | string;
     
     notesQuantity?:number;
     description?: string | undefined;
     image?: Attachment | undefined;
-    startDate?: string | undefined;
-    dueDate?: string | undefined;
+    startDate?: Date | string | undefined;
+    dueDate?: Date | string | undefined;
 
     categories: TaskCategory[],
     attachments: Attachment[],
