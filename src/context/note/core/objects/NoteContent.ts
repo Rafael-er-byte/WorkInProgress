@@ -1,6 +1,6 @@
-import InvalidParameters from "../../../shared/core/errors/InvalidParameters";
 import Text from "../../../shared/core/objects/Text";
 import ValueObject from "../../../shared/core/objects/ValueObject";
+import NoteContentTooLarge from "../error/NoteContentTooLarge";
 
 export default class NoteContent extends ValueObject{
     private content!: Text;
@@ -8,7 +8,7 @@ export default class NoteContent extends ValueObject{
     
     constructor(content:Text){
         super();
-        if(this.content.size() > this.LIMIT_CONTENT_SIZE)throw new InvalidParameters('Content too large', content);
+        if(this.content.size() > this.LIMIT_CONTENT_SIZE)throw new NoteContentTooLarge(content);
     }
 
     public getContent():Text{

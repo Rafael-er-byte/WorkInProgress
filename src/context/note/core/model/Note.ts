@@ -3,18 +3,19 @@ import type DateTime from "../../../shared/core/objects/DateTime";
 import ID from "../../../shared/core/objects/ID";
 import Text from "../../../shared/core/objects/Text";
 import type NoteContent from "../objects/NoteContent";
+import type NoteId from "../objects/NoteId";
 
 export default class Note{
 
     private readonly createdAt!:DateTime;
-    private readonly id!: ID;
+    private readonly id!: NoteId;
     private readonly creator!:Contributor;
     private readonly taskId!:ID;
     private content!: NoteContent;
 
     constructor(
         createdAt:DateTime,
-        id:ID,
+        id:NoteId,
         creator:Contributor,
         taskId:ID,
         content:NoteContent
@@ -26,7 +27,7 @@ export default class Note{
         this.content = content;
     }
 
-    public getID():ID{
+    public getID():NoteId{
         return this.id;
     }
 
