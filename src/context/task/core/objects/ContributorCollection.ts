@@ -3,8 +3,8 @@ import Contributor from "../../../shared/core/objects/Contributor";
 import ConflictDuplicateResource from "../../../shared/core/errors/ConflictDuplicatedResource";
 import ResourceNotFound from "../../../shared/core/errors/ResourceNotFound";
 import type Collection from "../../../shared/core/objects/Collection";
-import IntNumber from "../../../shared/core/objects/IntNumber";
 import LimitExceeded from "../../../shared/core/errors/LimitExceeded";
+import MemberMustBeActive from "../error/MemberMustBeActive";
 
 export default class ContributorCollection implements Collection{
     private readonly limitOfcontributors = TaskBusinessRules.maxContributors();
@@ -16,6 +16,7 @@ export default class ContributorCollection implements Collection{
 
     public addItem(contributor: Contributor): ContributorCollection {
         if(this.contributors.length + 1 > this.limitOfcontributors)throw new LimitExceeded('contributors limit exceeded');
+        if(!contributor.isActive())throw new MemberMustBeActive(contributor);
         const exists = this.contributors.find(c => c.getId() === contributor.getId());
         if(exists)throw new ConflictDuplicateResource('This contributor already exists in this task', contributor);
         return new ContributorCollection([...this.contributors, contributor]);        
