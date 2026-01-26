@@ -3,11 +3,11 @@ import LimitExceeded from "../../../shared/core/errors/LimitExceeded";
 import ResourceNotFound from "../../../shared/core/errors/ResourceNotFound";
 import type Attachment from "../../../shared/core/objects/Attachment";
 import type Collection from "../../../shared/core/objects/Collection";
-import IntNumber from "../../../shared/core/objects/IntNumber";
 import TaskBusinessRules from "../constants/TaskBuisnessRules";
 
 export default class AttachmentCollection implements Collection{
     private readonly limitOfattachments:number = TaskBusinessRules.maxAttachments();
+    private readonly limitAttachmentMBSize:number = TaskBusinessRules.getMaxMBLimitAttachmentSize();
     private readonly attachments:Attachment[] = [];
     
     constructor(attachments:Attachment[] = []){
@@ -15,7 +15,8 @@ export default class AttachmentCollection implements Collection{
     }
 
     public addItem(attachment:Attachment):AttachmentCollection{
-        if(this.attachments.length + 1 > this.limitOfattachments)throw new LimitExceeded('attachment limit exeeded')
+        if(this.attachments.length + 1 > this.limitOfattachments)throw new LimitExceeded('Attachment limit exeeded');
+        if(attachment.getSize().getValue() > this.limitAttachmentMBSize)throw new LimitExceeded('Attachment too large');
         const exists = this.attachments.find(savedattachment => savedattachment.getUrl() === attachment.getUrl());
         if(exists)throw new ConflictDuplicateResource('This attachment already exists', attachment);
         return new AttachmentCollection([...this.attachments, attachment]);

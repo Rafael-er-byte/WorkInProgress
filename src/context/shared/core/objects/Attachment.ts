@@ -9,10 +9,10 @@ import ValueObject from "./ValueObject";
 export default class Attachment extends ValueObject{
     private url!:Url;
     private type!:AllowedAttachents;
-    private name:Text | None = new None();
-    private size:IntNumber | None = new None();
+    private name:Text;
+    private size:IntNumber
 
-    constructor(url:Url, type: AllowedAttachents, name: Text | None, size: IntNumber | None){
+    constructor(url:Url, type: AllowedAttachents, name: Text, size: IntNumber){
         super();
         this.url = url;
         if(!ALLOWED_ATTACHMENTS.includes(type))throw new InvalidParameters('Attachment not supported');
@@ -29,11 +29,11 @@ export default class Attachment extends ValueObject{
         return this.type;
     }
 
-    public getName(): Text | None{
+    public getName(): Text{
         return this.name;
     }
 
-    public getSize(): IntNumber | None{
+    public getSize(): IntNumber{
         return this.size;
     }
 };
