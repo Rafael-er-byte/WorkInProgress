@@ -9,15 +9,17 @@ export default class DomainEvent{
     private event!: string;
     private id!: ID;
     private idEntity!: IdEntity;
+    private idProject!: IdEntity;
     private info? : unknown;
 
-    constructor(eventDate:DateTime, modifier: Contributor, idEntity: IdEntity, event: string, info?:unknown){
+    constructor(eventDate:DateTime, modifier: Contributor, idProject: IdEntity, idEntity: IdEntity, event: string, info?:unknown){
         this.modifier = modifier;
         this.event = event;
         this.eventDate = eventDate;
         if(info) this.info = info;
         this.id = ID.generateId();
         this.idEntity = idEntity;
+        this.idProject = idProject;
     }
 
     public getModifier(): Contributor{
@@ -42,5 +44,9 @@ export default class DomainEvent{
 
     public getIdEntity(): IdEntity{
         return this.idEntity;
+    }
+
+    public getIdProject(): IdEntity{
+        return this.idProject;
     }
 };

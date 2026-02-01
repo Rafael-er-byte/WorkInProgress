@@ -1,53 +1,61 @@
-import MissingRequiredParameters from "../../../shared/core/errors/MissingRequiredParameters";
-import Url from "../objects/URL";
+import IdCategory from "../objects/IdCategory";
+import idProject from "../../../project/core/objects/IdProject";
+import DateTime from "../../../shared/core/objects/DateTime";
+import CategoryName from "../objects/CategoryName";
+import Entity from "../../../shared/core/model/Entity";
+import CategoryColor from "../objects/CategoryColor";
+import type { AllowedColors } from "../types/AllowedColors";
+import CategoryCreated from "../events/CategoryCreated";
+import Contributor from "../../../shared/core/objects/Contributor";
+import type iCategoryParams from "../interfaces/iCategoryParams";
+import CategoryNameChanged from "../events/CategoryNameChanged";
+import CategoryColorChanged from "../events/CategoryColorChanged";
 
-export default class Category {
-    private name!: string;
-    private icon?: Url;
-    private readonly idCategory!: string;
-    private readonly idProject!: string;
-    private readonly createdAt?: string | undefined;
+export default class Category extends Entity{
+    private name!: CategoryName;
+    private color!: CategoryColor;
+    private readonly idCategory!: IdCategory;
+    private readonly idProject!: idProject;
+    private readonly createdAt!: DateTime;
 
-    constructor(name: string, idProject: string, idCategory: string, icon?: string,  createdAt?: string) {
-        if (!idCategory || idCategory?.trim().length === 0) throw new MissingRequiredParameters("id");
-        if (!name || name?.trim().length === 0) throw new MissingRequiredParameters("category_name");
-        if (!idProject || idProject?.trim().length === 0) throw new MissingRequiredParameters("id_creator");
+    private constructor(idCategory: IdCategory, name: CategoryName, color: CategoryColor, idProject: idProject, createdAt: DateTime) {
+        super();
 
-        this.setName(name);
+        this.name = name;
+        this.color = color;
         this.idCategory = idCategory;
         this.idProject = idProject;
         this.createdAt = createdAt;
-        if(icon)this.icon = new Url(icon);
     }
 
-    public getIdCategory(): string {
-        return this.idCategory;
+    public static create(id: string, name:string, color: string, idProject: idProject, createdAt:string, modifier: Contributor){
+        const idCategory = new IdCategory(id);
+        const category = new Category(idCategory, new CategoryName(name), new CategoryColor(color as AllowedColors), idProject, DateTime.create(createdAt));
+        category.addEvent(new CategoryCreated(DateTime.now(), modifier, idProject, idCategory));
+        return category;
     }
 
-    public getName(): string {
-        return this.name;
-    }
-
-    public getIdProject(): string {
-        return this.idProject;
-    }
-
-    public getCreatedAt(): string | undefined {
-        return this.createdAt;
-    }
-
-    public getIcon(): string | undefined{
-        return this.icon?this.icon.getUrl(): undefined;
-    }
-
-    public setIcon(newIcon:string): void{
-        this.icon = new Url(newIcon);
+    public static fromPrimitives(params:iCategoryParams){
+        return new Category(new IdCategory(params.id), new CategoryName(params.name), new CategoryColor(params.color as AllowedColors), params.idProject, DateTime.create(params.createdAt.toISOString()));
     }
     
-    public setName(name: string): void {
-        if (!name || name.trim().length === 0) {
-            throw new MissingRequiredParameters('category_name');
-        }
+    public updateName(name: CategoryName, modifier: Contributor): void {
         this.name = name;
+        this.addEvent(new CategoryNameChanged(DateTime.now(), modifier, this.idProject, this.idCategory, name));
+    }
+
+    public updateColor(color: CategoryColor, modifier: Contributor): void{
+        this.color = color;
+        this.addEvent(new CategoryColorChanged(DateTime.now(), modifier, this.idProject, this.idCategory, color));
+    }
+
+    public toPrimitives(): iCategoryParams {
+        return {
+            id: this.idCategory.getID(),
+            idProject: this.idProject,
+            name: this.name.getName(),
+            color: this.color.getColor(),
+            createdAt: this.createdAt.getDate()
+        }
     }
 };
