@@ -1,8 +1,6 @@
-import type idProject from "../../../project/core/objects/IdProject";
-
 export default interface iCategoryParams{
     id: string;
-    idProject: idProject;
+    idProject: string;
     name: string;
     color: string;
     createdAt: Date;
