@@ -3,7 +3,7 @@ import DomainEvent from "../../../shared/core/events/DomainEvent";
 import type DateTime from "../../../shared/core/objects/DateTime";
 import type IdEntity from "../../../shared/core/objects/IdEntity";
 import type TaskId from "../objects/TaskId";
-import type iTaskParams from "../params/iTaskParams";
+import type iTaskParams from "../interface/iTaskParams";
 
 export default class TaskCreated extends DomainEvent{
     constructor(date:DateTime, modifier: Member, idProject: IdEntity, taskId: TaskId, taskParams: iTaskParams){

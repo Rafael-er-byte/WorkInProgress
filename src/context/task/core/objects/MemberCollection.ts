@@ -6,7 +6,7 @@ import LimitExceeded from "../../../shared/core/errors/LimitExceeded";
 import MemberMustBeActive from "../error/MemberMustBeActive";
 import type Member from "../../../member/core/model/Member";
 
-export default class memberCollection implements Collection{
+export default class MemberCollection implements Collection{
     private readonly limitOfmembers = TaskRules.maxMembers();
     private readonly members:Member[] = [];
 
@@ -14,18 +14,18 @@ export default class memberCollection implements Collection{
         this.members = members;
     }
 
-    public addItem(member: Member): memberCollection {
+    public addItem(member: Member): MemberCollection {
         if(this.members.length + 1 > this.limitOfmembers)throw new LimitExceeded('members limit exceeded');
         if(member.isBlocked())throw new MemberMustBeActive(member);
         const exists = this.members.find(c => c.getId() === member.getId());
         if(exists)throw new ConflictDuplicateResource('This member already exists in this task', member);
-        return new memberCollection([...this.members, member]);        
+        return new MemberCollection([...this.members, member]);        
     }
 
-    public deleteItem(member:Member): memberCollection {
+    public deleteItem(member:Member): MemberCollection {
         const deletemember = this.members.find(c => c.getId() === member.getId());
         if(!deletemember)throw new ResourceNotFound('This member doesnt exist in this task');
-        return new memberCollection(this.members.filter(c => c.getId() !== member.getId()));
+        return new MemberCollection(this.members.filter(c => c.getId() !== member.getId()));
     }
 
     public find(member: Member):boolean{

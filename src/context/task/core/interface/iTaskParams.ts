@@ -1,6 +1,7 @@
+import type Category from "../../../category/core/model/Category";
+import type Member from "../../../member/core/model/Member";
 import type Attachment from "../../../shared/core/objects/Attachment";
-import type Contributor from "../../../shared/core/objects/Contributor";
-import type TaskCategory from "../objects/TaskCategory";
+import type Note from "../objects/Note";
 import type TaskPosition from "../objects/TaskPosition";
 
 export default interface iTaskParams{
@@ -18,7 +19,8 @@ export default interface iTaskParams{
     startDate?: Date | string | undefined;
     dueDate?: Date | string | undefined;
 
-    categories: TaskCategory[],
+    categories: Category[],
     attachments: Attachment[],
-    contributors: Contributor[]
+    members: Member[],
+    notes: Note[]
 };
