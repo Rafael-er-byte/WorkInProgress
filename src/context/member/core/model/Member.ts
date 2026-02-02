@@ -1,26 +1,97 @@
-import type IdMember from "../objects/IdMember";
-import type idProject from "../../../project/core/objects/IdProject";
-import type MemberStatus from "../objects/MemberStatus";
-import type MemberRole from "../objects/MemberRole";
+import IdMember from "../objects/IdMember";
+import idProject from "../../../project/core/objects/IdProject";
+import MemberStatus from "../objects/MemberStatus";
+import MemberRole from "../objects/MemberRole";
 import Entity from "../../../shared/core/model/Entity";
-import type Account from "../../../account/core/model/Account";
+import type iMemberParams from "../interfaces/iMemberParams";
+import MemberInfo from "../objects/MemberInfo";
+import type { AllowedMemberRoles } from "../types/AllowedMemberRoles";
+import type { AllowedMemberStatus } from "../types/AllowedMemberStatus";
+import MemberAddedToProject from "../events/MemberAddedToProject";
+import DateTime from "../../../shared/core/objects/DateTime";
+import MemberBlocked from "../events/MemberBlocked";
+import MemberActived from "../events/MemberActived";
+import MemberChangedRole from "../events/MemberRoleChanged";
+import MemberDeleted from "../events/MemberDeleted";
 
 export default class Member extends Entity{
     private id!:IdMember;
     private idProject!: idProject;
     private status!: MemberStatus; 
     private role!:MemberRole;
-    private userAcount!: Account
+    private memberInfo!: MemberInfo;
 
-    private constructor(id: IdMember, idProject: idProject, status: MemberStatus, role: MemberRole, account:Account){
+    private constructor(id: IdMember, idProject: idProject, status: MemberStatus, role: MemberRole, memberInfo:MemberInfo){
         super();
         this.id = id;
         this.idProject = idProject;
         this.status = status;
         this.role = role;
-        this.userAcount = account;
+        this.memberInfo = memberInfo;
     }
 
-    
+    public static create(params:iMemberParams, modifier:Member): Member{
+        const idMember = new IdMember(params.id);
+        const projectId = new idProject(params.idProject);
+        const memberRole = new MemberRole(params.role as AllowedMemberRoles);
 
+        const member = new Member(
+            idMember, 
+            projectId, 
+            MemberStatus.create(params.status as AllowedMemberStatus), 
+            memberRole, 
+            params.memberInfo
+        );
+
+        member.addEvent(new MemberAddedToProject(DateTime.now(), modifier, projectId, idMember, params));
+        return member;
+    }
+
+    public static fromPrimitives(params:iMemberParams): Member{
+        return new Member(
+            new IdMember(params.id), 
+            new idProject(params.idProject), 
+            MemberStatus.create(params.status as AllowedMemberStatus), 
+            new MemberRole(params.role as AllowedMemberRoles), 
+            params.memberInfo
+        );
+    }
+
+    public block(modifier: Member):void{
+        this.status = MemberStatus.blocked();
+        this.addEvent(new MemberBlocked(DateTime.now(), modifier, this.idProject, this.id));
+    }
+
+    public unBlock(modifier: Member): void{
+        this.status = MemberStatus.active();
+        this.addEvent(new MemberActived(DateTime.now(), modifier, this.idProject, this.id));
+    }
+
+    public changeRole(role: MemberRole, modifier: Member): void{
+        this.role = role;
+        this.addEvent(new MemberChangedRole(DateTime.now(), modifier, this.idProject, this.id, role));
+    }
+
+    public delete(modifier: Member): void{
+        this.status = MemberStatus.deleted();
+        this.addEvent(new MemberDeleted(DateTime.now(), modifier, this.idProject, this.id));
+    }
+
+    public isBlocked(): boolean{
+        return this.status.isBlocked();
+    }
+
+    public exists(): boolean{
+        return !this.status.isDeleted();
+    }
+
+    public toPrimitives():  iMemberParams{
+        return {
+            id: this.id.getID(),
+            idProject: this.idProject.getID(),
+            status: this.status.getStatus(),
+            role: this.role.getRole(),
+            memberInfo: this.memberInfo
+        }
+    }
 };

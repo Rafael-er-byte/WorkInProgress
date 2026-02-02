@@ -1,10 +1,10 @@
-import type Contributor from "../objects/Contributor";
+import type Member from "../../../member/core/model/Member";
 import type DateTime from "../objects/DateTime";
 import ID from "../objects/ID";
 import type IdEntity from "../objects/IdEntity";
 
 export default class DomainEvent{
-    private modifier!:Contributor;
+    private modifier!: Member;
     private eventDate!: DateTime;
     private event!: string;
     private id!: ID;
@@ -12,7 +12,7 @@ export default class DomainEvent{
     private idProject!: IdEntity;
     private info? : unknown;
 
-    constructor(eventDate:DateTime, modifier: Contributor, idProject: IdEntity, idEntity: IdEntity, event: string, info?:unknown){
+    constructor(eventDate:DateTime, modifier: Member, idProject: IdEntity, idEntity: IdEntity, event: string, info?:unknown){
         this.modifier = modifier;
         this.event = event;
         this.eventDate = eventDate;
@@ -22,7 +22,7 @@ export default class DomainEvent{
         this.idProject = idProject;
     }
 
-    public getModifier(): Contributor{
+    public getModifier(): Member{
         return this.modifier;
     }
 

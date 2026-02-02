@@ -1,10 +1,9 @@
-import type Account from "../../../account/core/model/Account";
-import type idProject from "../../../project/core/objects/IdProject";
+import type MemberInfo from "../objects/MemberInfo";
 
 export default interface iMemberParams{
     id:string;
-    idProject: idProject;
+    idProject: string;
     status: string; 
     role:string;
-    account: Account;
+    memberInfo: MemberInfo;
 };
