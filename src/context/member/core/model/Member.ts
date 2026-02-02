@@ -117,6 +117,10 @@ export default class Member extends Entity{
         return this.role.canUpdateTasks();
     }
 
+    public getId(): string{
+        return this.id.getID();
+    }
+
     public toPrimitives():  iMemberParams{
         return {
             id: this.id.getID(),

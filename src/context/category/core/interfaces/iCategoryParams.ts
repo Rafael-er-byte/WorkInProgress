@@ -3,5 +3,4 @@ export default interface iCategoryParams{
     idProject: string;
     name: string;
     color: string;
-    createdAt: Date;
 };
