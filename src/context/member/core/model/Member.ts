@@ -13,6 +13,8 @@ import MemberBlocked from "../events/MemberBlocked";
 import MemberActived from "../events/MemberActived";
 import MemberChangedRole from "../events/MemberRoleChanged";
 import MemberDeleted from "../events/MemberDeleted";
+import InvalidParameters from "../../../shared/core/errors/InvalidParameters";
+import Unauthorized from "../../../shared/core/errors/Unauthorized";
 
 export default class Member extends Entity{
     private id!:IdMember;
@@ -27,10 +29,12 @@ export default class Member extends Entity{
         this.idProject = idProject;
         this.status = status;
         this.role = role;
+        if(!(memberInfo instanceof MemberInfo)) throw new InvalidParameters("Member Info is not valid");
         this.memberInfo = memberInfo;
     }
 
     public static create(params:iMemberParams, modifier:Member): Member{
+        if(!modifier.canManageMembers())throw new Unauthorized("This member cannot add members to project", modifier);
         const idMember = new IdMember(params.id);
         const projectId = new idProject(params.idProject);
         const memberRole = new MemberRole(params.role as AllowedMemberRoles);
@@ -58,21 +62,25 @@ export default class Member extends Entity{
     }
 
     public block(modifier: Member):void{
+        if(!modifier.canManageMembers())throw new Unauthorized("This member cannot block members in the project", modifier);
         this.status = MemberStatus.blocked();
         this.addEvent(new MemberBlocked(DateTime.now(), modifier, this.idProject, this.id));
     }
 
     public unBlock(modifier: Member): void{
+        if(!modifier.canManageMembers())throw new Unauthorized("This member cannot unblock members in the project", modifier);
         this.status = MemberStatus.active();
         this.addEvent(new MemberActived(DateTime.now(), modifier, this.idProject, this.id));
     }
 
     public changeRole(role: MemberRole, modifier: Member): void{
+        if(!modifier.canManageMembers())throw new Unauthorized("This member cannot change roles to members in the project", modifier);
         this.role = role;
         this.addEvent(new MemberChangedRole(DateTime.now(), modifier, this.idProject, this.id, role));
     }
 
     public delete(modifier: Member): void{
+        if(!modifier.canManageMembers())throw new Unauthorized("This member cannot delete members in the project", modifier);
         this.status = MemberStatus.deleted();
         this.addEvent(new MemberDeleted(DateTime.now(), modifier, this.idProject, this.id));
     }
@@ -83,6 +91,30 @@ export default class Member extends Entity{
 
     public exists(): boolean{
         return !this.status.isDeleted();
+    }
+
+    public canManageProject(): boolean{
+        return this.role.canManageProject();
+    }
+
+    public canManageMembers(): boolean{
+        return this.role.canManageMembers();
+    }
+
+    public canManageCategories(): boolean{
+        return this.canManageCategories();
+    }
+
+    public canManageLists(): boolean{
+        return this.canManageLists();
+    }
+
+    public canManageTasks(): boolean{
+        return this.role.canManageTasks();
+    }
+
+    public canUpdateTasks(): boolean{
+        return this.role.canUpdateTasks();
     }
 
     public toPrimitives():  iMemberParams{
