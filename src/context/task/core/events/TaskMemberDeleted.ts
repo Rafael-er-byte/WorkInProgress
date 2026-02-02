@@ -1,10 +1,10 @@
+import type Member from "../../../member/core/model/Member";
 import DomainEvent from "../../../shared/core/events/DomainEvent";
-import type Contributor from "../../../shared/core/objects/Contributor";
 import type DateTime from "../../../shared/core/objects/DateTime";
 import type IdEntity from "../../../shared/core/objects/IdEntity";
 
 export default class TaskContributorDeleted extends DomainEvent{
-    constructor(date:DateTime, modifier: Contributor, idEntity: IdEntity, contributor: Contributor){
-        super(date, modifier, idEntity, 'TASK_CONTRIBUTOR_DELETED', contributor);
+    constructor(date:DateTime, modifier: Member, idProject: IdEntity, idEntity: IdEntity, contributor: Member){
+        super(date, modifier, idProject, idEntity, 'TASK_CONTRIBUTOR_DELETED', contributor);
     }
 };

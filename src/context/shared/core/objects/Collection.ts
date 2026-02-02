@@ -1,5 +1,3 @@
-import type IntNumber from "./IntNumber";
-
 export default interface Collection{
     addItem(object:unknown): Collection;
     deleteItem(object:unknown): Collection;
