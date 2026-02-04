@@ -23,5 +23,6 @@ export default interface iTaskParams{
     categories: Category[],
     attachments: Attachment[],
     members: Member[],
-    notes: Note[]
+    notes: Note[],
+    exists: boolean
 };

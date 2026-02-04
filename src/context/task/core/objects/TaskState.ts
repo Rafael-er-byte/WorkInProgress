@@ -1,6 +1,6 @@
 import ValueObject from "../../../shared/core/objects/ValueObject";
 import TaskStateNotSupported from "../error/TaskStateNotSupported";
-import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState.type";
+import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState";
 
 export default class TaskState extends ValueObject{
     private state!: AllowedTaskState;

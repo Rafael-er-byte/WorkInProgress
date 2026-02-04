@@ -30,7 +30,7 @@ import type iTaskParams from "../interface/iTaskParams";
 import TaskCreated from "../events/TaskCreated";
 import type { Priority } from "../types/Prioroty.type";
 import TaskState from "../objects/TaskState";
-import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState.type";
+import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState";
 import TaskDeleted from "../events/TaskDeleted";
 import CannotModifyArchivedTasks from "../error/CannotModifyArchivedTasks";
 import TaskNeedsToBeArchivedBeforeDeleteIt from "../error/TaskNeedsToBeArchivedBeforeDeleteIt";
@@ -64,6 +64,7 @@ export default class Task extends Entity {
     private members: MemberCollection = new MemberCollection();
     private attachments: AttachmentCollection = new AttachmentCollection();
     private notes: NoteCollection = new NoteCollection();
+    private exists!: boolean;
 
     private readonly id!: TaskId;
     private readonly idProject!: IdProject;
@@ -94,6 +95,7 @@ export default class Task extends Entity {
         this.attachments = new AttachmentCollection(params.attachments);
         this.members = new MemberCollection(params.members);
         this.notes = new NoteCollection(params.notes);
+        this.exists = params.exists;
     }
 
     public static create(params: iTaskParams, member: Member): Task {
@@ -104,16 +106,16 @@ export default class Task extends Entity {
         return task;
     }
 
-    public static delete(task: Task, member: Member): TaskId {
-        if (!task.isArchived()) {
-            throw new TaskNeedsToBeArchivedBeforeDeleteIt(task.getID());
+    public delete(member: Member): void {
+        if (!this.isArchived()) {
+            throw new TaskNeedsToBeArchivedBeforeDeleteIt(this.id);
         }
 
-        task.addEvent(
-            new TaskDeleted(DateTime.now(), member, task.getIdProject(), task.getID())
+        this.addEvent(
+            new TaskDeleted(DateTime.now(), member, this.idProject, this.id)
         );
 
-        return task.getID();
+        this.exists = false;
     }
 
     public static fromPrimitives(params: iTaskParams): Task {
@@ -298,6 +300,10 @@ export default class Task extends Entity {
         return this.idProject;
     }
 
+    public taskExists(): boolean{
+        return this.exists;
+    }
+
     public toPrimitives(): iTaskParams {
         const archivedTask = this.archived instanceof Archived;
         const descriptionTask = this.description instanceof TaskDescription ? this.description.getDescription() : undefined;
@@ -323,7 +329,8 @@ export default class Task extends Entity {
             notes: this.notes.primitiveCollection(),
             id: this.id.getID(),
             idProject: this.idProject.getID(),
-            createdAt: this.createdAt.getDate()
+            createdAt: this.createdAt.getDate(),
+            exists: this.exists
         };
     }
 }
