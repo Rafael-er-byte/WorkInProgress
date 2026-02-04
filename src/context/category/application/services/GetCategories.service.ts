@@ -17,7 +17,7 @@ export default class GetCategories{
 
         categories = await this.repo.getAll(categoryFilterDto);
 
-        let categoriesResponse: ResponseCategoryDto[] = categories.map(c => {
+        const categoriesResponse: ResponseCategoryDto[] = categories.map(c => {
                 const category:ResponseCategoryDto = new ResponseCategoryDto(c.getName(), c.getIdCategory(), c.getIcon() as string, c.getCreatedAt() as string);
                 return category;
         });

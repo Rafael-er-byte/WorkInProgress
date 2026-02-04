@@ -7,7 +7,7 @@ import { mockRepo } from "./mocks/repository/MockRepository";
 
 describe('Get categories service tests', () => {
     let service: GetCategories;
-    let validResponse: ResponseCategoryDto = new ResponseCategoryDto('category1', 'idCategory', 'http://icon.com', undefined);
+    const validResponse: ResponseCategoryDto = new ResponseCategoryDto('category1', 'idCategory', 'http://icon.com', undefined);
     const category: Category = new Category('category1', 'idProject', 'idCategory', 'http://icon.com');
 
     beforeEach(() => {
@@ -17,7 +17,7 @@ describe('Get categories service tests', () => {
     it('Should return a ResponseCategoryDto with all the categories that match with the filters', async () => {
         mockRepo.getAll = jest.fn().mockReturnValue([category]);
 
-        let filter: CategoryFilterDto = {
+        const filter: CategoryFilterDto = {
             idProject:'idProject',
             limit: 40,
             page:1,
@@ -25,13 +25,13 @@ describe('Get categories service tests', () => {
             orderBy: 'a-z'
         }
 
-        let response = await service.execute(filter);
+        const response = await service.execute(filter);
 
         expect(response).toStrictEqual([validResponse]);
     });
 
     it('Should throw an error if the order to sort is not valid', async () => {
-        let filter: CategoryFilterDto = {
+        const filter: CategoryFilterDto = {
             idProject:'idProject',
             limit: 40,
             page:1,

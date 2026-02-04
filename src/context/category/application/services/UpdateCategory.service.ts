@@ -22,7 +22,7 @@ export default class UpdateCategory{
         category.setIcon(categoryDto.icon);
         category.setName(categoryDto.name);
 
-        let savedOnRepo: boolean = await this.repo.update(category);
+        const savedOnRepo: boolean = await this.repo.update(category);
         if(!savedOnRepo)throw new CoreError('Cannot update the category at the moment', categoryDto);
 
         const action:Action = new Action(true, categoryDto.idCategory);

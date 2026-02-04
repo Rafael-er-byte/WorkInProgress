@@ -10,6 +10,7 @@ export default class CategoryName extends ValueObject{
         try{
             this.name = new Text(name);
         }catch(error){
+            console.error(error);
             throw new CategoryNameMustBeAValidText(name);
         }
     }

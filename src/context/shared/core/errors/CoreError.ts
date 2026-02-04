@@ -1,7 +1,7 @@
 export default class CoreError extends Error{
-    public info?:any;
+    public info?:unknown;
 
-    constructor(message:string, info:any){
+    constructor(message:string, info:unknown){
         super(message);
         this.info = info;
 

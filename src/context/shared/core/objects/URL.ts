@@ -22,6 +22,7 @@ export default class Url extends ValueObject{
             if(!this.tldRegex.test(tld))throw new InvalidParameters('url', newUrl);
 
         } catch (error) {
+            console.error(error);
             throw new InvalidParameters('url', newUrl);
         }
 

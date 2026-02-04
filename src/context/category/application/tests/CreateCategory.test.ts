@@ -20,7 +20,7 @@ describe('Create category service tests', () => {
     });
 
     it('Should create an instance of Category and return an action object', async () => {
-        let categoryDto: CategoryDto = {
+        const categoryDto: CategoryDto = {
             name:'Category1',
             idProject:'mock123',
             icon:'http://example.com'
@@ -40,7 +40,7 @@ describe('Create category service tests', () => {
     });
 
     it('Should throw an error if dont send the id of creator', async () => {
-        let categoryDto: CategoryDto = {
+        const categoryDto: CategoryDto = {
             name:'Category1',
             idProject:'',
             icon:'http://example.com'
@@ -50,7 +50,7 @@ describe('Create category service tests', () => {
     });
 
     it('Should throw an error if dont send the name of category', async () => {
-        let categoryDto: CategoryDto = {
+        const categoryDto: CategoryDto = {
             name:'',
             idProject:'mock123',
             icon:'http://example.com'
@@ -61,7 +61,7 @@ describe('Create category service tests', () => {
 
 
     it('Should throw an error if are some internal errors', async () => {
-        let categoryDto: CategoryDto = {
+        const categoryDto: CategoryDto = {
             name:'Category1',
             idProject:'mock123',
             icon:'http://example.com'
