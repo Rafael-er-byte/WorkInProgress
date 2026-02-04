@@ -1,2 +1,9 @@
-export const ALLOWED_ATTACHMENTS = ['image', 'pdf', 'doc', 'spreadsheet', 'video', 'lilnk'] as const;
-export type AllowedAttachents = typeof ALLOWED_ATTACHMENTS[number];
+export const ALLOWED_ATTACHMENTS = ['IMAGE', 'PDF', 'DOC', 'SPREADSHEET', 'VIDEO', 'LINK'] as const;
+export enum AllowedAttachents {
+    image = 'IMAGE',
+    pdf = 'PDF',
+    doc = 'DOC',
+    spreadsheet = 'SPREADSHEET',
+    video = 'VIDEO',
+    link = 'LINK'
+}

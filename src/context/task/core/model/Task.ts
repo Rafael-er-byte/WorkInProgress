@@ -28,7 +28,6 @@ import TaskPriority from "../objects/TaskPriority";
 import TaskTitle from "../objects/TaskTitle";
 import type iTaskParams from "../interface/iTaskParams";
 import TaskCreated from "../events/TaskCreated";
-import type { Priority } from "../types/Prioroty.type";
 import TaskState from "../objects/TaskState";
 import { ALLOWED_TASK_STATE, type AllowedTaskState } from "../types/AllowedTaskState";
 import TaskDeleted from "../events/TaskDeleted";
@@ -47,6 +46,7 @@ import TaskContributorDeleted from "../events/TaskMemberDeleted";
 import TaskMemberAdded from "../events/TaskMemberAdded";
 import IdProject from "../../../project/core/objects/IdProject";
 import TaskNoteAdded from "../events/TaskNoteAdded";
+import type { Priority } from "../types/Priority";
 
 export default class Task extends Entity {
     private title!: TaskTitle;
@@ -83,7 +83,7 @@ export default class Task extends Entity {
         }
 
         this.position = params.position;
-        this.state = new TaskState(params.state as AllowedTaskState);
+        this.state = TaskState.create(params.state as AllowedTaskState);
         this.archived = params.archived === true ? new Archived() : new None();
 
         if (params.description) this.description = new TaskDescription(params.description);
@@ -110,7 +110,6 @@ export default class Task extends Entity {
         if (!this.isArchived()) {
             throw new TaskNeedsToBeArchivedBeforeDeleteIt(this.id);
         }
-
         this.addEvent(
             new TaskDeleted(DateTime.now(), member, this.idProject, this.id)
         );
@@ -254,7 +253,7 @@ export default class Task extends Entity {
     public markAsFinished(member: Member): void {
         if (this.isArchived()) throw new CannotModifyArchivedTasks(this.id);
         if (this.state.isCompleted()) return;
-        this.state = new TaskState(ALLOWED_TASK_STATE[0]);
+        this.state = TaskState.completed();
         this.addEvent(
             new TaskFinished(DateTime.now(), member, this.idProject, this.id)
         );
@@ -263,7 +262,7 @@ export default class Task extends Entity {
     public markAsPending(member: Member): void {
         if (this.isArchived()) throw new CannotModifyArchivedTasks(this.id);
         if (!this.state.isCompleted()) return;
-        this.state = new TaskState(ALLOWED_TASK_STATE[1]);
+        this.state = TaskState.pending();
         this.addEvent(
             new TaskMarkedAsPending(DateTime.now(), member, this.idProject, this.id)
         );

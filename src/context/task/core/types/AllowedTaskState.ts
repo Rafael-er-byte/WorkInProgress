@@ -1,2 +1,10 @@
-export const ALLOWED_TASK_STATE = ["completed", "pending"] as const;
-export type AllowedTaskState = typeof ALLOWED_TASK_STATE[number];
+export const ALLOWED_TASK_STATE = [
+  'COMPLETED',
+  'PENDING',
+] as const;
+
+export enum AllowedTaskState {
+  completed = 'COMPLETED',
+  pending = 'PENDING',
+}
+

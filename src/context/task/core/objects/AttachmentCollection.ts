@@ -3,7 +3,7 @@ import LimitExceeded from "../../../shared/core/errors/LimitExceeded";
 import ResourceNotFound from "../../../shared/core/errors/ResourceNotFound";
 import type Attachment from "../../../shared/core/objects/Attachment";
 import type Collection from "../../../shared/core/objects/Collection";
-import TaskBusinessRules from "../constants/TaskBuisnessRules";
+import TaskBusinessRules from "../constants/TaskRules";
 
 export default class AttachmentCollection implements Collection{
     private readonly limitOfattachments:number = TaskBusinessRules.maxAttachments();

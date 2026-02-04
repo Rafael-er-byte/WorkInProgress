@@ -1,4 +1,5 @@
 import type { AllowedTaskState } from "../types/AllowedTaskState";
+import type { Priority } from "../types/Priority";
 
 export default interface TaskCriteria{
     limit: number;
@@ -7,6 +8,7 @@ export default interface TaskCriteria{
     categoryName: string;
     status: AllowedTaskState;
     member: string;
+    priority: Priority;
     DateRange: {
         type: 'DueDate' | 'StartDate',
         start: Date,

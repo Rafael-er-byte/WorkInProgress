@@ -1,7 +1,7 @@
 import LimitExceeded from "../../../shared/core/errors/LimitExceeded";
 import Text from "../../../shared/core/objects/Text";
 import ValueObject from "../../../shared/core/objects/ValueObject";
-import TaskBusinessRules from "../constants/TaskBuisnessRules";
+import TaskBusinessRules from "../constants/TaskRules";
 
 export default class TaskTitle extends ValueObject{
     private title!:Text;

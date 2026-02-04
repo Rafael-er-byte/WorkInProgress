@@ -1,6 +1,5 @@
 import InvalidParameters from "../errors/InvalidParameters";
 import { ALLOWED_ATTACHMENTS, type AllowedAttachents } from "../types/AllowedAttachment.types";
-import None from "./None";
 import type Text from "./Text";
 import type Url from "./URL";
 import type IntNumber from "./IntNumber";

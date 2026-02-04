@@ -1,2 +1,11 @@
-export const ALLOWED_MEMBER_STATUS = ['blocked', 'active', 'deleted'] as const;
-export type AllowedMemberStatus = typeof ALLOWED_MEMBER_STATUS[number];
+export const ALLOWED_MEMBER_STATUS = [
+  'BLOCKED',
+  'ACTIVE',
+  'DELETED',
+] as const;
+
+export enum AllowedMemberStatus {
+  blocked = 'BLOCKED',
+  active = 'ACTIVE',
+  deleted = 'DELETED',
+}
