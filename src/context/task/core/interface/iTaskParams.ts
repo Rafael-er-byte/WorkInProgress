@@ -11,6 +11,7 @@ export default interface iTaskParams{
     state: string;
     archived: boolean;
     id: string;
+    idProject:string;
     createdAt: Date | string;
     
     notesQuantity?:number;

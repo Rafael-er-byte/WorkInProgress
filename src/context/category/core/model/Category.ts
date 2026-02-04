@@ -10,7 +10,6 @@ import CategoryNameChanged from "../events/CategoryNameChanged";
 import CategoryColorChanged from "../events/CategoryColorChanged";
 import IdProject from "../../../project/core/objects/IdProject";
 import type Member from "../../../member/core/model/Member";
-import Unauthorized from "../../../shared/core/errors/Unauthorized";
 
 export default class Category extends Entity{
     private name!: CategoryName;
@@ -28,7 +27,6 @@ export default class Category extends Entity{
     }
 
     public static create(id: string, name:string, color: string, idProject: string, modifier: Member){
-        if(!modifier.canManageCategories())throw new Unauthorized("This member cannot create categories in this project", modifier);
         const idCategory = new IdCategory(id);
         const projectId = new IdProject(idProject);
         const category = new Category(idCategory, new CategoryName(name), new CategoryColor(color as AllowedColors), projectId);
@@ -41,13 +39,11 @@ export default class Category extends Entity{
     }
     
     public updateName(name: CategoryName, modifier: Member): void {
-        if(!modifier.canManageCategories())throw new Unauthorized("This member cannot modify categories in this project", modifier);
         this.name = name;
         this.addEvent(new CategoryNameChanged(DateTime.now(), modifier, this.idProject, this.idCategory, name));
     }
 
     public updateColor(color: CategoryColor, modifier: Member): void{
-        if(!modifier.canManageCategories())throw new Unauthorized("This member cannot modify categories in this project", modifier);
         this.color = color;
         this.addEvent(new CategoryColorChanged(DateTime.now(), modifier, this.idProject, this.idCategory, color));
     }
