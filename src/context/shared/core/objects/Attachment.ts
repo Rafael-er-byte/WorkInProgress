@@ -8,16 +8,21 @@ import ValueObject from "./ValueObject";
 export default class Attachment extends ValueObject{
     private url!:Url;
     private type!:AllowedAttachents;
-    private name:Text;
-    private size:IntNumber
+    private name!:Text;
+    private size!:IntNumber
 
     constructor(url:Url, type: AllowedAttachents, name: Text, size: IntNumber){
         super();
-        this.url = url;
+        
         if(!ALLOWED_ATTACHMENTS.includes(type))throw new InvalidParameters('Attachment not supported');
-        this.type = type;
-        this.name = name;
-        this.size = size;
+        try{
+            this.url = url;
+            this.type = type;
+            this.name = name;
+            this.size = size;
+        }catch(err){
+            throw new InvalidParameters('Some parameters are missing');
+        }
     }
 
     public getUrl():Url{

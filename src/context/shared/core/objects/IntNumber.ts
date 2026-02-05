@@ -7,7 +7,8 @@ export default class IntNumber extends ValueObject{
     constructor(value:number){
         super();
         if(!(typeof value === "number"))throw new InvalidParameters(' must be a number');
-        const isDecimal = value - Math.trunc(value) > 0;
+        const positiveValue = value < 0? value * -1: value;
+        const isDecimal = positiveValue - Math.trunc(value) > 0;
         if(isDecimal)throw new InvalidParameters('Number must be integer');
         this.value = value;
     }

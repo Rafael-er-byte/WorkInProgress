@@ -5,7 +5,7 @@ export default class TaskDateTime{
     private date!:DateTime;
 
     constructor(date:DateTime){
-        if(!DateTime.isAfter(date, DateTime.now()))throw new InvalidParameters('The start date must be in future', date);
+        if(!DateTime.isAfter(date, DateTime.now()))throw new InvalidParameters('The date must be in future', date);
         this.date = date;
     }
 

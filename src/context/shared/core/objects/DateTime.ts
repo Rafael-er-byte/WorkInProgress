@@ -11,16 +11,16 @@ export default class DateTime extends ValueObject{
         this.date = date;
     }
 
-    static now(): DateTime{
+    public static now(): DateTime{
         return new DateTime(new Date());
     }
 
-    static create(date:string): DateTime{
+    public static create(date:string): DateTime{
         if(!this.validateDate(date))throw new InvalidParameters("Invalid date");
         return new DateTime(new Date(date));
     }
 
-    static validateDate(originalDate:string):boolean{
+    private static validateDate(originalDate:string):boolean{
         const textDate = new Text(originalDate);
         const date = textDate.getText();
 

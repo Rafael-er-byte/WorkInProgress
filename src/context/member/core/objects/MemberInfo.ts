@@ -15,11 +15,11 @@ export default class MemberInfo extends ValueObject{
 
     constructor(username:string, url:Attachment){
         super();
-        if(username.length > this.maxNameSize)throw new MemberUserNameIsTooLarge(username);
+        this.username = new Text(username);
+        if(this.username.size() > this.maxNameSize)throw new MemberUserNameIsTooLarge(username);
         if(url.getSize().getValue() > this.maxAtachmentMbSize) throw new MemberProfileImageIsTooLarge(url);
         if(url.getType() !== this.attachmentType)throw new InvalidParameters("The attachment must be an image");
 
-        this.username = new Text(username);
         this.urlProfileImage = url;
     }
 
