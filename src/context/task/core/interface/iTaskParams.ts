@@ -6,7 +6,6 @@ import type TaskPosition from "../objects/TaskPosition";
 
 export default interface iTaskParams{
     title: string;
-    priority: string;
     position: TaskPosition;
     state: string;
     archived: boolean;

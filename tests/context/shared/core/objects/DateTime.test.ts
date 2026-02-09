@@ -31,9 +31,9 @@ describe('DateTime ValueObject ', () => {
 
     it('should reject clearly invalid numbers', () => {
       const invalidDates = [
-        '2024-13-01T10:30:45Z',     // month > 12
-        '2024-01-01T25:00:00Z',     // hour > 24
-        '2024-01-01T10:61:00Z',     // minute > 60
+        '2024-13-01T10:30:45Z',     
+        '2024-01-01T25:00:00Z',     
+        '2024-01-01T10:61:00Z',     
       ];
 
       for (const date of invalidDates) {

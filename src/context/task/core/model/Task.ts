@@ -13,7 +13,6 @@ import TaskDueDateUpdated from "../events/TaskDueDateUpdated";
 import TaskFinished from "../events/TaskFinished";
 import TaskMarkedAsPending from "../events/TaskMarkedAsPending";
 import TaskMoved from "../events/TaskMoved";
-import TaskPriorityUpdated from "../events/TaskPriorityUpdated";
 import TaskBeginDateUpdated from "../events/TaskStartDateUpdated";
 import TaskUnarchived from "../events/TaskUnarchived";
 import TitleUpdated from "../events/TitleUpdated";
@@ -24,7 +23,6 @@ import TaskDateTime from "../objects/TaskDateTime";
 import TaskDescription from "../objects/TaskDescription";
 import TaskId from "../objects/TaskId";
 import TaskPosition from "../objects/TaskPosition";
-import TaskPriority from "../objects/TaskPriority";
 import TaskTitle from "../objects/TaskTitle";
 import type iTaskParams from "../interface/iTaskParams";
 import TaskCreated from "../events/TaskCreated";
@@ -46,11 +44,9 @@ import TaskContributorDeleted from "../events/TaskMemberDeleted";
 import TaskMemberAdded from "../events/TaskMemberAdded";
 import IdProject from "../../../project/core/objects/IdProject";
 import TaskNoteAdded from "../events/TaskNoteAdded";
-import type { Priority } from "../types/Priority";
 
 export default class Task extends Entity {
     private title!: TaskTitle;
-    private priority!: TaskPriority;
     private position!: TaskPosition;
     private state!: TaskState;
     private archived!: Archived | None;
@@ -76,7 +72,6 @@ export default class Task extends Entity {
         this.id = new TaskId(params.id);
         this.idProject = new IdProject(params.idProject);
         this.createdAt = DateTime.create(params.createdAt as string);
-        this.priority = new TaskPriority(params.priority as Priority);
 
         if (!(params.position instanceof TaskPosition)) {
             throw new InvalidParameters("The position of the task is not valid", params.position);
@@ -180,14 +175,6 @@ export default class Task extends Entity {
         this.attachments = this.attachments.addItem(attachment);
         this.addEvent(
             new TaskAttachmentAdded(DateTime.now(), modifier, this.idProject, this.id, attachment)
-        );
-    }
-
-    public updatePriority(priority: TaskPriority, modifier: Member): void {
-        if (this.isArchived()) throw new CannotModifyArchivedTasks(this.id);
-        this.priority = priority;
-        this.addEvent(
-            new TaskPriorityUpdated(DateTime.now(), modifier, this.idProject, this.id, priority)
         );
     }
 
@@ -313,7 +300,6 @@ export default class Task extends Entity {
 
         return {
             title: this.title.getTitle(),
-            priority: this.priority.getPriority(),
             position: this.position,
             state,
             archived: archivedTask,
