@@ -1,5 +1,5 @@
-import type { AllowedMemberRoles } from "../../../member/core/types/AllowedMemberRoles";
-import type { AllowedMemberStatus } from "../../../member/core/types/AllowedMemberStatus";
+import type { AllowedMemberRoles } from "../types/AllowedMemberRoles";
+import type { AllowedMemberStatus } from "../types/AllowedMemberStatus";
 
 export default interface MemberCriteria {
     limit: number;

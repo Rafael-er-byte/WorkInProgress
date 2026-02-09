@@ -1,9 +1,9 @@
-import InvalidParameters from "../../../../../src/context/shared/core/errors/InvalidParameters";
-import Attachment from "../../../../../src/context/shared/core/objects/Attachment";
-import IntNumber from "../../../../../src/context/shared/core/objects/IntNumber";
-import Text from "../../../../../src/context/shared/core/objects/Text";
-import Url from "../../../../../src/context/shared/core/objects/URL";
-import { AllowedAttachents } from "../../../../../src/context/shared/core/types/AllowedAttachment.types";
+import InvalidParameters from "../../../../../src/modules/shared/core/errors/InvalidParameters";
+import Attachment from "../../../../../src/modules/shared/core/objects/Attachment";
+import IntNumber from "../../../../../src/modules/shared/core/objects/IntNumber";
+import Text from "../../../../../src/modules/shared/core/objects/Text";
+import Url from "../../../../../src/modules/shared/core/objects/URL";
+import { AllowedAttachents } from "../../../../../src/modules/shared/core/types/AllowedAttachment.types";
 
 describe('Attachment object tests', () => {
     const validUrl = new Url('http://localhost.com');

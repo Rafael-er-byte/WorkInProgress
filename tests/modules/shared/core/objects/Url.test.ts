@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../../src/context/shared/core/errors/InvalidParameters";
-import Url from "../../../../../src/context/shared/core/objects/URL";
+import InvalidParameters from "../../../../../src/modules/shared/core/errors/InvalidParameters";
+import Url from "../../../../../src/modules/shared/core/objects/URL";
 
 describe('Url value object tests', () => {
 

@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../../src/context/shared/core/errors/InvalidParameters";
-import IntNumber from "../../../../../src/context/shared/core/objects/IntNumber";
+import InvalidParameters from "../../../../../src/modules/shared/core/errors/InvalidParameters";
+import IntNumber from "../../../../../src/modules/shared/core/objects/IntNumber";
 
 describe('IntNumber object tests', () => {
     it('Should create a valid instante of IntNumber', () => {

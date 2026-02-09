@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../../src/context/shared/core/errors/InvalidParameters";
-import Text from "../../../../../src/context/shared/core/objects/Text";
+import InvalidParameters from "../../../../../src/modules/shared/core/errors/InvalidParameters";
+import Text from "../../../../../src/modules/shared/core/objects/Text";
 
 describe('Text object tests', () => {
     it('Should create a valid instante of Text', () => {

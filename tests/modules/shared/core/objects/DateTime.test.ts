@@ -1,5 +1,5 @@
-import InvalidParameters from "../../../../../src/context/shared/core/errors/InvalidParameters";
-import DateTime from "../../../../../src/context/shared/core/objects/DateTime";
+import InvalidParameters from "../../../../../src/modules/shared/core/errors/InvalidParameters";
+import DateTime from "../../../../../src/modules/shared/core/objects/DateTime";
 
 describe('DateTime ValueObject ', () => {
 
