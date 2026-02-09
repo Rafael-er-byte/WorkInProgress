@@ -16,13 +16,12 @@ export enum AllowedColors {
   RED = 'RED',
   BLUE = 'BLUE',
   GREEN = 'GREEN',
-  LIGHT_GREEN = 'LIGHT_GREEN',
+  LIGHT_GREEN = 'LIGHTGREEN',
   YELLOW = 'YELLOW',
   ROSE = 'ROSE',
-  SKY_BLUE = 'SKY_BLUE',
+  SKY_BLUE = 'SKYBLUE',
   BLACK = 'BLACK',
   ORANGE = 'ORANGE',
   PURPLE = 'PURPLE',
   NONE = 'NONE'
 }
-
