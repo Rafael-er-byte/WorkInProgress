@@ -1,6 +1,6 @@
 import ValueObject from "../../../shared/core/objects/ValueObject";
 import MemberStatusNotSupported from "../error/MemberStatusNotSupported";
-import { ALLOWED_MEMBER_STATUS, type AllowedMemberStatus } from "../types/AllowedMemberStatus";
+import { ALLOWED_MEMBER_STATUS, AllowedMemberStatus } from "../types/AllowedMemberStatus";
 
 export default class MemberStatus extends ValueObject{
     private status!: AllowedMemberStatus;
@@ -16,15 +16,15 @@ export default class MemberStatus extends ValueObject{
     }
 
     public static blocked(): MemberStatus{
-        return new MemberStatus(ALLOWED_MEMBER_STATUS[0]);
+        return new MemberStatus(AllowedMemberStatus.blocked);
     }
 
     public static active(): MemberStatus{
-        return new MemberStatus(ALLOWED_MEMBER_STATUS[1]);
+        return new MemberStatus(AllowedMemberStatus.active);
     }
 
     public static deleted(): MemberStatus{
-        return new MemberStatus(ALLOWED_MEMBER_STATUS[2]);
+        return new MemberStatus(AllowedMemberStatus.deleted);
     }
 
     public getStatus(): AllowedMemberStatus{

@@ -34,7 +34,6 @@ export default class Member extends Entity{
     }
 
     public static create(params:iMemberParams, modifier:Member): Member{
-        if(!modifier.canManageMembers())throw new Unauthorized("This member cannot add members to project", modifier);
         const idMember = new IdMember(params.id);
         const projectId = new idProject(params.idProject);
         const memberRole = new MemberRole(params.role as AllowedMemberRoles);
@@ -62,25 +61,21 @@ export default class Member extends Entity{
     }
 
     public block(modifier: Member):void{
-        if(!modifier.canManageMembers())throw new Unauthorized("This member cannot block members in the project", modifier);
         this.status = MemberStatus.blocked();
         this.addEvent(new MemberBlocked(DateTime.now(), modifier, this.idProject, this.id));
     }
 
     public unBlock(modifier: Member): void{
-        if(!modifier.canManageMembers())throw new Unauthorized("This member cannot unblock members in the project", modifier);
         this.status = MemberStatus.active();
         this.addEvent(new MemberActived(DateTime.now(), modifier, this.idProject, this.id));
     }
 
     public changeRole(role: MemberRole, modifier: Member): void{
-        if(!modifier.canManageMembers())throw new Unauthorized("This member cannot change roles to members in the project", modifier);
         this.role = role;
         this.addEvent(new MemberChangedRole(DateTime.now(), modifier, this.idProject, this.id, role));
     }
 
     public delete(modifier: Member): void{
-        if(!modifier.canManageMembers())throw new Unauthorized("This member cannot delete members in the project", modifier);
         this.status = MemberStatus.deleted();
         this.addEvent(new MemberDeleted(DateTime.now(), modifier, this.idProject, this.id));
     }
@@ -102,11 +97,11 @@ export default class Member extends Entity{
     }
 
     public canManageCategories(): boolean{
-        return this.canManageCategories();
+        return this.role.canManageCategories();
     }
 
     public canManageLists(): boolean{
-        return this.canManageLists();
+        return this.role.canManageLists();
     }
 
     public canManageTasks(): boolean{

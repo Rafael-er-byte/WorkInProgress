@@ -1,6 +1,6 @@
 import ValueObject from "../../../shared/core/objects/ValueObject";
 import MemberRoleNotValid from "../error/MemberRoleNotValid";
-import { ALLOWED_MEMBER_ROLES, type AllowedMemberRoles } from "../types/AllowedMemberRoles";
+import { ALLOWED_MEMBER_ROLES, AllowedMemberRoles } from "../types/AllowedMemberRoles";
 
 export default class MemberRole extends ValueObject{
     private role!: AllowedMemberRoles;
@@ -16,26 +16,26 @@ export default class MemberRole extends ValueObject{
     }
 
     public canManageProject(): boolean{
-        return this.role === ALLOWED_MEMBER_ROLES[0];
+        return this.role === AllowedMemberRoles.owner;
     }
 
     public canManageMembers(): boolean{
-        return this.canManageProject() || this.role === ALLOWED_MEMBER_ROLES[1];
+        return this.canManageProject() || this.role === AllowedMemberRoles.manager;
     }
 
     public canManageCategories(): boolean{
-        return this.canManageProject() || this.role === ALLOWED_MEMBER_ROLES[1];
+        return this.canManageProject() || this.role === AllowedMemberRoles.manager;
     }
 
     public canManageLists(): boolean{
-        return this.canManageProject() || this.role === ALLOWED_MEMBER_ROLES[1];
+        return this.canManageProject() || this.role === AllowedMemberRoles.manager;
     }
 
     public canManageTasks(): boolean{
-        return this.canManageProject() || this.role === ALLOWED_MEMBER_ROLES[1] || this.role === ALLOWED_MEMBER_ROLES[2]; 
+        return this.canManageProject() || this.role === AllowedMemberRoles.manager || this.role === AllowedMemberRoles.contributor; 
     }
 
     public canUpdateTasks(): boolean{
-        return this.canManageProject() || this.canManageTasks() || this.role === ALLOWED_MEMBER_ROLES[3]; 
+        return this.canManageProject() || this.canManageTasks() || this.role === AllowedMemberRoles.colaborator; 
     }
 };
