@@ -11,6 +11,7 @@ export default class TaskTitle extends ValueObject {
     const textTitle = new Text(title);
     if (textTitle.size() > TaskBusinessRules.titleLimit())
       throw new LimitExceeded('Title size limit exceeded');
+      this.title = textTitle;
   }
 
   public getTitle(): string {
