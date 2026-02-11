@@ -1,7 +1,7 @@
-import ValueObject from "./ValueObject";
+import ValueObject from './ValueObject';
 
-export default class None extends ValueObject{
-    constructor(){
-        super();
-    }
-};
+export default class None extends ValueObject {
+  constructor() {
+    super();
+  }
+}

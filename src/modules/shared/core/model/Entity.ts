@@ -1,26 +1,26 @@
-import type DomainEvent from "../events/DomainEvent";
-import DateTime from "../objects/DateTime";
+import type DomainEvent from '../events/DomainEvent';
+import DateTime from '../objects/DateTime';
 
-export default abstract class Entity{
-    private history:DomainEvent[] = [];
-    private lastUpdate!:DateTime
-    
-    constructor(){}
+export default abstract class Entity {
+  private history: DomainEvent[] = [];
+  private lastUpdate!: DateTime;
 
-    protected addEvent(event:DomainEvent): void{
-        this.history.push(event);
-        this.lastUpdate = DateTime.now();
-    }
+  constructor() {}
 
-    public pullEvents(): DomainEvent[]{
-        const events = this.history;
-        this.history = [];
-        return events;
-    }
+  protected addEvent(event: DomainEvent): void {
+    this.history.push(event);
+    this.lastUpdate = DateTime.now();
+  }
 
-    public getLastUpdate(): DateTime{
-        return this.lastUpdate;
-    }
+  public pullEvents(): DomainEvent[] {
+    const events = this.history;
+    this.history = [];
+    return events;
+  }
 
-    abstract toPrimitives():unknown
-};
+  public getLastUpdate(): DateTime {
+    return this.lastUpdate;
+  }
+
+  abstract toPrimitives(): unknown;
+}

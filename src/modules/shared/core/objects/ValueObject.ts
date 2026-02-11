@@ -1,1 +1,1 @@
-export default class ValueObject{};
+export default class ValueObject {}

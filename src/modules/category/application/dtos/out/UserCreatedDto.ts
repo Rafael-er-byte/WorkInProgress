@@ -1,4 +1,4 @@
-export default class UserCreatedDto{
-    userId!:string;
-    success:boolean = true;
-};
+export default class UserCreatedDto {
+  userId!: string;
+  success: boolean = true;
+}

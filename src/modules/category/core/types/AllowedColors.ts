@@ -23,5 +23,5 @@ export enum AllowedColors {
   BLACK = 'BLACK',
   ORANGE = 'ORANGE',
   PURPLE = 'PURPLE',
-  NONE = 'NONE'
+  NONE = 'NONE',
 }

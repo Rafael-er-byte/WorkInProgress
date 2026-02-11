@@ -1,5 +1,5 @@
-export default interface CategoryCriteria{
-    limit:number,
-    page: number,
-    nameLike: string
-};
+export default interface CategoryCriteria {
+  limit: number;
+  page: number;
+  nameLike: string;
+}

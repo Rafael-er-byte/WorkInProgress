@@ -1,8 +1,8 @@
-import CoreError from "./CoreError";
+import CoreError from './CoreError';
 
-export default class OperationNotAllowed extends CoreError{
-    constructor(message: string, info?: unknown){
-        super(message, info);
-        Object.setPrototypeOf(this, OperationNotAllowed);
-    }
-};
+export default class OperationNotAllowed extends CoreError {
+  constructor(message: string, info?: unknown) {
+    super(message, info);
+    Object.setPrototypeOf(this, OperationNotAllowed);
+  }
+}
