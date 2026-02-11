@@ -8,10 +8,10 @@ import CategoryCreated from '../events/CategoryCreated';
 import type iCategoryParams from '../interfaces/iCategoryParams';
 import CategoryNameChanged from '../events/CategoryNameChanged';
 import CategoryColorChanged from '../events/CategoryColorChanged';
-import IdProject from '../../../project/core/objects/IdProject';
 import type Member from '../../../member/core/model/Member';
 import CategoryStatus from '../objects/CategoryStatus';
 import type { AllowedCategoryStatus } from '../types/AllowedCategoryStatus';
+import IdProject from '../../../shared/core/objects/IdProject';
 
 export default class Category extends Entity {
   private name!: CategoryName;

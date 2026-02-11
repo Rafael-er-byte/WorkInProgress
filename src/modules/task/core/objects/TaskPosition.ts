@@ -1,22 +1,22 @@
-import ID from '../../../shared/core/objects/ID';
+import type IdList from '../../../shared/core/objects/IdList';
 import type IntNumber from '../../../shared/core/objects/IntNumber';
 import Text from '../../../shared/core/objects/Text';
 import ValueObject from '../../../shared/core/objects/ValueObject';
 
 export default class TaskPosition extends ValueObject {
-  private id!: ID;
+  private listId!: IdList;
   private name!: Text;
   private positionInList!: IntNumber;
 
-  constructor(id: ID, name: Text, position: IntNumber) {
+  constructor(listId: IdList, name: Text, position: IntNumber) {
     super();
-    this.id = id;
+    this.listId = listId;
     this.name = name;
     this.positionInList = position;
   }
 
-  public getIDList(): ID {
-    return this.id;
+  public getlistIdList(): IdList {
+    return this.listId;
   }
 
   public getListName(): Text {

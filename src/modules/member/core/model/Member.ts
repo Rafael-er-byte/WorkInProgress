@@ -1,5 +1,4 @@
 import IdMember from '../objects/IdMember';
-import idProject from '../../../project/core/objects/IdProject';
 import MemberStatus from '../objects/MemberStatus';
 import MemberRole from '../objects/MemberRole';
 import Entity from '../../../shared/core/model/Entity';
@@ -14,17 +13,18 @@ import MemberActived from '../events/MemberActived';
 import MemberChangedRole from '../events/MemberRoleChanged';
 import MemberDeleted from '../events/MemberDeleted';
 import InvalidParameters from '../../../shared/core/errors/InvalidParameters';
+import IdProject from '../../../shared/core/objects/IdProject';
 
 export default class Member extends Entity {
   private id!: IdMember;
-  private idProject!: idProject;
+  private idProject!: IdProject;
   private status!: MemberStatus;
   private role!: MemberRole;
   private memberInfo!: MemberInfo;
 
   private constructor(
     id: IdMember,
-    idProject: idProject,
+    idProject: IdProject,
     status: MemberStatus,
     role: MemberRole,
     memberInfo: MemberInfo,
@@ -41,7 +41,7 @@ export default class Member extends Entity {
 
   public static create(params: iMemberParams, modifier: Member): Member {
     const idMember = new IdMember(params.id);
-    const projectId = new idProject(params.idProject);
+    const projectId = new IdProject(params.idProject);
     const memberRole = new MemberRole(params.role as AllowedMemberRoles);
 
     const member = new Member(
@@ -61,7 +61,7 @@ export default class Member extends Entity {
   public static fromPrimitives(params: iMemberParams): Member {
     return new Member(
       new IdMember(params.id),
-      new idProject(params.idProject),
+      new IdProject(params.idProject),
       MemberStatus.create(params.status as AllowedMemberStatus),
       new MemberRole(params.role as AllowedMemberRoles),
       params.memberInfo,
