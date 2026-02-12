@@ -3,6 +3,8 @@ import DateTime from '../../../shared/core/objects/DateTime';
 import ValueObject from '../../../shared/core/objects/ValueObject';
 import MemberNoteInfo from './MemberNoteInfo';
 import Text from '../../../shared/core/objects/Text';
+import TaskRules from '../constants/TaskRules';
+import TaskNoteContentTooLarge from '../error/TaskNoteContentTooLarge';
 
 export default class Note extends ValueObject {
   private content!: Text;
@@ -13,6 +15,8 @@ export default class Note extends ValueObject {
     super();
 
     this.content = new Text(content);
+
+    if(this.content.size() > TaskRules.maxNoteContent())throw new TaskNoteContentTooLarge(content);
 
     if (!(creator instanceof MemberNoteInfo)) {
       throw new InvalidParameters('Member info is not valid', creator);

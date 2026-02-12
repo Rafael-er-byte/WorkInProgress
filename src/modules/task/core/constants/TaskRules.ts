@@ -6,6 +6,7 @@ export default class TaskRules {
   private static readonly MAX_MEMBERS: number = 200;
   private static readonly ATTACHMENT_LIMIT_MB_SIZE: number = 250;
   private static readonly MAX_NOTES_LIMIT: number = 150;
+  private static readonly MAX_NOTE_CONTENT: number = 700;
 
   public static titleLimit(): number {
     return this.TITLE_LIMIT_SIZE;
@@ -33,5 +34,9 @@ export default class TaskRules {
 
   public static maxNotes(): number {
     return this.MAX_NOTES_LIMIT;
+  }
+
+  public static maxNoteContent(): number{
+    return this.MAX_NOTE_CONTENT;
   }
 }

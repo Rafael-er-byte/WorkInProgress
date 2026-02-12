@@ -8,6 +8,8 @@ import IdMember from "../../../../../src/modules/member/core/objects/IdMember";
 import MemberInfo from "../../../../../src/modules/member/core/objects/MemberInfo";
 import MemberNoteInfo from "../../../../../src/modules/task/core/objects/MemberNoteInfo";
 import Note from "../../../../../src/modules/task/core/objects/Note";
+import TaskRules from "../../../../../src/modules/task/core/constants/TaskRules";
+import TaskNoteContentTooLarge from "../../../../../src/modules/task/core/error/TaskNoteContentTooLarge";
 
 const createMemberNoteInfo = (): MemberNoteInfo => {
   const id = new IdMember('member-1');
@@ -45,5 +47,9 @@ describe('Note Value Object', () => {
     const invalidCreator = {} as MemberNoteInfo;
 
     expect(() => new Note('This is a note', invalidCreator, new Date())).toThrow(InvalidParameters);
+  });
+
+  it('Should throw if the content of the note is too large', () => {
+    expect(() => new Note('a'.repeat(TaskRules.maxNoteContent() + 1), createMemberNoteInfo(), new Date())).toThrow(TaskNoteContentTooLarge);
   });
 });
