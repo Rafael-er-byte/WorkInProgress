@@ -1,0 +1,59 @@
+import type Member from '../../../member/core/model/Member';
+import type DateTime from '../objects/DateTime';
+import ID from '../objects/ID';
+import type IdEntity from '../objects/IdEntity';
+
+export default class DomainEvent {
+  private modifier!: Member;
+  private eventDate!: DateTime;
+  private event!: string;
+  private id!: ID;
+  private idEntity!: IdEntity;
+  private idProject!: IdEntity;
+  private info?: unknown;
+
+  constructor(
+    eventDate: DateTime,
+    modifier: Member,
+    idProject: IdEntity,
+    idEntity: IdEntity,
+    event: string,
+    info?: unknown,
+  ) {
+    this.modifier = modifier;
+    this.event = event;
+    this.eventDate = eventDate;
+    if (info) this.info = info;
+    this.id = ID.generateId();
+    this.idEntity = idEntity;
+    this.idProject = idProject;
+  }
+
+  public getModifier(): Member {
+    return this.modifier;
+  }
+
+  public getDate(): DateTime {
+    return this.eventDate;
+  }
+
+  public getEvent(): string {
+    return this.event;
+  }
+
+  public getInfo(): unknown {
+    return this.info;
+  }
+
+  public getId(): ID {
+    return this.id;
+  }
+
+  public getIdEntity(): IdEntity {
+    return this.idEntity;
+  }
+
+  public getIdProject(): IdEntity {
+    return this.idProject;
+  }
+}
