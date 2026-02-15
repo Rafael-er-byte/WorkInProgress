@@ -42,8 +42,8 @@ import TaskCategoryAdded from '../events/TaskCategoryAdded';
 import TaskCategoryDeleted from '../events/TaskCategoryDeleted';
 import TaskContributorDeleted from '../events/TaskMemberDeleted';
 import TaskMemberAdded from '../events/TaskMemberAdded';
-import IdProject from '../../../project/core/objects/IdProject';
 import TaskNoteAdded from '../events/TaskNoteAdded';
+import IdProject from '../../../shared/core/objects/IdProject';
 
 export default class Task extends Entity {
   private title!: TaskTitle;
