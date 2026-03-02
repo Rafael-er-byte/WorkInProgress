@@ -13,7 +13,7 @@ import MemberActived from '../events/MemberActived';
 import MemberChangedRole from '../events/MemberRoleChanged';
 import MemberDeleted from '../events/MemberDeleted';
 import InvalidParameters from '../../../shared/core/errors/InvalidParameters';
-import IdProject from '../../../shared/core/objects/IdProject';
+import IdProject from '../../../shared/core/objects/IdProject'; 
 
 export default class Member extends Entity {
   private id!: IdMember;
